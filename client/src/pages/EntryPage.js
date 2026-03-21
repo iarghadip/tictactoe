@@ -7,11 +7,10 @@ export default function EntryPage({ onDone }) {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const handleEntry = async (username) => {
-        setError(null);
+    const handleEntry = async (username, displayName) => {
         setLoading(true);
         try {
-            await connect(username);
+            await connect(username, displayName);
             onDone();
         } catch (e) {
             setError(e.message || 'Choose a different username!');
