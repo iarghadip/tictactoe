@@ -1,0 +1,109 @@
+.finding {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #141218;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.finding__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    width: 100%;
+    max-width: 320px;
+}
+
+.finding__hourglass {
+    font-size: 64px;
+    animation: flip 2s ease-in-out infinite;
+    display: inline-block;
+    filter: grayscale(1) brightness(2);
+}
+
+@keyframes flip {
+    0%   { transform: rotate(0deg);   }
+    40%  { transform: rotate(0deg);   }
+    50%  { transform: rotate(180deg); }
+    90%  { transform: rotate(180deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.finding__text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #E6E0E9;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.finding__dots span {
+    animation: blink 1.4s infinite;
+    opacity: 0;
+}
+
+.finding__dots span:nth-child(1) {
+    animation-delay: 0s;
+}
+.finding__dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.finding__dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes blink {
+    0%, 80%, 100% {
+        opacity: 0;
+    }
+    40% {
+        opacity: 1;
+    }
+}
+
+.finding__timer {
+    font-size: 13px;
+    color: rgba(230, 224, 233, 0.35);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.finding__bar-track {
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.finding__bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: rgba(230, 224, 233, 0.4);
+    width: 0%;
+    transition: width 1s linear;
+}
+
+.finding__cancel {
+    padding: 10px 32px;
+    border-radius: 999px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    background: transparent;
+    color: rgba(230, 224, 233, 0.5);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.finding__cancel:hover {
+    border-color: rgba(255, 255, 255, 0.35);
+    color: #E6E0E9;
+    background: rgba(255, 255, 255, 0.06);
+}

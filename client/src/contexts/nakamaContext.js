@@ -4,11 +4,22 @@ import { Client, Session } from '@heroiclabs/nakama-js';
 const NakamaContext = createContext(null);
 
 export function NakamaProvider({ children }) {
-
     const [client] = useState(() => new Client('defaultkey', 'localhost', '7350', false));
     const [session, setSession] = useState(null);
     const [socket, setSocket] = useState(null);
+    const [account, setAccount] = useState(null);
     const [restoring, setRestoring] = useState(true);
+
+    const connectSocket = async (s) => {
+        const newSocket = client.createSocket(false, false);
+        await newSocket.connect(s, true);
+        setSocket(newSocket);
+    };
+
+    const fetchAccount = async (s) => {
+        const acc = await client.getAccount(s);
+        setAccount(acc);
+    };
 
     useEffect(() => {
         const restore = async () => {
@@ -26,9 +37,8 @@ export function NakamaProvider({ children }) {
                     }
 
                     setSession(restored);
-                    const newSocket = client.createSocket(false, false);
-                    await newSocket.connect(restored, true);
-                    setSocket(newSocket);
+                    await fetchAccount(restored);
+                    await connectSocket(restored);
                 }
             } catch (e) {
                 localStorage.removeItem('nk_token');
@@ -47,9 +57,8 @@ export function NakamaProvider({ children }) {
         localStorage.setItem('nk_refresh_token', newSession.refresh_token);
         await client.updateAccount(newSession, { displayName });
         setSession(newSession);
-        const newSocket = client.createSocket(false, false);
-        await newSocket.connect(newSession, true);
-        setSocket(newSocket);
+        await fetchAccount(newSession);
+        await connectSocket(newSession);
     };
 
     const disconnect = () => {
@@ -57,10 +66,11 @@ export function NakamaProvider({ children }) {
         localStorage.removeItem('nk_refresh_token');
         setSession(null);
         setSocket(null);
+        setAccount(null);
     };
 
     return (
-        <NakamaContext.Provider value={{ client, session, socket, connect, disconnect, restoring }}>
+        <NakamaContext.Provider value={{ client, session, socket, account, connect, disconnect, restoring }}>
             {children}
         </NakamaContext.Provider>
     );
