@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import LoginIcon from '@mui/icons-material/Login';
+import { RoundButton } from '../button';
 import './Enter.css';
 
 export default function Enter({ open, title, fields, initialValues, onSubmit, onClose, loading, error }) {
@@ -51,13 +52,12 @@ export default function Enter({ open, title, fields, initialValues, onSubmit, on
                         />
                     </div>
                 ))}
-                <button
-                    className="entry__btn"
+                <RoundButton
                     onClick={handleSubmit}
                     disabled={!isValid || loading}
                 >
                     {loading ? '...' : <LoginIcon style={{ fontSize: 20 }} />}
-                </button>
+                </RoundButton>
             </div>
         </div>
     );

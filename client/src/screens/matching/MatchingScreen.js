@@ -1,4 +1,5 @@
 import LogoutIcon from '@mui/icons-material/Logout';
+import { RoundButton } from '../../components/button';
 import './MatchingScreen.css';
 
 export default function MatchingScreen({ elapsed, displayName, onCancel }) {
@@ -16,9 +17,9 @@ export default function MatchingScreen({ elapsed, displayName, onCancel }) {
                     </span>
                 </div>
                 <div className="matching__timer">{elapsed}s</div>
-                <button className="matching__cancel" onClick={onCancel}>
+                <RoundButton onClick={onCancel}>
                     <LogoutIcon style={{ fontSize: 20 }} />
-                </button>
+                </RoundButton>
             </div>
         </div>
     );

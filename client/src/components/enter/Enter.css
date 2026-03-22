@@ -68,56 +68,6 @@
     color: rgba(230, 224, 233, 0.25);
 }
 
-.entry__btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(255, 255, 255, 0.1);
-    color: #E6E0E9;
-    font-size: 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: background 0.2s ease, transform 0.15s ease;
-    position: relative;
-    overflow: visible;
-}
-
-.entry__btn::after {
-    content: '';
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: #E6E0E9;
-    filter: blur(14px);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
-
-.entry__btn:hover::after {
-    opacity: 0.3;
-}
-
-.entry__btn:hover {
-    background: rgba(255, 255, 255, 0.18);
-    transform: scale(1.08);
-}
-
-.entry__btn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.entry__btn:disabled::after {
-    display: none;
-}
-
 .entry__error {
     color: #e05c5c;
     font-size: 13px;

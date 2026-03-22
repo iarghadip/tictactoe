@@ -14,6 +14,7 @@
     padding: 20px;
     box-sizing: border-box;
 }
+
 .game-container {
     display: flex;
     flex-direction: column;
@@ -22,18 +23,21 @@
     width: 100%;
     max-width: 400px;
 }
+
 .game-players {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
 }
+
 .game-turn {
     font-size: 13px;
     color: #E6E0E9;
     letter-spacing: 1px;
     text-transform: uppercase;
 }
+
 .game-turn.timed {
     background: linear-gradient(
         to right,
@@ -45,17 +49,20 @@
     background-clip: text;
     transition: --fill 1s linear;
 }
+
 .game-disconnect {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
 .game-disconnect__text {
     font-size: 13px;
     color: rgba(230, 224, 233, 0.5);
     letter-spacing: 1px;
     text-transform: uppercase;
 }
+
 .game-disconnect__text.timed {
     background: linear-gradient(
         to right,
@@ -67,80 +74,30 @@
     background-clip: text;
     transition: --fill 1s linear;
 }
+
 .game-board-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
 }
+
 .game-actions {
     display: flex;
     flex-direction: row;
     gap: 12px;
     justify-content: center;
 }
-.game-action-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(255, 255, 255, 0.1);
-    color: #E6E0E9;
-    font-size: 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: background 0.2s ease, transform 0.15s ease;
-    position: relative;
-    overflow: visible;
-}
-.game-action-btn::after {
-    content: '';
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: #E6E0E9;
-    filter: blur(14px);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
-.game-action-btn:hover::after {
-    opacity: 0.3;
-}
-.game-action-btn:hover {
-    background: rgba(255, 255, 255, 0.18);
-    transform: scale(1.08);
-}
-.game-action-btn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-    transform: none;
-}
-.game-action-btn:disabled::after {
-    display: none;
-}
-.game-action-btn.glowing::after {
-    animation: glow-pulse 1s ease-in-out infinite;
-}
+
 .game-rematch-spinning {
     animation: rematch-spin 1s linear infinite;
 }
+
 @keyframes rematch-spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
-@keyframes glow-pulse {
-    0%, 100% {
-        opacity: 0.15;
-    }
-    50% {
-        opacity: 0.45;
-    }
-}
+
 @media (max-width: 360px) {
     .game-board-wrapper {
         transform: scale(0.85);

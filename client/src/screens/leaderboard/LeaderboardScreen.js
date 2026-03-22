@@ -1,4 +1,5 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { RoundButton } from '../../components/button';
 import './LeaderboardScreen.css';
 
 function StatPill({ label, value }) {
@@ -58,9 +59,9 @@ export default function LeaderboardScreen({ loading, top100, myStats, myUserId, 
         <div className="lb-screen">
             <div className="lb-container">
                 <div className="lb-header">
-                    <button className="lb-back" onClick={onBack}>
+                    <RoundButton onClick={onBack}>
                         <ArrowBackIcon style={{ fontSize: 20 }} />
-                    </button>
+                    </RoundButton>
                     <div className="lb-header__title">Global Ranks</div>
                 </div>
 

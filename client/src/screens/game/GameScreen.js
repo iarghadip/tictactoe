@@ -2,6 +2,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Board } from '../../components/board';
 import { Score } from '../../components/score';
+import { RoundButton } from '../../components/button';
 import './GameScreen.css';
 
 const TURN_LIMIT = 30;
@@ -79,23 +80,23 @@ export default function GameScreen({
                 }
                 {status === 'finished' && (
                     <div className="game-actions">
-                        <button
-                            className={`game-action-btn ${opponentVoted ? 'glowing' : ''}`}
+                        <RoundButton
+                            glowing={opponentVoted}
                             onClick={onRematch}
                             disabled={myVoted}
                         >
                             <RefreshIcon style={{ fontSize: 20 }} className={myVoted ? 'game-rematch-spinning' : ''} />
-                        </button>
-                        <button className="game-action-btn" onClick={onLeave}>
+                        </RoundButton>
+                        <RoundButton onClick={onLeave}>
                             <LogoutIcon style={{ fontSize: 20 }} />
-                        </button>
+                        </RoundButton>
                     </div>
                 )}
                 {status !== 'finished' && (
                     <div className="game-actions">
-                        <button className="game-action-btn" onClick={onLeave}>
+                        <RoundButton onClick={onLeave}>
                             <LogoutIcon style={{ fontSize: 20 }} />
-                        </button>
+                        </RoundButton>
                     </div>
                 )}
             </div>

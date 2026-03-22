@@ -1,0 +1,62 @@
+.round-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: #E6E0E9;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s ease, transform 0.15s ease;
+    position: relative;
+    overflow: visible;
+}
+
+.round-btn::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #E6E0E9;
+    filter: blur(14px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.round-btn:hover::after {
+    opacity: 0.3;
+}
+
+.round-btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+    transform: scale(1.08);
+}
+
+.round-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.round-btn:disabled::after {
+    display: none;
+}
+
+.round-btn--glowing::after {
+    animation: round-btn-glow 1s ease-in-out infinite;
+}
+
+@keyframes round-btn-glow {
+    0%, 100% {
+        opacity: 0.15;
+    }
+    50% {
+        opacity: 0.45;
+    }
+}
