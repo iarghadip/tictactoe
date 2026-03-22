@@ -1,3 +1,4 @@
+import LoginIcon from '@mui/icons-material/Login';
 import { useState } from 'react';
 import './EntryScreen.css';
 
@@ -46,7 +47,7 @@ export default function EntryScreen({ onDone, loading, error }) {
                     onClick={handleSubmit}
                     disabled={username.trim().length === 0 || loading}
                 >
-                    {loading ? '...' : '→'}
+                    {loading ? '...' : <LoginIcon style={{ fontSize: 20 }} />}
                 </button>
             </div>
         </div>

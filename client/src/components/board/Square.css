@@ -1,0 +1,38 @@
+.square {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    box-sizing: border-box;
+    position: relative;
+    overflow: visible;
+}
+
+.square.hoverable {
+    cursor: pointer;
+}
+
+.square.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.square::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #E6E0E9;
+    filter: blur(15px);
+    opacity: 0;
+    transition: opacity 1s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.square.hoverable:hover::after {
+    opacity: 1;
+}

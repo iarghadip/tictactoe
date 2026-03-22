@@ -6,23 +6,37 @@ export default function MatchingPage({ onFound, onCancel }) {
     const { socket, account } = useNakama();
     const [elapsed, setElapsed] = useState(0);
     const ticketRef = useRef(null);
+    const onFoundRef = useRef(onFound);
+    const activeRef = useRef(true);
+
+    useEffect(() => {
+        onFoundRef.current = onFound;
+    }, [onFound]);
 
     const displayName = account?.user?.display_name || 'Anonymous';
 
     useEffect(() => {
         if (!socket) return;
 
-        console.log('MatchingPage: socket ready, joining matchmaker');
+        activeRef.current = true;
 
-        socket.onmatchmakermatched = (matched) => {
-            console.log('MatchingPage: match found', matched);
-            onFound(matched);
+        socket.onmatchmakermatched = async (matched) => {
+            console.log('matched object:', JSON.stringify(matched));
+            if (!activeRef.current) return;
+            try {
+                const token = matched.token || matched.matchmakerTicket?.token;
+                const matchId = matched.match_id || matched.matchId || null;
+                const match = await socket.joinMatch(matchId, null, token);
+                ticketRef.current = null;
+                onFoundRef.current(match);
+            } catch (e) {
+                console.error('MatchingPage: failed to join match', JSON.stringify(e));
+            }
         };
 
         socket.addMatchmaker('*', 2, 2)
             .then((result) => {
                 ticketRef.current = result.ticket;
-                console.log('MatchingPage: matchmaker ticket', result.ticket);
             })
             .catch((e) => {
                 console.error('MatchingPage: matchmaker error', JSON.stringify(e));
@@ -31,14 +45,14 @@ export default function MatchingPage({ onFound, onCancel }) {
         const timer = setInterval(() => setElapsed(s => s + 1), 1000);
 
         return () => {
-            console.log('MatchingPage: cleanup, removing matchmaker');
+            activeRef.current = false;
             clearInterval(timer);
             if (ticketRef.current) {
                 socket.removeMatchmaker(ticketRef.current).catch(() => {});
                 ticketRef.current = null;
             }
         };
-    }, [socket, onFound]);
+    }, [socket]);
 
     return <MatchingScreen elapsed={elapsed} displayName={displayName} onCancel={onCancel} />;
 }
