@@ -1,6 +1,7 @@
 import HourglassEmptyOutlinedIcon from '@mui/icons-material/HourglassEmptyOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { RoundButton } from '../../components/button';
+import { CapitalText } from '../../components/text';
 import './MatchingScreen.css';
 
 export default function MatchingScreen({ elapsed, displayName, onCancel }) {
@@ -15,10 +16,8 @@ export default function MatchingScreen({ elapsed, displayName, onCancel }) {
                     </div>
                 </div>
                 <div className="matching__text">{displayName}</div>
-                <div className="matching__text matching__text--sub">
-                    Finding a random player
-                </div>
-                <div className="matching__timer">{elapsed}s</div>
+                <CapitalText fill="-1">Finding a random player</CapitalText>
+                <CapitalText fill="-1">{elapsed}s</CapitalText>
                 <RoundButton onClick={onCancel} disabled={!canCancel}>
                     <LogoutIcon style={{ fontSize: 20 }} />
                 </RoundButton>

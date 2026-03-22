@@ -6,6 +6,8 @@ import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { MenuIcon } from '../../components/icon';
+import { CapitalText } from '../../components/text';
 import './HomeScreen.css';
 
 const MENU = [
@@ -57,9 +59,7 @@ export default function HomeScreen({
             <div className="home-container">
                 <div className="home-header">
                     <div className="home-header__title">Tic Tac Toe</div>
-                    {isLoggedIn && (
-                        <div className="home-header__name">{displayName}</div>
-                    )}
+                    {isLoggedIn && <CapitalText>{displayName}</CapitalText>}
                 </div>
                 <div className="home-menu">
                     {MENU.map((group, gi) => (
@@ -71,9 +71,7 @@ export default function HomeScreen({
                                     className="home-menu__item"
                                     onClick={handlers[item.key]}
                                 >
-                                    <span className={`home-menu__icon home-menu__icon--${item.color}`}>
-                                        {item.icon}
-                                    </span>
+                                    <MenuIcon icon={item.icon} color={item.color} size="md" />
                                     <span className="home-menu__label">{item.label}</span>
                                     <ChevronRightIcon className="home-menu__arrow" style={{ fontSize: 18 }} />
                                 </div>
@@ -87,9 +85,11 @@ export default function HomeScreen({
                                 className="home-menu__item home-menu__item--danger"
                                 onClick={onLogout}
                             >
-                                <span className="home-menu__icon home-menu__icon--danger">
-                                    <LogoutOutlinedIcon fontSize="small" />
-                                </span>
+                                <MenuIcon
+                                    icon={<LogoutOutlinedIcon fontSize="small" />}
+                                    color="danger"
+                                    size="md"
+                                />
                                 <span className="home-menu__label home-menu__label--danger">Logout Player</span>
                                 <ChevronRightIcon className="home-menu__arrow" style={{ fontSize: 18 }} />
                             </div>

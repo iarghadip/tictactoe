@@ -59,13 +59,6 @@
     font-variant-numeric: tabular-nums;
 }
 
-.lb-my-card__name {
-    font-size: 13px;
-    color: rgba(230, 224, 233, 0.4);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-
 .lb-my-card__stats {
     display: flex;
     gap: 12px;
@@ -120,7 +113,6 @@
 
 .lb-row--me {
     background: rgba(128, 203, 196, 0.06);
-    border-left: 2px solid #80CBC4;
 }
 
 .lb-row__rank {
@@ -153,12 +145,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.lb-row__sub {
-    font-size: 11px;
-    color: rgba(230, 224, 233, 0.3);
-    letter-spacing: 0.5px;
 }
 
 .lb-row__score {

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import LoginIcon from '@mui/icons-material/Login';
 import { RoundButton } from '../button';
-import './Enter.css';
+import './MenuInput.css';
 
-export default function Enter({ open, title, fields, initialValues, onSubmit, onClose, loading, error }) {
+export default function MenuInput({ open, title, fields, initialValues, onSubmit, onClose, loading, error }) {
     const [values, setValues] = useState({});
 
     useEffect(() => {
@@ -19,7 +19,7 @@ export default function Enter({ open, title, fields, initialValues, onSubmit, on
     }, [open]);
 
     const handleKeyDown = (e) => {
-        if (e.key === 'Enter') handleSubmit();
+        if (e.key === 'MenuInput') handleSubmit();
         if (e.key === 'Escape') onClose();
     };
 

@@ -1,0 +1,48 @@
+.menu-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    flex-shrink: 0;
+    color: rgba(230, 224, 233, 0.7);
+}
+
+.menu-icon--md {
+    width: 36px;
+    height: 36px;
+}
+
+.menu-icon--sm {
+    width: 32px;
+    height: 32px;
+    margin-top: 1px;
+}
+
+.menu-icon--teal {
+    background: rgba(128, 203, 196, 0.12);
+}
+
+.menu-icon--purple {
+    background: rgba(208, 188, 255, 0.12);
+}
+
+.menu-icon--amber {
+    background: rgba(255, 183, 77, 0.12);
+}
+
+.menu-icon--blue {
+    background: rgba(100, 181, 246, 0.12);
+}
+
+.menu-icon--green {
+    background: rgba(129, 199, 132, 0.12);
+}
+
+.menu-icon--red {
+    background: rgba(224, 92, 92, 0.12);
+}
+
+.menu-icon--danger {
+    background: rgba(224, 92, 92, 0.10);
+    color: #e05c5c;
+}

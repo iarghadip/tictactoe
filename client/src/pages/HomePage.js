@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNakama } from '../contexts/nakamaContext';
 import { HomeScreen } from '../screens/home';
-import { Enter } from '../components/enter';
+import { MenuInput } from '../components/input';
 
 export default function HomePage({ onFindMatch, onGlobalRanks, onAbout }) {
     const { session, connect, updateDisplayName, disconnect, account } = useNakama();
@@ -101,7 +101,7 @@ export default function HomePage({ onFindMatch, onGlobalRanks, onAbout }) {
                 onAbout={() => executeAction('about')}
                 onLogout={disconnect}
             />
-            <Enter
+            <MenuInput
                 open={authModal}
                 title="Who are you?"
                 fields={[
@@ -112,7 +112,7 @@ export default function HomePage({ onFindMatch, onGlobalRanks, onAbout }) {
                 loading={authLoading}
                 error={authError}
             />
-            <Enter
+            <MenuInput
                 open={nameModal}
                 title="Name Settings"
                 fields={[

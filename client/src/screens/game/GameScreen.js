@@ -3,6 +3,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Board } from '../../components/board';
 import { Score } from '../../components/score';
 import { RoundButton } from '../../components/button';
+import { CapitalText } from '../../components/text';
 import './GameScreen.css';
 
 const TURN_LIMIT = 30;
@@ -28,24 +29,17 @@ export default function GameScreen({
     onLeave,
 }) {
     const isTimed = gameMode === 'timed';
-
-    const fillPct = isTimed && status === 'playing' && !opponentDisconnected
-        ? ((TURN_LIMIT - timeLeft) / TURN_LIMIT) * 100
-        : 0;
-
-    const disconnectFillPct = opponentDisconnected
-        ? ((DISCONNECT_GRACE - disconnectCountdown) / DISCONNECT_GRACE) * 100
-        : 0;
-
-    const turnStyle = isTimed && status === 'playing' && !opponentDisconnected
-        ? { '--fill': `${fillPct}%` }
-        : {};
-
-    const disconnectStyle = opponentDisconnected
-        ? { '--fill': `${disconnectFillPct}%` }
-        : {};
-
+    const isPlaying = status === 'playing';
+    const isFinished = status === 'finished';
     const leaveDisabled = opponentDisconnected && disconnectCountdown > 30;
+
+    const turnFill = isTimed && isPlaying && !opponentDisconnected
+        ? ((TURN_LIMIT - timeLeft) / TURN_LIMIT) * 100
+        : null;
+
+    const disconnectFill = opponentDisconnected
+        ? ((DISCONNECT_GRACE - disconnectCountdown) / DISCONNECT_GRACE) * 100
+        : null;
 
     return (
         <div className="game-screen">
@@ -55,52 +49,27 @@ export default function GameScreen({
                     <Board
                         squares={cells}
                         onCellClick={onCellClick}
-                        disabled={status !== 'playing' || opponentDisconnected}
+                        disabled={!isPlaying || opponentDisconnected}
                         winCombo={winCombo}
                         isMyTurn={isMyTurn && !opponentDisconnected}
                     />
                 </div>
-                {opponentDisconnected
-                    ? (
-                        <div className="game-disconnect">
-                            <span
-                                className="game-disconnect__text timed"
-                                style={disconnectStyle}
-                            >
-                                {opponentName} disconnected
-                            </span>
-                        </div>
-                    )
-                    : (
-                        <div
-                            className={`game-turn ${isTimed && status === 'playing' ? 'timed' : ''}`}
-                            style={turnStyle}
-                        >
-                            {turnText}
-                        </div>
-                    )
-                }
-                {status === 'finished' && (
-                    <div className="game-actions">
-                        <RoundButton
-                            glowing={opponentVoted}
-                            onClick={onRematch}
-                            disabled={myVoted}
-                        >
+                <div className="game-status">
+                    {opponentDisconnected
+                        ? <CapitalText fill={disconnectFill}>{opponentName} disconnected</CapitalText>
+                        : <CapitalText fill={turnFill}>{turnText}</CapitalText>
+                    }
+                </div>
+                <div className="game-actions">
+                    {isFinished && (
+                        <RoundButton glowing={opponentVoted} onClick={onRematch} disabled={myVoted}>
                             <RefreshIcon style={{ fontSize: 20 }} className={myVoted ? 'game-rematch-spinning' : ''} />
                         </RoundButton>
-                        <RoundButton onClick={onLeave}>
-                            <LogoutIcon style={{ fontSize: 20 }} />
-                        </RoundButton>
-                    </div>
-                )}
-                {status !== 'finished' && (
-                    <div className="game-actions">
-                        <RoundButton onClick={onLeave} disabled={leaveDisabled}>
-                            <LogoutIcon style={{ fontSize: 20 }} />
-                        </RoundButton>
-                    </div>
-                )}
+                    )}
+                    <RoundButton onClick={onLeave} disabled={leaveDisabled}>
+                        <LogoutIcon style={{ fontSize: 20 }} />
+                    </RoundButton>
+                </div>
             </div>
         </div>
     );

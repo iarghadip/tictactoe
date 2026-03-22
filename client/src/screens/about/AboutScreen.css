@@ -19,38 +19,6 @@
     border-bottom: none;
 }
 
-.about-feature__icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 1px;
-    color: rgba(230, 224, 233, 0.7);
-}
-
-.about-feature__icon--teal {
-    background: rgba(128, 203, 196, 0.12);
-}
-
-.about-feature__icon--purple {
-    background: rgba(208, 188, 255, 0.12);
-}
-
-.about-feature__icon--red {
-    background: rgba(224, 92, 92, 0.12);
-}
-
-.about-feature__icon--amber {
-    background: rgba(255, 183, 77, 0.12);
-}
-
-.about-feature__icon--blue {
-    background: rgba(100, 181, 246, 0.12);
-}
-
 .about-feature__body {
     display: flex;
     flex-direction: column;

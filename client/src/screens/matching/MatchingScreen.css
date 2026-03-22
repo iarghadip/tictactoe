@@ -62,25 +62,6 @@
     letter-spacing: 0.5px;
 }
 
-.matching__text--sub {
-    font-size: 13px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    background: linear-gradient(
-        90deg,
-        rgba(230, 224, 233, 0.2) 0%,
-        rgba(230, 224, 233, 0.2) 25%,
-        rgba(230, 224, 233, 0.7) 50%,
-        rgba(230, 224, 233, 0.2) 75%,
-        rgba(230, 224, 233, 0.2) 100%
-    );
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: text-sweep 2s linear infinite;
-}
-
 @keyframes text-sweep {
     0% {
         background-position: 100% center;
@@ -88,13 +69,6 @@
     100% {
         background-position: -100% center;
     }
-}
-
-.matching__timer {
-    font-size: 13px;
-    color: rgba(230, 224, 233, 0.5);
-    letter-spacing: 1px;
-    text-transform: uppercase;
 }
 
 .matching__bar-track {

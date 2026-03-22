@@ -1,5 +1,6 @@
 import MilitaryTechOutlinedIcon from '@mui/icons-material/MilitaryTechOutlined';
 import { Layout } from '../../components/layout';
+import { CapitalText } from '../../components/text';
 import './LeaderboardScreen.css';
 
 function StatPill({ label, value }) {
@@ -25,7 +26,7 @@ function MyCard({ stats }) {
                 <div className="lb-my-card__rank">#{stats.rank}</div>
                 <div className="lb-my-card__score">{stats.score.toLocaleString()} pts</div>
             </div>
-            <div className="lb-my-card__name">{stats.display_name}</div>
+            <CapitalText>{stats.display_name}</CapitalText>
             <div className="lb-my-card__stats">
                 <StatPill label="played" value={stats.matches} />
                 <StatPill label="won" value={stats.wins} />
@@ -53,7 +54,7 @@ function PlayerRow({ player, isMe }) {
             </div>
             <div className="lb-row__info">
                 <div className="lb-row__name">{player.display_name}</div>
-                <div className="lb-row__sub">{player.matches}P · {player.wins}W · {player.losses}L</div>
+                <CapitalText size="11">{player.matches}P · {player.wins}W · {player.losses}L</CapitalText>
             </div>
             <div className="lb-row__score">{player.score.toLocaleString()}</div>
         </div>
