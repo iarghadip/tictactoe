@@ -12,6 +12,11 @@ export function NakamaProvider({ children }) {
     const connectingRef = useRef(false);
     const socketRef = useRef(null);
 
+    const fetchAccount = async (s) => {
+        const acc = await client.getAccount(s);
+        setAccount(acc);
+    };
+
     const connectSocket = async (s) => {
         if (connectingRef.current) return;
         if (socketRef.current) {
@@ -26,11 +31,6 @@ export function NakamaProvider({ children }) {
         } finally {
             connectingRef.current = false;
         }
-    };
-
-    const fetchAccount = async (s) => {
-        const acc = await client.getAccount(s);
-        setAccount(acc);
     };
 
     useEffect(() => {
@@ -63,14 +63,18 @@ export function NakamaProvider({ children }) {
         restore();
     }, [client]);
 
-    const connect = async (username, displayName) => {
+    const connect = async (username) => {
         const newSession = await client.authenticateCustom(username.toLowerCase(), true, username);
         localStorage.setItem('nk_token', newSession.token);
         localStorage.setItem('nk_refresh_token', newSession.refresh_token);
-        await client.updateAccount(newSession, { displayName });
         setSession(newSession);
         await fetchAccount(newSession);
         await connectSocket(newSession);
+    };
+
+    const updateDisplayName = async (displayName) => {
+        await client.updateAccount(session, { displayName });
+        await fetchAccount(session);
     };
 
     const disconnect = () => {
@@ -86,7 +90,7 @@ export function NakamaProvider({ children }) {
     };
 
     return (
-        <NakamaContext.Provider value={{ client, session, socket, account, connect, disconnect, restoring }}>
+        <NakamaContext.Provider value={{ client, session, socket, account, connect, updateDisplayName, disconnect, restoring }}>
             {children}
         </NakamaContext.Provider>
     );

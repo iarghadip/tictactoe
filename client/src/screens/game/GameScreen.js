@@ -16,6 +16,7 @@ export default function GameScreen({
     status,
     isMyTurn,
     timeLeft,
+    gameMode,
     myVoted,
     opponentVoted,
     opponentDisconnected,
@@ -25,7 +26,9 @@ export default function GameScreen({
     onRematch,
     onLeave,
 }) {
-    const fillPct = status === 'playing' && !opponentDisconnected
+    const isTimed = gameMode === 'timed';
+
+    const fillPct = isTimed && status === 'playing' && !opponentDisconnected
         ? ((TURN_LIMIT - timeLeft) / TURN_LIMIT) * 100
         : 0;
 
@@ -33,7 +36,7 @@ export default function GameScreen({
         ? ((DISCONNECT_GRACE - disconnectCountdown) / DISCONNECT_GRACE) * 100
         : 0;
 
-    const turnStyle = status === 'playing' && !opponentDisconnected
+    const turnStyle = isTimed && status === 'playing' && !opponentDisconnected
         ? { '--fill': `${fillPct}%` }
         : {};
 
@@ -67,7 +70,7 @@ export default function GameScreen({
                     )
                     : (
                         <div
-                            className={`game-turn ${status === 'playing' ? 'timed' : ''}`}
+                            className={`game-turn ${isTimed && status === 'playing' ? 'timed' : ''}`}
                             style={turnStyle}
                         >
                             {turnText}

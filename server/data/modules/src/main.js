@@ -73,13 +73,17 @@ function saveGame(nk, logger, userA, userB, winnerId) {
 
 var matchmakerMatched = function (ctx, logger, nk, matches) {
     logger.info('Matchmaker matched: %s vs %s', matches[0].presence.username, matches[1].presence.username);
-    var matchId = nk.matchCreate('tictactoe', {});
-    logger.info('Match created: %s', matchId);
+    var properties = matches[0].stringProperties || matches[0].properties || {};
+    var mode = properties.mode || 'timed';
+    var matchId = nk.matchCreate('tictactoe', { mode: mode });
+    logger.info('Match created: %s mode: %s', matchId, mode);
     return matchId;
 };
 
 var matchInit = function (ctx, logger, nk, params) {
     logger.info('matchInit called. matchId: %s', ctx.matchId);
+    var mode = (params && params.mode) ? params.mode : 'timed';
+    logger.info('Match mode: %s', mode);
     return {
         state: {
             board: makeInitialBoard(),
@@ -92,6 +96,7 @@ var matchInit = function (ctx, logger, nk, params) {
             turnStartTick: null,
             disconnectedPlayers: {},
             historicalScores: null,
+            mode: mode,
         },
         tickRate: 1,
         label: 'tictactoe',
@@ -159,12 +164,14 @@ var matchLeave = function (ctx, logger, nk, dispatcher, tick, state, presences) 
 var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
     if (state.status === 'ready') {
         state.status = 'playing';
-        state.turnStartTick = tick;
+        if (state.mode === 'timed') {
+            state.turnStartTick = tick;
+        }
 
         var playerIds = Object.keys(state.marks);
         state.historicalScores = loadHistoricalScores(nk, logger, state.marks, playerIds);
 
-        logger.info('Broadcasting GAME_START. marks: %s players: %s currentTurn: %s', JSON.stringify(state.marks), JSON.stringify(state.players), state.currentTurn);
+        logger.info('Broadcasting GAME_START. marks: %s players: %s currentTurn: %s mode: %s', JSON.stringify(state.marks), JSON.stringify(state.players), state.currentTurn, state.mode);
         dispatcher.broadcastMessage(SERVER_OPCODE.GAME_START, JSON.stringify({
             marks: state.marks,
             players: state.players,
@@ -172,6 +179,7 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
             board: state.board,
             timeLeft: TURN_LIMIT,
             scores: state.historicalScores,
+            mode: state.mode,
         }));
         return { state: state };
     }
@@ -258,7 +266,9 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
             }
 
             state.currentTurn = Object.keys(state.marks).find(function (id) { return id !== senderId; });
-            state.turnStartTick = tick;
+            if (state.mode === 'timed') {
+                state.turnStartTick = tick;
+            }
             logger.info('Turn switched. nextTurn: %s', state.currentTurn);
             dispatcher.broadcastMessage(SERVER_OPCODE.GAME_STATE, JSON.stringify({
                 board: state.board,
@@ -285,7 +295,9 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
                 state.rematchVotes = {};
                 state.status = 'playing';
                 state.currentTurn = Object.keys(state.marks)[0];
-                state.turnStartTick = tick;
+                if (state.mode === 'timed') {
+                    state.turnStartTick = tick;
+                }
                 logger.info('Rematch started. firstTurn: %s', state.currentTurn);
                 dispatcher.broadcastMessage(SERVER_OPCODE.REMATCH_START, JSON.stringify({
                     board: state.board,
@@ -308,7 +320,7 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
         }
     });
 
-    if (state.status === 'playing' && state.turnStartTick !== null && disconnectedIds.length === 0) {
+    if (state.mode === 'timed' && state.status === 'playing' && state.turnStartTick !== null && disconnectedIds.length === 0) {
         var elapsed = tick - state.turnStartTick;
         var timeLeft = TURN_LIMIT - elapsed;
 

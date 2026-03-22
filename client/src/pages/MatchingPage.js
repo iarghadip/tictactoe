@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNakama } from '../contexts/nakamaContext';
 import { MatchingScreen } from '../screens/matching';
 
-export default function MatchingPage({ onFound, onCancel }) {
+export default function MatchingPage({ mode, onFound, onCancel }) {
     const { socket, account } = useNakama();
     const [elapsed, setElapsed] = useState(0);
     const ticketRef = useRef(null);
@@ -21,7 +21,6 @@ export default function MatchingPage({ onFound, onCancel }) {
         activeRef.current = true;
 
         socket.onmatchmakermatched = async (matched) => {
-            console.log('matched object:', JSON.stringify(matched));
             if (!activeRef.current) return;
             try {
                 const token = matched.token || matched.matchmakerTicket?.token;
@@ -34,7 +33,13 @@ export default function MatchingPage({ onFound, onCancel }) {
             }
         };
 
-        socket.addMatchmaker('*', 2, 2)
+        socket.addMatchmaker(
+            '+properties.mode:' + mode,
+            2,
+            2,
+            { mode: mode },
+            {}
+        )
             .then((result) => {
                 ticketRef.current = result.ticket;
             })
@@ -52,7 +57,7 @@ export default function MatchingPage({ onFound, onCancel }) {
                 ticketRef.current = null;
             }
         };
-    }, [socket]);
+    }, [socket, mode]);
 
     return <MatchingScreen elapsed={elapsed} displayName={displayName} onCancel={onCancel} />;
 }

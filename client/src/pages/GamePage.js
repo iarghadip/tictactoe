@@ -31,6 +31,7 @@ export default function GamePage({ match, onLeave }) {
     const [gameOverWinner, setGameOverWinner] = useState(null);
     const [opponentDisconnected, setOpponentDisconnected] = useState(false);
     const [disconnectCountdown, setDisconnectCountdown] = useState(60);
+    const [gameMode, setGameMode] = useState('timed');
 
     const myMark = marks[myUserId];
     const opponentMark = myMark === 'X' ? 'O' : 'X';
@@ -65,6 +66,7 @@ export default function GamePage({ match, onLeave }) {
                     setCurrentTurn(payload.currentTurn);
                     setTimeLeft(payload.timeLeft ?? 30);
                     setScores(payload.scores ?? { X: 0, O: 0 });
+                    setGameMode(payload.mode ?? 'timed');
                     setStatus('playing');
                     setMyVoted(false);
                     setOpponentVoted(false);
@@ -200,6 +202,7 @@ export default function GamePage({ match, onLeave }) {
             status={status}
             isMyTurn={isMyTurn}
             timeLeft={timeLeft}
+            gameMode={gameMode}
             myVoted={myVoted}
             opponentVoted={opponentVoted}
             opponentDisconnected={opponentDisconnected}

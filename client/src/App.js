@@ -1,35 +1,49 @@
 import { useState, useEffect } from 'react';
 import { useNakama } from './contexts/nakamaContext';
-import EntryPage from './pages/EntryPage';
+import HomePage from './pages/HomePage';
 import MatchingPage from './pages/MatchingPage';
 import GamePage from './pages/GamePage';
 import './App.css';
 
 function App() {
-    const { session, restoring } = useNakama();
-    const [step, setStep] = useState('entry');
+    const { restoring, session } = useNakama();
+    const [step, setStep] = useState('home');
     const [match, setMatch] = useState(null);
+    const [mode, setMode] = useState(() => localStorage.getItem('nk_mode') || 'timed');
 
     useEffect(() => {
-        if (session && step === 'entry') {
+        if (!restoring && session && localStorage.getItem('nk_in_match') === 'true') {
+            localStorage.removeItem('nk_in_match');
             setStep('finding');
         }
-    }, [session]);
+    }, [restoring]);
 
     if (restoring) return null;
 
-    if (!session) {
-        return <EntryPage onDone={() => setStep('finding')} />;
-    }
+    const handleFindMatch = (selectedMode) => {
+        localStorage.setItem('nk_mode', selectedMode);
+        setMode(selectedMode);
+        setStep('finding');
+    };
+
+    const handleFound = (foundMatch) => {
+        localStorage.setItem('nk_in_match', 'true');
+        setMatch(foundMatch);
+        setStep('game');
+    };
+
+    const handleLeave = () => {
+        localStorage.removeItem('nk_in_match');
+        setMatch(null);
+        setStep('finding');
+    };
 
     if (step === 'finding') {
         return (
             <MatchingPage
-                onFound={(foundMatch) => {
-                    setMatch(foundMatch);
-                    setStep('game');
-                }}
-                onCancel={() => setStep('entry')}
+                mode={mode}
+                onFound={handleFound}
+                onCancel={() => setStep('home')}
             />
         );
     }
@@ -38,15 +52,16 @@ function App() {
         return (
             <GamePage
                 match={match}
-                onLeave={() => {
-                    setMatch(null);
-                    setStep('finding');
-                }}
+                onLeave={handleLeave}
             />
         );
     }
 
-    return null;
+    return (
+        <HomePage
+            onFindMatch={handleFindMatch}
+        />
+    );
 }
 
 export default App;
