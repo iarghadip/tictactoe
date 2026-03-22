@@ -1,6 +1,5 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MilitaryTechOutlinedIcon from '@mui/icons-material/MilitaryTechOutlined';
-import { RoundButton } from '../../components/button';
+import { Layout } from '../../components/layout';
 import './LeaderboardScreen.css';
 
 function StatPill({ label, value }) {
@@ -20,7 +19,6 @@ function MyCard({ stats }) {
             </div>
         );
     }
-
     return (
         <div className="lb-my-card">
             <div className="lb-my-card__top">
@@ -41,7 +39,6 @@ const MEDAL_COLORS = ['#FFD700', '#C0C0C0', '#CD7F32'];
 
 function PlayerRow({ player, isMe }) {
     const isTop = player.rank <= 3;
-
     return (
         <div className={`lb-row ${isMe ? 'lb-row--me' : ''}`}>
             <div className={`lb-row__rank ${isTop ? 'lb-row__rank--top' : ''}`}>
@@ -65,42 +62,33 @@ function PlayerRow({ player, isMe }) {
 
 export default function LeaderboardScreen({ loading, top100, myStats, myUserId, onBack }) {
     return (
-        <div className="lb-screen">
-            <div className="lb-container">
-                <div className="lb-header">
-                    <RoundButton onClick={onBack}>
-                        <ArrowBackIcon style={{ fontSize: 20 }} />
-                    </RoundButton>
-                    <div className="lb-header__title">Global Ranks</div>
-                </div>
-
-                {loading
-                    ? (
-                        <div className="lb-loading">Loading...</div>
-                    )
-                    : (
-                        <>
-                            <MyCard stats={myStats} />
-                            {top100.length === 0
-                                ? (
-                                    <div className="lb-empty">No players ranked yet.</div>
-                                )
-                                : (
-                                    <div className="lb-list">
-                                        {top100.map(player => (
-                                            <PlayerRow
-                                                key={player.id}
-                                                player={player}
-                                                isMe={player.id === myUserId}
-                                            />
-                                        ))}
-                                    </div>
-                                )
-                            }
-                        </>
-                    )
-                }
-            </div>
-        </div>
+        <Layout title="Global Ranks" onBack={onBack}>
+            {loading
+                ? (
+                    <div className="lb-loading">Loading...</div>
+                )
+                : (
+                    <>
+                        <MyCard stats={myStats} />
+                        {top100.length === 0
+                            ? (
+                                <div className="lb-empty">No players ranked yet.</div>
+                            )
+                            : (
+                                <div className="lb-list">
+                                    {top100.map(player => (
+                                        <PlayerRow
+                                            key={player.id}
+                                            player={player}
+                                            isMe={player.id === myUserId}
+                                        />
+                                    ))}
+                                </div>
+                            )
+                        }
+                    </>
+                )
+            }
+        </Layout>
     );
 }

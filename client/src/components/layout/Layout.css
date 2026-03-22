@@ -1,0 +1,31 @@
+.layout {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.layout__container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    max-width: 480px;
+    padding-bottom: 40px;
+}
+
+.layout__header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-top: 8px;
+}
+
+.layout__title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #E6E0E9;
+    letter-spacing: 0.3px;
+}

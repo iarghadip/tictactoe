@@ -1,4 +1,3 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
 import ShuffleOutlinedIcon from '@mui/icons-material/ShuffleOutlined';
 import BoltOutlinedIcon from '@mui/icons-material/BoltOutlined';
@@ -6,7 +5,7 @@ import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import WifiOffOutlinedIcon from '@mui/icons-material/WifiOffOutlined';
-import { RoundButton } from '../../components/button';
+import { Layout } from '../../components/layout';
 import './AboutScreen.css';
 
 const FEATURES = [
@@ -38,7 +37,7 @@ const FEATURES = [
         icon: <CalculateOutlinedIcon fontSize="small" />,
         iconClass: 'about-feature__icon--teal',
         name: 'Score Calculation',
-        desc: 'Every win earns 100 points. Every loss deducts 25. Draws don\'t count — no record, no penalty, no reward.'
+        desc: 'Every win earns 100 points. Every loss deducts 25. Draws don\'t count — no record, no penalty, no reward.',
     },
     {
         icon: <TimerOutlinedIcon fontSize="small" />,
@@ -69,43 +68,34 @@ const DEV_ROWS = [
 
 export default function AboutScreen({ onBack }) {
     return (
-        <div className="about-screen">
-            <div className="about-container">
-                <div className="about-header">
-                    <RoundButton onClick={onBack}>
-                        <ArrowBackIcon style={{ fontSize: 20 }} />
-                    </RoundButton>
-                    <div className="about-header__title">About Game</div>
-                </div>
+        <Layout title="About Game" onBack={onBack}>
+            <div className="about-features">
+                {FEATURES.map(feature => (
+                    <div className="about-feature" key={feature.name}>
+                        <div className={`about-feature__icon ${feature.iconClass}`}>
+                            {feature.icon}
+                        </div>
+                        <div className="about-feature__body">
+                            <div className="about-feature__name">{feature.name}</div>
+                            <div className="about-feature__desc">{feature.desc}</div>
+                        </div>
+                    </div>
+                ))}
+            </div>
 
-                <div className="about-features">
-                    {FEATURES.map(feature => (
-                        <div className="about-feature" key={feature.name}>
-                            <div className={`about-feature__icon ${feature.iconClass}`}>
-                                {feature.icon}
-                            </div>
-                            <div className="about-feature__body">
-                                <div className="about-feature__name">{feature.name}</div>
-                                <div className="about-feature__desc">{feature.desc}</div>
-                            </div>
+            <div className="about-dev">
+                <div className="about-dev__top">
+                    <div className="about-dev__name">Arghadip Das</div>
+                </div>
+                <div className="about-dev__rows">
+                    {DEV_ROWS.map(row => (
+                        <div className="about-dev__row" key={row.key}>
+                            <div className="about-dev__key">{row.key}</div>
+                            <div className="about-dev__val">{row.val}</div>
                         </div>
                     ))}
                 </div>
-
-                <div className="about-dev">
-                    <div className="about-dev__top">
-                        <div className="about-dev__name">Arghadip Das</div>
-                    </div>
-                    <div className="about-dev__rows">
-                        {DEV_ROWS.map(row => (
-                            <div className="about-dev__row" key={row.key}>
-                                <div className="about-dev__key">{row.key}</div>
-                                <div className="about-dev__val">{row.val}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
             </div>
-        </div>
+        </Layout>
     );
 }
