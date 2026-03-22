@@ -24,14 +24,6 @@
     text-align: center;
 }
 
-.home-header__title {
-    font-size: 26px;
-    font-weight: 700;
-    color: #E6E0E9;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
-
 .home-menu {
     display: flex;
     flex-direction: column;
@@ -80,14 +72,6 @@
 
 .home-menu__label {
     flex: 1;
-    font-size: 15px;
-    font-weight: 500;
-    letter-spacing: 0.2px;
-    color: #E6E0E9;
-}
-
-.home-menu__label--danger {
-    color: #e05c5c;
 }
 
 .home-menu__arrow {

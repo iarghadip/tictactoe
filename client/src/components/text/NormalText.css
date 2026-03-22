@@ -1,0 +1,10 @@
+.normal-text {
+    font-weight: bold;
+    letter-spacing: 0.2px;
+    color: #E6E0E9;
+    text-overflow: ellipsis;
+}
+
+.normal-text--danger {
+    color: #e05c5c;
+}

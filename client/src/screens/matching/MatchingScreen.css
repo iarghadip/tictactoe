@@ -54,14 +54,6 @@
     }
 }
 
-.matching__text {
-    font-size: 18px;
-    font-weight: 600;
-    color: #E6E0E9;
-    text-align: center;
-    letter-spacing: 0.5px;
-}
-
 @keyframes text-sweep {
     0% {
         background-position: 100% center;

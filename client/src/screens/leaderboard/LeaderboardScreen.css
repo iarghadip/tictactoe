@@ -45,18 +45,8 @@
     justify-content: space-between;
 }
 
-.lb-my-card__rank {
-    font-size: 28px;
-    font-weight: 700;
-    color: #E6E0E9;
-    line-height: 1;
-}
-
 .lb-my-card__score {
-    font-size: 20px;
-    font-weight: 700;
-    color: #80CBC4;
-    font-variant-numeric: tabular-nums;
+    color: #80CBC4 !important;
 }
 
 .lb-my-card__stats {
@@ -73,20 +63,6 @@
     border-radius: 10px;
     padding: 8px 16px;
     flex: 1;
-}
-
-.stat-pill__value {
-    font-size: 18px;
-    font-weight: 700;
-    color: #E6E0E9;
-    font-variant-numeric: tabular-nums;
-}
-
-.stat-pill__label {
-    font-size: 10px;
-    color: rgba(230, 224, 233, 0.3);
-    letter-spacing: 1px;
-    text-transform: uppercase;
 }
 
 .lb-list {
@@ -137,20 +113,7 @@
     min-width: 0;
 }
 
-.lb-row__name {
-    font-size: 14px;
-    font-weight: 600;
-    color: #E6E0E9;
-    letter-spacing: 0.2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .lb-row__score {
-    font-size: 15px;
-    font-weight: 700;
-    color: #80CBC4;
-    font-variant-numeric: tabular-nums;
+    color: #80CBC4 !important;
     flex-shrink: 0;
 }

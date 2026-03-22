@@ -39,24 +39,6 @@
     z-index: 1;
 }
 
-.badge__name {
-    font-size: 13px;
-    font-weight: 600;
-    color: #E6E0E9;
-    letter-spacing: 0.5px;
-    position: relative;
-    z-index: 1;
-}
-
-.badge__score {
-    font-size: 28px;
-    font-weight: 700;
-    color: #E6E0E9;
-    line-height: 1;
-    position: relative;
-    z-index: 1;
-}
-
 .score {
     display: flex;
     align-items: center;

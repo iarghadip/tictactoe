@@ -1,19 +1,19 @@
 import './CapitalText.css';
 
 export default function CapitalText({ children, size = 13, fill = null }) {
-    let className = 'text';
+    let className = 'capital-text';
     let style;
 
     if (fill == -1) {
-        className += ' util sweep';
+        className += ' capital-text--util capital-text--sweep';
     } else if (fill !== null) {
-        className += ' util load';
+        className += ' capital-text--util capital-text--load';
         style = { '--fill': `${fill}%` };
     }
 
     return (
         <span className={className} style={{ ...style, fontSize: `${size}px` }}>
-            {children}
+        {children}
         </span>
     );
 }

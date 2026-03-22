@@ -1,13 +1,13 @@
 import MilitaryTechOutlinedIcon from '@mui/icons-material/MilitaryTechOutlined';
 import { Layout } from '../../components/layout';
-import { CapitalText } from '../../components/text';
+import { CapitalText, NormalText } from '../../components/text';
 import './LeaderboardScreen.css';
 
 function StatPill({ label, value }) {
     return (
         <div className="stat-pill">
-            <span className="stat-pill__value">{value}</span>
-            <span className="stat-pill__label">{label}</span>
+            <NormalText size="2">{value}</NormalText>
+            <CapitalText size="10">{label}</CapitalText>
         </div>
     );
 }
@@ -23,8 +23,8 @@ function MyCard({ stats }) {
     return (
         <div className="lb-my-card">
             <div className="lb-my-card__top">
-                <div className="lb-my-card__rank">#{stats.rank}</div>
-                <div className="lb-my-card__score">{stats.score.toLocaleString()} pts</div>
+                <NormalText size="1">#{stats.rank}</NormalText>
+                <NormalText size="2" className="lb-my-card__score">{stats.score.toLocaleString()} pts</NormalText>
             </div>
             <CapitalText>{stats.display_name}</CapitalText>
             <div className="lb-my-card__stats">
@@ -53,10 +53,10 @@ function PlayerRow({ player, isMe }) {
                 }
             </div>
             <div className="lb-row__info">
-                <div className="lb-row__name">{player.display_name}</div>
+                <NormalText>{player.display_name}</NormalText>
                 <CapitalText size="11">{player.matches}P · {player.wins}W · {player.losses}L</CapitalText>
             </div>
-            <div className="lb-row__score">{player.score.toLocaleString()}</div>
+            <NormalText className="lb-row__score">{player.score.toLocaleString()}</NormalText>
         </div>
     );
 }

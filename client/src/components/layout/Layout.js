@@ -1,5 +1,6 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { RoundButton } from '../../components/button';
+import { NormalText } from '../../components/text';
 import './Layout.css';
 
 export default function Layout({ title, onBack, children }) {
@@ -10,7 +11,7 @@ export default function Layout({ title, onBack, children }) {
                     <RoundButton onClick={onBack}>
                         <ArrowBackIcon style={{ fontSize: 20 }} />
                     </RoundButton>
-                    <div className="layout__title">{title}</div>
+                    <NormalText size="2">{title}</NormalText>
                 </div>
                 {children}
             </div>
