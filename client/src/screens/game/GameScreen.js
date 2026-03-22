@@ -59,7 +59,7 @@ export default function GameScreen({
                     : <CapitalText fill={turnFill}>{turnText}</CapitalText>
                 }
             </div>
-            <div className="flex-center gap-3">
+            <div className="flex-center gap">
                 {isFinished && (
                     <RoundButton glowing={opponentVoted} onClick={onRematch} disabled={myVoted}>
                         <RefreshIcon style={{ fontSize: 20 }} className={myVoted ? 'icon-spin' : ''} />

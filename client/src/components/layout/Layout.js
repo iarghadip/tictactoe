@@ -5,15 +5,14 @@ import './Layout.css';
 
 export default function Layout({ title, onBack, children }) {
     return (
-        <div className="layout">
-            <div className="layout__container">
-                <div className="layout__header">
+        <div className="flex layout">
+            <div className="flex layout__container">
+                <div className="flex layout__header">
                     {onBack && (
-                            <RoundButton onClick={onBack}>
-                                <ArrowBackIcon style={{ fontSize: 20 }} />
-                            </RoundButton>
-                        )
-                    }
+                        <RoundButton onClick={onBack}>
+                            <ArrowBackIcon style={{ fontSize: 20 }} />
+                        </RoundButton>
+                    )}
                     {title && <NormalText size="2">{title}</NormalText> }
                 </div>
                 {children}
