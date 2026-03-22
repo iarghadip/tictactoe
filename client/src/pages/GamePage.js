@@ -39,7 +39,6 @@ export default function GamePage({ match, onLeave }) {
     const isMyTurn = currentTurn === myUserId;
     const isXTurn = currentTurn ? marks[currentTurn] === 'X' : true;
     const result = checkWinner(cells);
-    const isDraw = !result && cells.every(c => c !== null);
 
     const clearDisconnectTimer = useCallback(() => {
         if (disconnectTimerRef.current) {
@@ -177,7 +176,10 @@ export default function GamePage({ match, onLeave }) {
             CLIENT_OPCODE.LEAVE,
             JSON.stringify({})
         );
-    }, [socket, match]);
+        if (opponentDisconnected) {
+            onLeaveRef.current();
+        }
+    }, [socket, match, opponentDisconnected]);
 
     const winnerMark = result ? result.winner : gameOverWinner;
     const iWon = winnerMark && marks[myUserId] === winnerMark;

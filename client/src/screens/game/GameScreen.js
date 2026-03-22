@@ -45,6 +45,8 @@ export default function GameScreen({
         ? { '--fill': `${disconnectFillPct}%` }
         : {};
 
+    const leaveDisabled = opponentDisconnected && disconnectCountdown > 30;
+
     return (
         <div className="game-screen">
             <div className="game-container">
@@ -94,7 +96,7 @@ export default function GameScreen({
                 )}
                 {status !== 'finished' && (
                     <div className="game-actions">
-                        <RoundButton onClick={onLeave}>
+                        <RoundButton onClick={onLeave} disabled={leaveDisabled}>
                             <LogoutIcon style={{ fontSize: 20 }} />
                         </RoundButton>
                     </div>
