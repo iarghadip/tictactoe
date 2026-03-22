@@ -1,61 +1,12 @@
-.game-screen {
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    box-sizing: border-box;
+.icon-spin {
+    animation: icon-spin 1s linear infinite;
 }
 
-.game-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 32px;
-    width: 100%;
-    max-width: 400px;
-}
-
-.game-players {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
-.game-status {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.game-board-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-}
-
-.game-actions {
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    justify-content: center;
-}
-
-.game-rematch-spinning {
-    animation: rematch-spin 1s linear infinite;
-}
-
-@keyframes rematch-spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-@media (max-width: 360px) {
-    .game-board-wrapper {
-        transform: scale(0.85);
-        transform-origin: center;
+@keyframes icon-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
     }
 }

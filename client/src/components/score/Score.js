@@ -1,36 +1,43 @@
-import Circle from '../shapes/Circle';
-import Cross from '../shapes/Cross';
-import { NormalText } from '../text';
+import { CapitalText, NormalText } from '../../components/text';
 import './Score.css';
 
-function Badge({ name, score, shape, isActive }) {
+function StatPill({ label, value }) {
     return (
-        <div className={`badge ${isActive ? 'active' : ''}`}>
-            <div className="badge__shape">
-                {shape === 'O' ? <Circle /> : <Cross />}
-            </div>
-            <NormalText size="4">{name}</NormalText>
-            <NormalText size="1">{score}</NormalText>
+        <div className="score-stat-pill">
+            <NormalText size="2">{value}</NormalText>
+            <CapitalText size="10">{label}</CapitalText>
         </div>
     );
 }
 
-export default function Score({ p1, p2 }) {
+export default function Score({ stats }) {
+    if (!stats) {
+        return (
+            <div className="score-stats score-stats--empty">
+                <CapitalText>You are not ranked yet</CapitalText>
+            </div>
+        );
+    }
+    // stats = {
+    //     rank: -1,
+    //     score: -1,
+    //     matches: -1,
+    //     wins: -1,
+    //     losses: -1,
+    //     display_name: -1
+    // };
     return (
-        <div className="score">
-            <Badge
-                name={p1.name}
-                score={p1.score}
-                shape={p1.mark}
-                isActive={p1.turn}
-            />
-            <div className="score__divider" />
-            <Badge
-                name={p2.name}
-                score={p2.score}
-                shape={p2.mark}
-                isActive={p2.turn}
-            />
+        <div className="score-stats">
+            <div className="score-stats__top">
+                <NormalText size="1">#{stats.rank}</NormalText>
+                <NormalText size="2" className="score-stats__score">{stats.score.toLocaleString()} pts</NormalText>
+            </div>
+            <CapitalText>{stats.display_name}</CapitalText>
+            <div className="score-stats__stats">
+                <StatPill label="played" value={stats.matches} />
+                <StatPill label="won" value={stats.wins} />
+                <StatPill label="lost" value={stats.losses} />
+            </div>
         </div>
     );
 }

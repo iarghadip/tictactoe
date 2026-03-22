@@ -9,7 +9,7 @@ function normalizeBoard(board) {
 }
 
 export default function GamePage({ match, onLeave }) {
-    const { socket, account } = useNakama();
+    const { socket, client, session, account } = useNakama();
     const myUserId = account?.user?.id;
     const activeRef = useRef(true);
     const onLeaveRef = useRef(onLeave);
@@ -22,7 +22,6 @@ export default function GamePage({ match, onLeave }) {
     const [cells, setCells] = useState(Array(9).fill(null));
     const [marks, setMarks] = useState({});
     const [currentTurn, setCurrentTurn] = useState(null);
-    const [scores, setScores] = useState({ X: 0, O: 0 });
     const [players, setPlayers] = useState({});
     const [status, setStatus] = useState('waiting');
     const [myVoted, setMyVoted] = useState(false);
@@ -32,12 +31,12 @@ export default function GamePage({ match, onLeave }) {
     const [opponentDisconnected, setOpponentDisconnected] = useState(false);
     const [disconnectCountdown, setDisconnectCountdown] = useState(60);
     const [gameMode, setGameMode] = useState('timed');
+    const [myStats, setMyStats] = useState(null);
 
     const myMark = marks[myUserId];
     const opponentMark = myMark === 'X' ? 'O' : 'X';
     const opponentName = players[opponentMark] ?? '...';
     const isMyTurn = currentTurn === myUserId;
-    const isXTurn = currentTurn ? marks[currentTurn] === 'X' : true;
     const result = checkWinner(cells);
 
     const clearDisconnectTimer = useCallback(() => {
@@ -46,6 +45,27 @@ export default function GamePage({ match, onLeave }) {
             disconnectTimerRef.current = null;
         }
     }, []);
+
+    const fetchMyStats = useCallback(async () => {
+        if (!client || !session) return;
+        try {
+            const result = await client.rpc(session, 'get_leaderboard', {});
+            const data = result.payload;
+            setMyStats(data.myStats || null);
+        } catch (e) {
+            console.error('Failed to fetch stats:', e);
+        }
+    }, [client, session]);
+
+    useEffect(() => {
+        fetchMyStats();
+    }, [fetchMyStats]);
+
+    useEffect(() => {
+        if (status === 'finished') {
+            fetchMyStats();
+        }
+    }, [status, fetchMyStats]);
 
     useEffect(() => {
         if (!socket) return;
@@ -64,7 +84,6 @@ export default function GamePage({ match, onLeave }) {
                     setCells(normalizeBoard(payload.board));
                     setCurrentTurn(payload.currentTurn);
                     setTimeLeft(payload.timeLeft ?? 30);
-                    setScores(payload.scores ?? { X: 0, O: 0 });
                     setGameMode(payload.mode ?? 'timed');
                     setStatus('playing');
                     setMyVoted(false);
@@ -84,12 +103,6 @@ export default function GamePage({ match, onLeave }) {
                     setCells(normalizeBoard(payload.board));
                     setStatus('finished');
                     setGameOverWinner(payload.winner ?? null);
-                    if (payload.winner) {
-                        setScores(s => ({
-                            ...s,
-                            [payload.winner]: s[payload.winner] + 1,
-                        }));
-                    }
                     break;
 
                 case SERVER_OPCODE.TIMER_UPDATE:
@@ -196,8 +209,6 @@ export default function GamePage({ match, onLeave }) {
 
     return (
         <GameScreen
-            p1={{ name: players['O'] ?? '...', score: scores.O, mark: 'O', turn: !isXTurn }}
-            p2={{ name: players['X'] ?? '...', score: scores.X, mark: 'X', turn: isXTurn }}
             cells={cells}
             winCombo={result?.combo ?? null}
             turnText={turnText}
@@ -210,6 +221,7 @@ export default function GamePage({ match, onLeave }) {
             opponentDisconnected={opponentDisconnected}
             opponentName={opponentName}
             disconnectCountdown={disconnectCountdown}
+            myStats={myStats}
             onCellClick={handleCellClick}
             onRematch={handleRematch}
             onLeave={handleLeave}

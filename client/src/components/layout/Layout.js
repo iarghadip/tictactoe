@@ -8,10 +8,13 @@ export default function Layout({ title, onBack, children }) {
         <div className="layout">
             <div className="layout__container">
                 <div className="layout__header">
-                    <RoundButton onClick={onBack}>
-                        <ArrowBackIcon style={{ fontSize: 20 }} />
-                    </RoundButton>
-                    <NormalText size="2">{title}</NormalText>
+                    {onBack && (
+                            <RoundButton onClick={onBack}>
+                                <ArrowBackIcon style={{ fontSize: 20 }} />
+                            </RoundButton>
+                        )
+                    }
+                    {title && <NormalText size="2">{title}</NormalText> }
                 </div>
                 {children}
             </div>

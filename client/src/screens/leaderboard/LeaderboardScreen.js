@@ -1,40 +1,8 @@
 import MilitaryTechOutlinedIcon from '@mui/icons-material/MilitaryTechOutlined';
 import { Layout } from '../../components/layout';
+import { Score } from '../../components/score';
 import { CapitalText, NormalText } from '../../components/text';
 import './LeaderboardScreen.css';
-
-function StatPill({ label, value }) {
-    return (
-        <div className="stat-pill">
-            <NormalText size="2">{value}</NormalText>
-            <CapitalText size="10">{label}</CapitalText>
-        </div>
-    );
-}
-
-function MyCard({ stats }) {
-    if (!stats) {
-        return (
-            <div className="lb-my-card lb-my-card--empty">
-                <div className="lb-my-card__no-games">Play a match to appear on the leaderboard</div>
-            </div>
-        );
-    }
-    return (
-        <div className="lb-my-card">
-            <div className="lb-my-card__top">
-                <NormalText size="1">#{stats.rank}</NormalText>
-                <NormalText size="2" className="lb-my-card__score">{stats.score.toLocaleString()} pts</NormalText>
-            </div>
-            <CapitalText>{stats.display_name}</CapitalText>
-            <div className="lb-my-card__stats">
-                <StatPill label="played" value={stats.matches} />
-                <StatPill label="won" value={stats.wins} />
-                <StatPill label="lost" value={stats.losses} />
-            </div>
-        </div>
-    );
-}
 
 const MEDAL_COLORS = ['#FFD700', '#C0C0C0', '#CD7F32'];
 
@@ -66,16 +34,14 @@ export default function LeaderboardScreen({ loading, top100, myStats, myUserId, 
         <Layout title="Global Ranks" onBack={onBack}>
             {loading
                 ? (
-                    <div className="lb-loading">Loading...</div>
-                )
-                : (
+                    <CapitalText fill="-1">Loading your stats</CapitalText>
+                ) : (
                     <>
-                        <MyCard stats={myStats} />
+                        <Score stats={myStats} />
                         {top100.length === 0
                             ? (
-                                <div className="lb-empty">No players ranked yet.</div>
-                            )
-                            : (
+                                <CapitalText>No players ranked yet</CapitalText>
+                            ) : (
                                 <div className="lb-list">
                                     {top100.map(player => (
                                         <PlayerRow
