@@ -2,20 +2,20 @@ import './MatchingScreen.css';
 
 export default function MatchingScreen({ elapsed, displayName, onCancel }) {
     return (
-        <div className="finding">
-            <div className="finding__container">
-                <div className="finding__hourglass">⏳</div>
-                <div className="finding__text">{displayName}</div>
-                <div className="finding__text">
+        <div className="matching-screen">
+            <div className="matching__container">
+                <div className="matching__hourglass">⏳</div>
+                <div className="matching__text">{displayName}</div>
+                <div className="matching__text">
                     Finding a random player
-                    <span className="finding__dots">
+                    <span className="matching__dots">
                         <span>.</span>
                         <span>.</span>
                         <span>.</span>
                     </span>
                 </div>
-                <div className="finding__timer">{elapsed}s</div>
-                <button className="finding__cancel" onClick={onCancel}>
+                <div className="matching__timer">{elapsed}s</div>
+                <button className="matching__cancel" onClick={onCancel}>
                     Cancel
                 </button>
             </div>

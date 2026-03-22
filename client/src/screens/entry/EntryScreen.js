@@ -14,13 +14,13 @@ export default function EntryScreen({ onDone, loading, error }) {
     }
 
     return (
-        <div className="name-entry">
-            <div className="name-entry__container">
-                <div className="name-entry__title">Who are you?</div>
-                {error && <p className="name-entry__error">{error}</p>}
-                <div className="name-entry__row">
+        <div className="entry-screen">
+            <div className="entry__container">
+                <div className="entry__title">Who are you?</div>
+                {error && <p className="entry__error">{error}</p>}
+                <div className="entry__row">
                     <input
-                        className="name-entry__input"
+                        className="entry__input"
                         type="text"
                         placeholder="Username"
                         maxLength={10}
@@ -30,9 +30,9 @@ export default function EntryScreen({ onDone, loading, error }) {
                         autoFocus
                     />
                 </div>
-                <div className="name-entry__row">
+                <div className="entry__row">
                     <input
-                        className="name-entry__input"
+                        className="entry__input"
                         type="text"
                         placeholder="Display name"
                         maxLength={10}
@@ -42,7 +42,7 @@ export default function EntryScreen({ onDone, loading, error }) {
                     />
                 </div>
                 <button
-                    className="name-entry__btn"
+                    className="entry__btn"
                     onClick={handleSubmit}
                     disabled={username.trim().length === 0 || loading}
                 >
