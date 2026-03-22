@@ -49,7 +49,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
 }
 .game-disconnect__text {
     font-size: 13px;
@@ -57,12 +56,16 @@
     letter-spacing: 1px;
     text-transform: uppercase;
 }
-.game-disconnect__countdown {
-    font-size: 28px;
-    font-weight: 700;
-    color: #e05c5c;
-    font-variant-numeric: tabular-nums;
-    line-height: 1;
+.game-disconnect__text.timed {
+    background: linear-gradient(
+        to right,
+        #e05c5c var(--fill),
+        rgba(230, 224, 233, 0.5) var(--fill)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: --fill 1s linear;
 }
 .game-board-wrapper {
     display: flex;

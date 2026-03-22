@@ -5,6 +5,7 @@ import { Score } from '../../components/score';
 import './GameScreen.css';
 
 const TURN_LIMIT = 30;
+const DISCONNECT_GRACE = 60;
 
 export default function GameScreen({
     p1,
@@ -27,8 +28,16 @@ export default function GameScreen({
         ? ((TURN_LIMIT - timeLeft) / TURN_LIMIT) * 100
         : 0;
 
+    const disconnectFillPct = opponentDisconnected
+        ? ((DISCONNECT_GRACE - disconnectCountdown) / DISCONNECT_GRACE) * 100
+        : 0;
+
     const turnStyle = status === 'playing' && !opponentDisconnected
         ? { '--fill': `${fillPct}%` }
+        : {};
+
+    const disconnectStyle = opponentDisconnected
+        ? { '--fill': `${disconnectFillPct}%` }
         : {};
 
     return (
@@ -47,8 +56,12 @@ export default function GameScreen({
                 {opponentDisconnected
                     ? (
                         <div className="game-disconnect">
-                            <span className="game-disconnect__text">Opponent disconnected</span>
-                            <span className="game-disconnect__countdown">{disconnectCountdown}s</span>
+                            <span
+                                className="game-disconnect__text timed"
+                                style={disconnectStyle}
+                            >
+                                Opponent disconnected
+                            </span>
                         </div>
                     )
                     : (
