@@ -3,7 +3,7 @@ import { useNakama } from '../contexts/nakamaContext';
 import { HomeScreen } from '../screens/home';
 import { Enter } from '../components/enter';
 
-export default function HomePage({ onFindMatch }) {
+export default function HomePage({ onFindMatch, onGlobalRanks }) {
     const { session, connect, updateDisplayName, disconnect, account } = useNakama();
 
     const [authModal, setAuthModal] = useState(false);
@@ -26,6 +26,9 @@ export default function HomePage({ onFindMatch }) {
             case 'name-settings':
                 setNameError(null);
                 setNameModal(true);
+                break;
+            case 'ranks':
+                onGlobalRanks();
                 break;
             default:
                 break;

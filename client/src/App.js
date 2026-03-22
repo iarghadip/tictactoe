@@ -3,6 +3,7 @@ import { useNakama } from './contexts/nakamaContext';
 import HomePage from './pages/HomePage';
 import MatchingPage from './pages/MatchingPage';
 import GamePage from './pages/GamePage';
+import LeaderboardPage from './pages/LeaderboardPage';
 import './App.css';
 
 function App() {
@@ -57,9 +58,17 @@ function App() {
         );
     }
 
+    if (step === 'leaderboard') {
+        return (
+            <LeaderboardPage
+                onBack={() => setStep('home')}
+            />
+        );
+    }
     return (
         <HomePage
             onFindMatch={handleFindMatch}
+            onGlobalRanks={() => setStep('leaderboard')}
         />
     );
 }

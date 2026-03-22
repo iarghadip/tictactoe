@@ -59,17 +59,103 @@ function loadHistoricalScores(nk, logger, marks, playerIds) {
     return scores;
 }
 
-function saveGame(nk, logger, userA, userB, winnerId) {
+function saveGame(nk, logger, userA, userB, winnerId, loserId) {
     try {
         nk.sqlExec(
-            'INSERT INTO games (id, user_a, user_b, winner) VALUES ($1, $2, $3, $4)',
-            [nk.uuidv4(), userA, userB, winnerId]
+            'INSERT INTO games (id, user_a, user_b, winner, loser, completed_at) VALUES ($1, $2, $3, $4, $5, NOW())',
+            [nk.uuidv4(), userA, userB, winnerId || null, loserId || null]
         );
-        logger.info('Game saved. user_a: %s user_b: %s winner: %s', userA, userB, winnerId || 'draw');
+        logger.info('Game saved. user_a: %s user_b: %s winner: %s loser: %s', userA, userB, winnerId || 'draw', loserId || 'draw');
     } catch (e) {
-        logger.error('Failed to save game. user_a: %s user_b: %s winner: %s error: %s', userA, userB, winnerId || 'draw', e.message);
+        logger.error('Failed to save game. user_a: %s user_b: %s winner: %s loser: %s error: %s', userA, userB, winnerId || 'draw', loserId || 'draw', e.message);
     }
 }
+
+var getLeaderboard = function (ctx, logger, nk, payload) {
+    var userId = ctx.userId;
+
+    try {
+        var top100 = nk.sqlQuery(`
+            WITH ranked AS (
+                SELECT
+                    u.id,
+                    COALESCE(u.display_name, 'Anonymous') AS display_name,
+                    COUNT(CASE WHEN g.winner = u.id THEN 1 END)                                                           AS wins,
+                    COUNT(CASE WHEN g.loser = u.id THEN 1 END)                                                            AS losses,
+                    COUNT(CASE WHEN g.winner = u.id OR g.loser = u.id THEN 1 END)                                         AS matches,
+                    COUNT(CASE WHEN g.winner = u.id THEN 1 END) * 100
+                    - COUNT(CASE WHEN g.loser = u.id THEN 1 END) * 25                                                     AS score
+                FROM users u
+                INNER JOIN games g ON g.winner = u.id OR g.loser = u.id
+                GROUP BY u.id, u.display_name
+            ),
+            ranked_with_rank AS (
+                SELECT *, RANK() OVER (ORDER BY score DESC) AS rank
+                FROM ranked
+            )
+            SELECT * FROM ranked_with_rank
+            ORDER BY rank
+            LIMIT 100
+        `, []);
+
+        var myStats = null;
+        try {
+            var myRows = nk.sqlQuery(`
+                WITH ranked AS (
+                    SELECT
+                        u.id,
+                        COALESCE(u.display_name, 'Anonymous') AS display_name,
+                        COUNT(CASE WHEN g.winner = u.id THEN 1 END)                                                           AS wins,
+                        COUNT(CASE WHEN g.loser = u.id THEN 1 END)                                                            AS losses,
+                        COUNT(CASE WHEN g.winner = u.id OR g.loser = u.id THEN 1 END)                                         AS matches,
+                        COUNT(CASE WHEN g.winner = u.id THEN 1 END) * 100
+                        - COUNT(CASE WHEN g.loser = u.id THEN 1 END) * 25                                                     AS score
+                    FROM users u
+                    INNER JOIN games g ON g.winner = u.id OR g.loser = u.id
+                    GROUP BY u.id, u.display_name
+                ),
+                ranked_with_rank AS (
+                    SELECT *, RANK() OVER (ORDER BY score DESC) AS rank
+                    FROM ranked
+                )
+                SELECT * FROM ranked_with_rank WHERE id = $1
+            `, [userId]);
+
+            if (myRows && myRows.length > 0) {
+                var r = myRows[0];
+                myStats = {
+                    id:           r.id,
+                    display_name: r.display_name,
+                    wins:         parseInt(r.wins, 10),
+                    losses:       parseInt(r.losses, 10),
+                    matches:      parseInt(r.matches, 10),
+                    score:        parseInt(r.score, 10),
+                    rank:         parseInt(r.rank, 10),
+                };
+            }
+        } catch (e) {
+            logger.error('Failed to load my stats: %s', e.message);
+        }
+
+        var players = (top100 || []).map(function (r) {
+            return {
+                id:           r.id,
+                display_name: r.display_name,
+                wins:         parseInt(r.wins, 10),
+                losses:       parseInt(r.losses, 10),
+                matches:      parseInt(r.matches, 10),
+                score:        parseInt(r.score, 10),
+                rank:         parseInt(r.rank, 10),
+            };
+        });
+
+        logger.info('Leaderboard fetched. top100count: %s myStats: %s', players.length, myStats ? 'found' : 'none');
+        return JSON.stringify({ players: players, myStats: myStats });
+    } catch (e) {
+        logger.error('getLeaderboard failed: %s', e.message);
+        return JSON.stringify({ players: [], myStats: null });
+    }
+};
 
 var matchmakerMatched = function (ctx, logger, nk, matches) {
     logger.info('Matchmaker matched: %s vs %s', matches[0].presence.username, matches[1].presence.username);
@@ -197,7 +283,7 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
                 var winnerId = playerIds.find(function (id) { return id !== dcId; });
                 logger.info('Disconnect grace expired. dcId: %s winnerId: %s', dcId, winnerId);
                 if (state.status === 'playing' && playerIds.length === 2) {
-                    saveGame(nk, logger, playerIds[0], playerIds[1], winnerId);
+                    saveGame(nk, logger, playerIds[0], playerIds[1], winnerId, dcId);
                 }
                 state.status = 'finished';
                 state.turnStartTick = null;
@@ -241,8 +327,9 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
                 state.status = 'finished';
                 state.turnStartTick = null;
                 var playerIds = Object.keys(state.marks);
-                logger.info('Game over. winner mark: %s winnerId: %s', result.winner, senderId);
-                saveGame(nk, logger, playerIds[0], playerIds[1], senderId);
+                var loserId = playerIds.find(function (id) { return id !== senderId; });
+                logger.info('Game over. winner mark: %s winnerId: %s loserId: %s', result.winner, senderId, loserId);
+                saveGame(nk, logger, playerIds[0], playerIds[1], senderId, loserId);
                 dispatcher.broadcastMessage(SERVER_OPCODE.GAME_OVER, JSON.stringify({
                     board: state.board,
                     winner: result.winner,
@@ -256,7 +343,7 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
                 state.turnStartTick = null;
                 var playerIds = Object.keys(state.marks);
                 logger.info('Game over. result: draw');
-                saveGame(nk, logger, playerIds[0], playerIds[1], null);
+                saveGame(nk, logger, playerIds[0], playerIds[1], null, null);
                 dispatcher.broadcastMessage(SERVER_OPCODE.GAME_OVER, JSON.stringify({
                     board: state.board,
                     winner: null,
@@ -312,7 +399,7 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
             if (state.status === 'playing') {
                 var playerIds = Object.keys(state.marks);
                 var winnerId = playerIds.find(function (id) { return id !== senderId; });
-                saveGame(nk, logger, playerIds[0], playerIds[1], winnerId);
+                saveGame(nk, logger, playerIds[0], playerIds[1], winnerId, senderId);
             }
             state.status = 'finished';
             state.turnStartTick = null;
@@ -332,7 +419,7 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
             state.status = 'finished';
             state.turnStartTick = null;
             logger.info('Turn timeout. timedOutId: %s winnerId: %s winnerMark: %s', timedOutId, winnerId, winnerMark);
-            saveGame(nk, logger, playerIds[0], playerIds[1], winnerId);
+            saveGame(nk, logger, playerIds[0], playerIds[1], winnerId, timedOutId);
             dispatcher.broadcastMessage(SERVER_OPCODE.GAME_OVER, JSON.stringify({
                 board: state.board,
                 winner: winnerMark,
@@ -369,14 +456,18 @@ var InitModule = function (ctx, logger, nk, initializer) {
                 completed_at TIMESTAMP DEFAULT NULL,
                 user_a       UUID      REFERENCES users(id),
                 user_b       UUID      REFERENCES users(id),
-                winner       UUID      REFERENCES users(id) DEFAULT NULL
+                winner       UUID      REFERENCES users(id) DEFAULT NULL,
+                loser        UUID      REFERENCES users(id) DEFAULT NULL
             );
         `, []);
-        logger.info('Tables ready.');
+        nk.sqlExec('CREATE INDEX IF NOT EXISTS idx_games_winner ON games(winner);', []);
+        nk.sqlExec('CREATE INDEX IF NOT EXISTS idx_games_loser ON games(loser);', []);
+        logger.info('Tables and indexes ready.');
     } catch (e) {
         logger.error('Failed to create tables: %s', e.message);
     }
 
+    initializer.registerRpc('get_leaderboard', getLeaderboard);
     initializer.registerMatchmakerMatched(matchmakerMatched);
     initializer.registerMatch('tictactoe', {
         matchInit: matchInit,
