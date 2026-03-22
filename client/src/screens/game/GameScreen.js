@@ -4,6 +4,8 @@ import { Board } from '../../components/board';
 import { Score } from '../../components/score';
 import './GameScreen.css';
 
+const TURN_LIMIT = 30;
+
 export default function GameScreen({
     p1,
     p2,
@@ -12,12 +14,23 @@ export default function GameScreen({
     turnText,
     status,
     isMyTurn,
+    timeLeft,
     myVoted,
     opponentVoted,
+    opponentDisconnected,
+    disconnectCountdown,
     onCellClick,
     onRematch,
     onLeave,
 }) {
+    const fillPct = status === 'playing' && !opponentDisconnected
+        ? ((TURN_LIMIT - timeLeft) / TURN_LIMIT) * 100
+        : 0;
+
+    const turnStyle = status === 'playing' && !opponentDisconnected
+        ? { '--fill': `${fillPct}%` }
+        : {};
+
     return (
         <div className="game-screen">
             <div className="game-container">
@@ -26,12 +39,27 @@ export default function GameScreen({
                     <Board
                         squares={cells}
                         onCellClick={onCellClick}
-                        disabled={status !== 'playing'}
+                        disabled={status !== 'playing' || opponentDisconnected}
                         winCombo={winCombo}
-                        isMyTurn={isMyTurn}
+                        isMyTurn={isMyTurn && !opponentDisconnected}
                     />
                 </div>
-                <div className="game-turn">{turnText}</div>
+                {opponentDisconnected
+                    ? (
+                        <div className="game-disconnect">
+                            <span className="game-disconnect__text">Opponent disconnected</span>
+                            <span className="game-disconnect__countdown">{disconnectCountdown}s</span>
+                        </div>
+                    )
+                    : (
+                        <div
+                            className={`game-turn ${status === 'playing' ? 'timed' : ''}`}
+                            style={turnStyle}
+                        >
+                            {turnText}
+                        </div>
+                    )
+                }
                 {status === 'finished' && (
                     <div className="game-actions">
                         <button

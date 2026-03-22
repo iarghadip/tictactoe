@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { Client, Session } from '@heroiclabs/nakama-js';
 
 const NakamaContext = createContext(null);
@@ -9,11 +9,23 @@ export function NakamaProvider({ children }) {
     const [socket, setSocket] = useState(null);
     const [account, setAccount] = useState(null);
     const [restoring, setRestoring] = useState(true);
+    const connectingRef = useRef(false);
+    const socketRef = useRef(null);
 
     const connectSocket = async (s) => {
-        const newSocket = client.createSocket(false, false);
-        await newSocket.connect(s, true);
-        setSocket(newSocket);
+        if (connectingRef.current) return;
+        if (socketRef.current) {
+            try { socketRef.current.disconnect(); } catch (_) {}
+        }
+        connectingRef.current = true;
+        try {
+            const newSocket = client.createSocket(false, false);
+            await newSocket.connect(s, true);
+            socketRef.current = newSocket;
+            setSocket(newSocket);
+        } finally {
+            connectingRef.current = false;
+        }
     };
 
     const fetchAccount = async (s) => {
@@ -64,6 +76,10 @@ export function NakamaProvider({ children }) {
     const disconnect = () => {
         localStorage.removeItem('nk_token');
         localStorage.removeItem('nk_refresh_token');
+        if (socketRef.current) {
+            try { socketRef.current.disconnect(); } catch (_) {}
+            socketRef.current = null;
+        }
         setSession(null);
         setSocket(null);
         setAccount(null);

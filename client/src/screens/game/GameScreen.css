@@ -1,3 +1,9 @@
+@property --fill {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 0%;
+}
+
 .game-screen {
     min-height: 100vh;
     width: 100%;
@@ -27,6 +33,36 @@
     color: #E6E0E9;
     letter-spacing: 1px;
     text-transform: uppercase;
+}
+.game-turn.timed {
+    background: linear-gradient(
+        to right,
+        #e05c5c var(--fill),
+        #E6E0E9 var(--fill)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: --fill 1s linear;
+}
+.game-disconnect {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+.game-disconnect__text {
+    font-size: 13px;
+    color: rgba(230, 224, 233, 0.5);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.game-disconnect__countdown {
+    font-size: 28px;
+    font-weight: 700;
+    color: #e05c5c;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
 }
 .game-board-wrapper {
     display: flex;
