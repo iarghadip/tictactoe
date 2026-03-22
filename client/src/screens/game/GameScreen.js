@@ -19,6 +19,7 @@ export default function GameScreen({
     myVoted,
     opponentVoted,
     opponentDisconnected,
+    opponentName,
     disconnectCountdown,
     onCellClick,
     onRematch,
@@ -60,7 +61,7 @@ export default function GameScreen({
                                 className="game-disconnect__text timed"
                                 style={disconnectStyle}
                             >
-                                Opponent disconnected
+                                {opponentName} disconnected
                             </span>
                         </div>
                     )

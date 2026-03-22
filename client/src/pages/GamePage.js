@@ -33,6 +33,8 @@ export default function GamePage({ match, onLeave }) {
     const [disconnectCountdown, setDisconnectCountdown] = useState(60);
 
     const myMark = marks[myUserId];
+    const opponentMark = myMark === 'X' ? 'O' : 'X';
+    const opponentName = players[opponentMark] ?? '...';
     const isMyTurn = currentTurn === myUserId;
     const isXTurn = currentTurn ? marks[currentTurn] === 'X' : true;
     const result = checkWinner(cells);
@@ -201,6 +203,7 @@ export default function GamePage({ match, onLeave }) {
             myVoted={myVoted}
             opponentVoted={opponentVoted}
             opponentDisconnected={opponentDisconnected}
+            opponentName={opponentName}
             disconnectCountdown={disconnectCountdown}
             onCellClick={handleCellClick}
             onRematch={handleRematch}
