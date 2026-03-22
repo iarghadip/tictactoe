@@ -62,6 +62,7 @@ export default function GamePage({ match, onLeave }) {
                     setCells(normalizeBoard(payload.board));
                     setCurrentTurn(payload.currentTurn);
                     setTimeLeft(payload.timeLeft ?? 30);
+                    setScores(payload.scores ?? { X: 0, O: 0 });
                     setStatus('playing');
                     setMyVoted(false);
                     setOpponentVoted(false);

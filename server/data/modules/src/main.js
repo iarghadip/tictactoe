@@ -39,6 +39,26 @@ function makeInitialBoard() {
     return ['', '', '', '', '', '', '', '', ''];
 }
 
+function loadHistoricalScores(nk, logger, marks, playerIds) {
+    var scores = { O: 0, X: 0 };
+    try {
+        var rows = nk.sqlQuery(
+            'SELECT winner, COUNT(*) AS wins FROM games WHERE ((user_a = $1 AND user_b = $2) OR (user_a = $2 AND user_b = $1)) AND winner IS NOT NULL GROUP BY winner',
+            [playerIds[0], playerIds[1]]
+        );
+        rows.forEach(function (row) {
+            var mark = marks[row.winner];
+            if (mark) {
+                scores[mark] = parseInt(row.wins, 10);
+            }
+        });
+        logger.info('Historical scores loaded. O: %s X: %s', scores.O, scores.X);
+    } catch (e) {
+        logger.error('Failed to load historical scores: %s', e.message);
+    }
+    return scores;
+}
+
 function saveGame(nk, logger, userA, userB, winnerId) {
     try {
         nk.sqlExec(
@@ -71,6 +91,7 @@ var matchInit = function (ctx, logger, nk, params) {
             status: 'waiting',
             turnStartTick: null,
             disconnectedPlayers: {},
+            historicalScores: null,
         },
         tickRate: 1,
         label: 'tictactoe',
@@ -139,6 +160,10 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
     if (state.status === 'ready') {
         state.status = 'playing';
         state.turnStartTick = tick;
+
+        var playerIds = Object.keys(state.marks);
+        state.historicalScores = loadHistoricalScores(nk, logger, state.marks, playerIds);
+
         logger.info('Broadcasting GAME_START. marks: %s players: %s currentTurn: %s', JSON.stringify(state.marks), JSON.stringify(state.players), state.currentTurn);
         dispatcher.broadcastMessage(SERVER_OPCODE.GAME_START, JSON.stringify({
             marks: state.marks,
@@ -146,6 +171,7 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
             currentTurn: state.currentTurn,
             board: state.board,
             timeLeft: TURN_LIMIT,
+            scores: state.historicalScores,
         }));
         return { state: state };
     }
