@@ -11,14 +11,11 @@ function PlayerRow({ player, isMe }) {
     return (
         <div className={`lb-row ${isMe ? 'lb-row--me' : ''}`}>
             <div className={`lb-row__rank ${isTop ? 'lb-row__rank--top' : ''}`}>
-                {isTop
-                    ? (
-                        <MilitaryTechOutlinedIcon
-                            style={{ fontSize: 22, color: MEDAL_COLORS[player.rank - 1] }}
-                        />
-                    )
-                    : `#${player.rank}`
-                }
+                {isTop ? (
+                    <MilitaryTechOutlinedIcon
+                        style={{ fontSize: 22, color: MEDAL_COLORS[player.rank - 1] }}
+                    />
+                ) : `#${player.rank}` }
             </div>
             <div className="lb-row__info">
                 <NormalText>{player.display_name}</NormalText>
@@ -32,30 +29,20 @@ function PlayerRow({ player, isMe }) {
 export default function LeaderboardScreen({ loading, top100, myStats, myUserId, onBack }) {
     return (
         <Layout title="Global Ranks" onBack={onBack}>
-            {loading
-                ? (
-                    <CapitalText fill="-1">Loading your stats</CapitalText>
+            <Score stats={myStats} loading={loading} />
+                {top100.length === 0 ? (
+                    <CapitalText>No players ranked yet</CapitalText>
                 ) : (
-                    <>
-                        <Score stats={myStats} />
-                        {top100.length === 0
-                            ? (
-                                <CapitalText>No players ranked yet</CapitalText>
-                            ) : (
-                                <div className="lb-list">
-                                    {top100.map(player => (
-                                        <PlayerRow
-                                            key={player.id}
-                                            player={player}
-                                            isMe={player.id === myUserId}
-                                        />
-                                    ))}
-                                </div>
-                            )
-                        }
-                    </>
-                )
-            }
+                    <div className="lb-list">
+                        {top100.map(player => (
+                            <PlayerRow
+                                key={player.id}
+                                player={player}
+                                isMe={player.id === myUserId}
+                            />
+                        ))}
+                    </div>
+                )}
         </Layout>
     );
 }

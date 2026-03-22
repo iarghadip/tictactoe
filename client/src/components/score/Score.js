@@ -10,22 +10,18 @@ function StatPill({ label, value }) {
     );
 }
 
-export default function Score({ stats }) {
+export default function Score({ stats, loading = false }) {
     if (!stats) {
         return (
             <div className="score-stats score-stats--empty">
-                <CapitalText>You are not ranked yet</CapitalText>
+                {loading ? (
+                    <CapitalText fill="-1">Loading your stats</CapitalText>
+                ) : (
+                    <CapitalText>You are not ranked yet</CapitalText>
+                )}
             </div>
         );
     }
-    // stats = {
-    //     rank: -1,
-    //     score: -1,
-    //     matches: -1,
-    //     wins: -1,
-    //     losses: -1,
-    //     display_name: -1
-    // };
     return (
         <div className="score-stats">
             <div className="score-stats__top">
