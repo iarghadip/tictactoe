@@ -3,6 +3,7 @@ import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
 import ShuffleOutlinedIcon from '@mui/icons-material/ShuffleOutlined';
 import BoltOutlinedIcon from '@mui/icons-material/BoltOutlined';
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
+import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import WifiOffOutlinedIcon from '@mui/icons-material/WifiOffOutlined';
 import { RoundButton } from '../../components/button';
@@ -32,6 +33,12 @@ const FEATURES = [
         iconClass: 'about-feature__icon--red',
         name: 'Global Leaderboard',
         desc: 'Tracks wins, losses, and score across all players. Persistent rankings with full per-player statistics.',
+    },
+    {
+        icon: <CalculateOutlinedIcon fontSize="small" />,
+        iconClass: 'about-feature__icon--teal',
+        name: 'Score Calculation',
+        desc: 'Every win earns 100 points. Every loss deducts 25. Draws don\'t count — no record, no penalty, no reward.'
     },
     {
         icon: <TimerOutlinedIcon fontSize="small" />,

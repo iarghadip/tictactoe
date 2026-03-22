@@ -62,7 +62,7 @@ function loadHistoricalScores(nk, logger, marks, playerIds) {
 function saveGame(nk, logger, userA, userB, winnerId, loserId) {
     try {
         nk.sqlExec(
-            'INSERT INTO games (id, user_a, user_b, winner, loser, completed_at) VALUES ($1, $2, $3, $4, $5, NOW())',
+            'INSERT INTO games (id, user_a, user_b, winner, loser) VALUES ($1, $2, $3, $4, $5)',
             [nk.uuidv4(), userA, userB, winnerId || null, loserId || null]
         );
         logger.info('Game saved. user_a: %s user_b: %s winner: %s loser: %s', userA, userB, winnerId || 'draw', loserId || 'draw');
@@ -86,7 +86,7 @@ var getLeaderboard = function (ctx, logger, nk, payload) {
                     COUNT(CASE WHEN g.winner = u.id THEN 1 END) * 100
                     - COUNT(CASE WHEN g.loser = u.id THEN 1 END) * 25                                                     AS score
                 FROM users u
-                INNER JOIN games g ON g.winner = u.id OR g.loser = u.id
+                INNER JOIN games g ON (g.winner = u.id OR g.loser = u.id)
                 GROUP BY u.id, u.display_name
             ),
             ranked_with_rank AS (
@@ -111,7 +111,7 @@ var getLeaderboard = function (ctx, logger, nk, payload) {
                         COUNT(CASE WHEN g.winner = u.id THEN 1 END) * 100
                         - COUNT(CASE WHEN g.loser = u.id THEN 1 END) * 25                                                     AS score
                     FROM users u
-                    INNER JOIN games g ON g.winner = u.id OR g.loser = u.id
+                    INNER JOIN games g ON (g.winner = u.id OR g.loser = u.id)
                     GROUP BY u.id, u.display_name
                 ),
                 ranked_with_rank AS (
@@ -124,13 +124,13 @@ var getLeaderboard = function (ctx, logger, nk, payload) {
             if (myRows && myRows.length > 0) {
                 var r = myRows[0];
                 myStats = {
-                    id:           r.id,
+                    id: r.id,
                     display_name: r.display_name,
-                    wins:         parseInt(r.wins, 10),
-                    losses:       parseInt(r.losses, 10),
-                    matches:      parseInt(r.matches, 10),
-                    score:        parseInt(r.score, 10),
-                    rank:         parseInt(r.rank, 10),
+                    wins: parseInt(r.wins, 10),
+                    losses: parseInt(r.losses, 10),
+                    matches: parseInt(r.matches, 10),
+                    score: parseInt(r.score, 10),
+                    rank: parseInt(r.rank, 10),
                 };
             }
         } catch (e) {
@@ -139,13 +139,13 @@ var getLeaderboard = function (ctx, logger, nk, payload) {
 
         var players = (top100 || []).map(function (r) {
             return {
-                id:           r.id,
+                id: r.id,
                 display_name: r.display_name,
-                wins:         parseInt(r.wins, 10),
-                losses:       parseInt(r.losses, 10),
-                matches:      parseInt(r.matches, 10),
-                score:        parseInt(r.score, 10),
-                rank:         parseInt(r.rank, 10),
+                wins: parseInt(r.wins, 10),
+                losses: parseInt(r.losses, 10),
+                matches: parseInt(r.matches, 10),
+                score: parseInt(r.score, 10),
+                rank: parseInt(r.rank, 10),
             };
         });
 
@@ -452,8 +452,6 @@ var InitModule = function (ctx, logger, nk, initializer) {
         nk.sqlExec(`
             CREATE TABLE IF NOT EXISTS games (
                 id           TEXT      PRIMARY KEY,
-                created_at   TIMESTAMP DEFAULT NOW(),
-                completed_at TIMESTAMP DEFAULT NULL,
                 user_a       UUID      REFERENCES users(id),
                 user_b       UUID      REFERENCES users(id),
                 winner       UUID      REFERENCES users(id) DEFAULT NULL,
