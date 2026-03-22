@@ -51,7 +51,7 @@ const DEV_ROWS = [
     { key: 'Notice Period', val: '30 days' },
     { key: 'Last Working Day', val: '30th April, 2026' },
     { key: 'Tentative Start Date', val: '1st May, 2026' },
-    { key: 'Relocation', val: 'PAN India' }
+    { key: 'Relocation', val: 'Pan India' }
 ];
 
 export default function AboutScreen({ onBack }) {
