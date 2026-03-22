@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import MatchingPage from './pages/MatchingPage';
 import GamePage from './pages/GamePage';
 import LeaderboardPage from './pages/LeaderboardPage';
+import AboutPage from './pages/AboutPage';
 import './App.css';
 
 function App() {
@@ -65,10 +66,20 @@ function App() {
             />
         );
     }
+
+    if (step === 'about') {
+        return (
+            <AboutPage
+                onBack={() => setStep('home')}
+            />
+        );
+    }
+
     return (
         <HomePage
             onFindMatch={handleFindMatch}
             onGlobalRanks={() => setStep('leaderboard')}
+            onAbout={() => setStep('about')}
         />
     );
 }
