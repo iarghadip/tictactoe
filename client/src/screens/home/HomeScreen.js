@@ -12,22 +12,22 @@ const MENU = [
     {
         group: 'play',
         items: [
-            { key: 'timed', label: 'Timed Match', icon: <TimerOutlinedIcon fontSize="small" /> },
-            { key: 'classic', label: 'Classic Match', icon: <AppsOutlinedIcon fontSize="small" /> },
+            { key: 'timed', label: 'Timed Match', icon: <TimerOutlinedIcon fontSize="small" />, color: 'blue' },
+            { key: 'classic', label: 'Classic Match', icon: <AppsOutlinedIcon fontSize="small" />, color: 'teal' },
         ],
     },
     {
         group: 'social',
         items: [
-            { key: 'explore', label: 'Explore Rooms', icon: <ExploreOutlinedIcon fontSize="small" /> },
-            { key: 'ranks', label: 'Global Ranks', icon: <EmojiEventsOutlinedIcon fontSize="small" /> },
+            { key: 'explore', label: 'Explore Rooms', icon: <ExploreOutlinedIcon fontSize="small" />, color: 'purple' },
+            { key: 'ranks', label: 'Global Ranks', icon: <EmojiEventsOutlinedIcon fontSize="small" />, color: 'amber' },
         ],
     },
     {
         group: 'settings',
         items: [
-            { key: 'name-settings', label: 'Name Settings', icon: <BadgeOutlinedIcon fontSize="small" /> },
-            { key: 'about', label: 'About Game', icon: <InfoOutlinedIcon fontSize="small" /> },
+            { key: 'name-settings', label: 'Name Settings', icon: <BadgeOutlinedIcon fontSize="small" />, color: 'green' },
+            { key: 'about', label: 'About Game', icon: <InfoOutlinedIcon fontSize="small" />, color: 'purple' },
         ],
     },
 ];
@@ -71,7 +71,9 @@ export default function HomeScreen({
                                     className="home-menu__item"
                                     onClick={handlers[item.key]}
                                 >
-                                    <span className="home-menu__icon">{item.icon}</span>
+                                    <span className={`home-menu__icon home-menu__icon--${item.color}`}>
+                                        {item.icon}
+                                    </span>
                                     <span className="home-menu__label">{item.label}</span>
                                     <ChevronRightIcon className="home-menu__arrow" style={{ fontSize: 18 }} />
                                 </div>

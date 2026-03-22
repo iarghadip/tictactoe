@@ -1,4 +1,5 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import MilitaryTechOutlinedIcon from '@mui/icons-material/MilitaryTechOutlined';
 import { RoundButton } from '../../components/button';
 import './LeaderboardScreen.css';
 
@@ -36,12 +37,20 @@ function MyCard({ stats }) {
     );
 }
 
+const MEDAL_COLORS = ['#FFD700', '#C0C0C0', '#CD7F32'];
+
 function PlayerRow({ player, isMe }) {
+    const isTop = player.rank <= 3;
+
     return (
         <div className={`lb-row ${isMe ? 'lb-row--me' : ''}`}>
-            <div className={`lb-row__rank ${player.rank <= 3 ? 'lb-row__rank--top' : ''}`}>
-                {player.rank <= 3
-                    ? ['🥇', '🥈', '🥉'][player.rank - 1]
+            <div className={`lb-row__rank ${isTop ? 'lb-row__rank--top' : ''}`}>
+                {isTop
+                    ? (
+                        <MilitaryTechOutlinedIcon
+                            style={{ fontSize: 22, color: MEDAL_COLORS[player.rank - 1] }}
+                        />
+                    )
                     : `#${player.rank}`
                 }
             </div>

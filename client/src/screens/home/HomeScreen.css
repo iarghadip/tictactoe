@@ -90,12 +90,31 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.06);
     color: rgba(230, 224, 233, 0.7);
     flex-shrink: 0;
+}
+
+.home-menu__icon--teal {
+    background: rgba(128, 203, 196, 0.12);
+}
+
+.home-menu__icon--purple {
+    background: rgba(208, 188, 255, 0.12);
+}
+
+.home-menu__icon--amber {
+    background: rgba(255, 183, 77, 0.12);
+}
+
+.home-menu__icon--blue {
+    background: rgba(100, 181, 246, 0.12);
+}
+
+.home-menu__icon--green {
+    background: rgba(129, 199, 132, 0.12);
 }
 
 .home-menu__icon--danger {

@@ -1,44 +1,50 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
+import ShuffleOutlinedIcon from '@mui/icons-material/ShuffleOutlined';
+import BoltOutlinedIcon from '@mui/icons-material/BoltOutlined';
+import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
+import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
+import WifiOffOutlinedIcon from '@mui/icons-material/WifiOffOutlined';
 import { RoundButton } from '../../components/button';
 import './AboutScreen.css';
 
 const FEATURES = [
     {
-        icon: '🛡️',
+        icon: <SecurityOutlinedIcon fontSize="small" />,
         iconClass: 'about-feature__icon--teal',
         name: 'Server-Authoritative Logic',
         desc: 'All game state lives on the server. Every move is validated before being applied — no client-side manipulation or cheating possible.',
     },
     {
-        icon: '🔀',
+        icon: <ShuffleOutlinedIcon fontSize="small" />,
         iconClass: 'about-feature__icon--purple',
         name: 'Smart Matchmaking',
         desc: 'Automatically pairs players by mode. Handles connections and disconnections gracefully with a reconnection grace period.',
     },
     {
-        icon: '⚡',
+        icon: <BoltOutlinedIcon fontSize="small" />,
         iconClass: 'about-feature__icon--amber',
         name: 'Concurrent Sessions',
         desc: 'Multiple isolated game rooms run simultaneously. Each session is fully independent, keeping gameplay fair and scalable.',
     },
     {
-        icon: '🏆',
+        icon: <EmojiEventsOutlinedIcon fontSize="small" />,
         iconClass: 'about-feature__icon--red',
         name: 'Global Leaderboard',
         desc: 'Tracks wins, losses, and score across all players. Persistent rankings with full per-player statistics.',
     },
     {
-        icon: '⏱️',
+        icon: <TimerOutlinedIcon fontSize="small" />,
         iconClass: 'about-feature__icon--blue',
         name: 'Timed Mode',
         desc: '30 seconds per turn. Miss your window and the move is forfeited automatically. Choose between Classic or Timed wisely.',
     },
     {
-        icon: '🔌',
+        icon: <WifiOffOutlinedIcon fontSize="small" />,
         iconClass: 'about-feature__icon--purple',
         name: 'Disconnect Tolerance',
-        desc: 'If opponent loses connection, the game pauses and gives them 60 seconds to reconnect, otherwise the match only ends.'
-    }
+        desc: 'If opponent loses connection, the game pauses and gives them 60 seconds to reconnect, otherwise the match only ends.',
+    },
 ];
 
 const DEV_ROWS = [
@@ -51,7 +57,7 @@ const DEV_ROWS = [
     { key: 'Notice Period', val: '30 days' },
     { key: 'Last Working Day', val: '30th April, 2026' },
     { key: 'Tentative Start Date', val: '1st May, 2026' },
-    { key: 'Relocation', val: 'Pan India' }
+    { key: 'Relocation', val: 'Pan India' },
 ];
 
 export default function AboutScreen({ onBack }) {
