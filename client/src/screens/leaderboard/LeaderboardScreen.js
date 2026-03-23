@@ -7,7 +7,6 @@ import './LeaderboardScreen.css';
 
 function PlayerRow({ player, isMe }) {
     const isTop = player.rank <= 3;
-
     return (
         <div className={`flex items-center leaderboard-row ${isMe ? 'leaderboard-row--me' : ''}`}>
             <Confetti isWinner={isMe} />

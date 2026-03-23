@@ -43,9 +43,7 @@ export default function MenuInput({ open, title, fields, initialValues, onSubmit
                 className="flex flex-col items-center gap-5 w-full max-w-[320px] p-8 px-6 box-border modal"
             >
                 <div className="text-center modal__title">{title}</div>
-
                 {error && <p className="text-center mt-[-8px] entry__error">{error}</p>}
-
                 {fields.map((field, i) => (
                     <div key={field.key} className="flex items-center w-full rounded-full px-6 py-2 pl-6 box-border entry__row">
                         <input
@@ -60,10 +58,7 @@ export default function MenuInput({ open, title, fields, initialValues, onSubmit
                         />
                     </div>
                 ))}
-
-                <RoundButton onClick={handleSubmit} disabled={!isValid || loading}>
-                    <LoginIcon style={{ fontSize: 20 }} />
-                </RoundButton>
+                <RoundButton onClick={handleSubmit} icon={LoginIcon} disabled={!isValid || loading}/>
             </div>
         </div>
     );

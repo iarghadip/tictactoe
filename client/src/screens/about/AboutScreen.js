@@ -18,7 +18,6 @@ export default function AboutScreen({ onBack }) {
                     </div>
                 ))}
             </div>
-
             <div className="flex flex-col overflow-hidden about-dev">
                 <div className="flex flex-col about-dev__top">
                     <NormalText size="3">Created by Arghadip Das</NormalText>

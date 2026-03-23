@@ -17,11 +17,7 @@ export default function Layout({ title, onBack, children, center = false, classN
             >
                 {hasHeader && (
                     <div className="relative flex items-center gap-4 py-2 sticky top-0 z-10 layout__header">
-                        {onBack && (
-                            <RoundButton onClick={onBack}>
-                                <ArrowBackIcon style={{ fontSize: 20 }} />
-                            </RoundButton>
-                        )}
+                        {onBack && <RoundButton onClick={onBack} icon={ArrowBackIcon}/>}
                         {title && <NormalText size="2">{title}</NormalText>}
                     </div>
                 )}

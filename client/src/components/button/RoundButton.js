@@ -1,8 +1,9 @@
 import './RoundButton.css';
 
-export default function RoundButton({ onClick, disabled, glowing, children }) {
+export default function RoundButton({ onClick, disabled, glowing, btnRef, icon: Icon, className = '' }) {
     return (
         <button
+            ref={btnRef}
             onClick={onClick}
             disabled={disabled}
             className={`
@@ -14,9 +15,10 @@ export default function RoundButton({ onClick, disabled, glowing, children }) {
                 disabled:opacity-30 disabled:cursor-not-allowed
                 round-btn
                 ${glowing ? 'round-btn--glowing' : ''}
+                ${className}
             `}
         >
-            {children}
+            <Icon style={{ fontSize: 20 }} />
         </button>
     );
 }

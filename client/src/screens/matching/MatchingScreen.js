@@ -20,12 +20,7 @@ export default function MatchingScreen({ elapsed, displayName, onCancel, cancelB
                 </div>
                 <div className="flex items-center justify-center flex-col gap-4">
                     <CapitalText fill="-1">{elapsed}s</CapitalText>
-                    <RoundButton
-                        onClick={onCancel}
-                        btnRef={cancelBtnRef}
-                    >
-                        <LogoutIcon style={{ fontSize: 20 }} />
-                    </RoundButton>
+                    <RoundButton onClick={onCancel} icon={LogoutIcon} btnRef={cancelBtnRef}/>
                 </div>
             </div>
         </Layout>

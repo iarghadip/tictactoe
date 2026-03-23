@@ -6,10 +6,8 @@ import { CapitalText, NormalText } from '../../components/text';
 import './GameScreen.css';
 
 export default function GameScreen({
-    cells, winCombo, isMyTurn, isLoading,
-    title, bottomText, bottomFill,
-    opponentDisconnected, leaveDisabled,
-    onCellClick, onLeave,
+    cells, winCombo, isMyTurn, isLoading, title, bottomText, bottomFill,
+    opponentDisconnected, leaveDisabled, onCellClick, onLeave,
 }) {
     return (
         <Layout center className="gap-12">
@@ -28,9 +26,7 @@ export default function GameScreen({
             </div>
             <div className="flex items-center justify-center flex-col gap-4">
                 <CapitalText fill={bottomFill}>{bottomText}</CapitalText>
-                <RoundButton onClick={onLeave} disabled={leaveDisabled}>
-                    <LogoutIcon style={{ fontSize: 20 }} />
-                </RoundButton>
+                <RoundButton onClick={onLeave} icon={LogoutIcon} disabled={leaveDisabled}/>
             </div>
         </Layout>
     );

@@ -17,32 +17,22 @@ export default function HomePage({ onFindMatch, onGlobalRanks, onAbout }) {
     const displayName = account?.user?.display_name || 'Anonymous';
     const rawDisplayName = account?.user?.display_name || '';
 
-    const executeAction = (action) => {
-        switch (action) {
-            case 'timed':
-            case 'classic':
-                onFindMatch(action);
-                break;
-            case 'name-settings':
-                setNameError(null);
-                setNameModal(true);
-                break;
-            case 'ranks':
-                onGlobalRanks();
-                break;
-            case 'about':
-                onAbout();
-                break;
-            default:
-                break;
+    const executeAction = (index) => {
+        switch (index) {
+            case 0: onFindMatch('timed'); break;
+            case 1: onFindMatch('classic'); break;
+            case 2: break;
+            case 3: onGlobalRanks(); break;
+            case 4: setNameError(null); setNameModal(true); break;
+            case 5: onAbout(); break;
         }
     };
 
-    const requireAuth = (action) => {
+    const requireAuth = (index) => {
         if (session) {
-            executeAction(action);
+            executeAction(index);
         } else {
-            setPendingAction(action);
+            setPendingAction(index);
             setAuthError(null);
             setAuthModal(true);
         }
@@ -93,12 +83,7 @@ export default function HomePage({ onFindMatch, onGlobalRanks, onAbout }) {
             <HomeScreen
                 displayName={displayName}
                 isLoggedIn={!!session}
-                onTimedMatch={() => requireAuth('timed')}
-                onClassicMatch={() => requireAuth('classic')}
-                onExploreRooms={() => requireAuth('explore')}
-                onGlobalRanks={() => requireAuth('ranks')}
-                onNameSettings={() => requireAuth('name-settings')}
-                onAbout={() => executeAction('about')}
+                onMenuSelect={requireAuth}
                 onLogout={disconnect}
             />
             <MenuInput
