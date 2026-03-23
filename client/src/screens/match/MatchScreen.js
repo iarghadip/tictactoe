@@ -12,7 +12,7 @@ export default function MatchScreen({
         <Layout center>
             <div className="flex flex-col items-center w-full mx-auto matching__container">
                 <div className="flex items-center justify-center flex-col gap-4">
-                    <div className="flex items-center justify-center matching__hourglass-card">
+                    <div className="flex items-center justify-center card-theme card-theme-item">
                         <div className="flex items-center justify-center matching__hourglass">
                             <HourglassEmptyOutlinedIcon style={{ fontSize: 32 }} />
                         </div>

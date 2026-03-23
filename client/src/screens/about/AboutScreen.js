@@ -9,7 +9,7 @@ export default function AboutScreen({ onBack }) {
         <Layout title="About Game" onBack={onBack}>
             <div className="flex flex-col overflow-hidden card-theme">
                 {ABOUT_SCREEN_MENU_1.map(feature => (
-                    <div key={feature.name} className="flex items-start about-screen-feature">
+                    <div key={feature.name} className="flex items-start card-theme-item about-screen-feature">
                         <MenuIcon icon={feature.icon} color={feature.color} size="sm" />
                         <div className="flex flex-col gap-1 flex-1 min-w-0 about-screen-feature__body">
                             <NormalText>{feature.name}</NormalText>

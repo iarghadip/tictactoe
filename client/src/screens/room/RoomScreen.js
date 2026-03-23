@@ -25,14 +25,18 @@ export default function RoomScreen({
     if (!selectedRoom) {
         return (
             <Layout title="Explore Rooms" onBack={onBack}>
-                <div className="flex gap-4 justify-center mb-6">
-                    <RoundButton icon={AddIcon} onClick={() => setCreateOpen(true)} />
-                    <RoundButton icon={SearchIcon} onClick={() => setJoinOpen(true)} />
+
+                <div className="flex items-center justify-center flex-col gap-4">
+                    <CapitalText>100 Players</CapitalText>
+                    <div className="flex items-center justify-center gap-4">
+                        <RoundButton icon={AddIcon} onClick={() => setCreateOpen(true)} />
+                        <RoundButton icon={SearchIcon} onClick={() => setJoinOpen(true)} />
+                    </div>
                 </div>
 
                 {rooms.length === 0 ? (
-                    <div className="text-center mt-4 mb-6">
-                        <CapitalText>You are not in any rooms yet</CapitalText>
+                    <div className="text-center mt-4">
+                        <CapitalText>You are not a member yet</CapitalText>
                     </div>
                 ) : (
                     <div className="flex flex-col overflow-hidden card-theme mb-6">
@@ -97,9 +101,10 @@ export default function RoomScreen({
 
     return (
         <Layout title={selectedRoom.name} onBack={() => onSelectRoom(null)}>
-            <div className="flex flex-col items-center gap-4 card-theme room-screen-header mb-6">
+
+            <div className="flex items-center justify-center flex-col gap-4">
                 <CapitalText>{selectedRoom.edge_count} / 100 Players</CapitalText>
-                <div className="flex gap-4">
+                <div className="flex items-center justify-center gap-4">
                     <RoundButton icon={PlayArrowIcon} onClick={() => onStartRoomMatch(selectedRoom.id)} />
                     {isAdmin ? (
                         <RoundButton icon={DeleteIcon} onClick={() => onDelete(selectedRoom.id)} />
@@ -133,14 +138,14 @@ export default function RoomScreen({
             
             {roomMembers.length === 0 ? (
                 <div className="text-center mt-4">
-                    <CapitalText>No players are in this room</CapitalText>
+                    <CapitalText>No players are a member yet</CapitalText>
                 </div>
             ) : (
                 <div className="flex flex-col overflow-hidden card-theme">
                     {roomMembers.map((m, idx) => (
                         <div key={m.user.id} className="flex flex-col">
                             {idx > 0 && <div className="h-px room-screen-divider" />}
-                            <div className={`flex items-center justify-between room-screen-item ${isAdmin && m.user.id !== myUserId ? 'room-screen-item--danger cursor-pointer' : ''}`}
+                            <div className={`flex items-center justify-between card-theme-item room-screen-item ${isAdmin && m.user.id !== myUserId ? 'room-screen-item--danger cursor-pointer' : ''}`}
                                 onClick={() => isAdmin && m.user.id !== myUserId && onKick(selectedRoom.id, m.user.id)}>
                                 <NormalText className="flex-1 truncate">
                                     {m.user.display_name} {m.user.id === selectedRoom.creator_id ? '(Admin)' : ''}

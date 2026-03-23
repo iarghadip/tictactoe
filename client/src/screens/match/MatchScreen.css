@@ -3,13 +3,6 @@
     gap: 32px;
 }
 
-.matching__hourglass-card {
-    width: 64px;
-    height: 64px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, .06);
-}
-
 .matching__hourglass {
     color: rgba(230, 224, 233, .7);
     animation: flip 2s ease-in-out infinite;

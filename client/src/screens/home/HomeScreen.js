@@ -22,7 +22,7 @@ export default function HomeScreen({
                         )}
                         <div
                             onClick={() => onMenuSelect(idx)}
-                            className="flex items-center cursor-pointer home-screen__item"
+                            className="flex items-center cursor-pointer card-theme-item home-screen__item"
                         >
                             <MenuIcon icon={item.icon} color={item.color} size="md" />
                             <NormalText className="flex-1">{item.label}</NormalText>
@@ -33,7 +33,7 @@ export default function HomeScreen({
                 {isLoggedIn && (
                     <>
                         <div className="h-px home-screen__divider" />
-                        <div onClick={onLogout} className="flex items-center cursor-pointer home-screen__item home-screen__item--danger">
+                        <div onClick={onLogout} className="flex items-center cursor-pointer card-theme-item home-screen__item home-screen__item--danger">
                             <MenuIcon icon={<LogoutOutlinedIcon fontSize="small" />} color="danger" size="md" />
                             <NormalText className="flex-1" danger>Logout Player</NormalText>
                             <ChevronRightIcon className="shrink-0 home-screen__arrow" style={{ fontSize: 18 }} />
