@@ -1,12 +1,3 @@
-.cross {
-    width: 60px;
-    height: 60px;
-    position: relative;
-    overflow: visible;
-    box-sizing: border-box;
-    animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
 .cross::before,
 .cross::after {
     content: '';
@@ -23,21 +14,17 @@
 .cross::before {
     rotate: 45deg;
 }
+
 .cross::after {
     rotate: -45deg;
 }
 
+.cross {
+    animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
 @keyframes pop-in {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
-    70% {
-        transform: scale(1.15);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
+    0%   { transform: scale(0); opacity: 0; }
+    70%  { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
 }

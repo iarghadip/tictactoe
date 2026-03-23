@@ -25,32 +25,48 @@ export default function HomeScreen({
         'name-settings': onNameSettings,
         about: onAbout,
     };
+
     return (
         <Layout center>
-            <div className="flex flex-center flex-column flex-gap">
+            <div className="flex items-center justify-center flex-col gap-4">
                 <NormalText size="1">Tic Tac Toe</NormalText>
                 {isLoggedIn && <CapitalText>{displayName}</CapitalText>}
             </div>
-            <div className="flex home-menu">
+
+            <div className="flex flex-col overflow-hidden home-menu">
                 {HOME_SCREEN_MENU.map((group, gi) => (
-                    <div key={group.group} className="flex home-menu__group">
-                        {gi > 0 && <div className="home-menu__divider" />}
+                    <div key={group.group} className="flex flex-col">
+                        {gi > 0 && <div className="h-px home-menu__divider" />}
                         {group.items.map(item => (
-                            <div key={item.key} className="flex home-menu__item" onClick={handlers[item.key]}>
+                            <div
+                                key={item.key}
+                                onClick={handlers[item.key]}
+                                className="flex items-center cursor-pointer home-menu__item"
+                            >
                                 <MenuIcon icon={item.icon} color={item.color} size="md" />
-                                <NormalText className="home-menu__label">{item.label}</NormalText>
-                                <ChevronRightIcon className="home-menu__arrow" style={{ fontSize: 18 }} />
+                                <NormalText className="flex-1">{item.label}</NormalText>
+                                <ChevronRightIcon
+                                    className="shrink-0 home-menu__arrow"
+                                    style={{ fontSize: 18 }}
+                                />
                             </div>
                         ))}
                     </div>
                 ))}
+
                 {isLoggedIn && (
                     <>
-                        <div className="home-menu__divider" />
-                        <div className="flex home-menu__item home-menu__item--danger" onClick={onLogout}>
+                        <div className="h-px home-menu__divider" />
+                        <div
+                            onClick={onLogout}
+                            className="flex items-center cursor-pointer home-menu__item home-menu__item--danger"
+                        >
                             <MenuIcon icon={<LogoutOutlinedIcon fontSize="small" />} color="danger" size="md" />
-                            <NormalText className="home-menu__label" danger>Logout Player</NormalText>
-                            <ChevronRightIcon className="home-menu__arrow" style={{ fontSize: 18 }} />
+                            <NormalText className="flex-1" danger>Logout Player</NormalText>
+                            <ChevronRightIcon
+                                className="shrink-0 home-menu__arrow"
+                                style={{ fontSize: 18 }}
+                            />
                         </div>
                     </>
                 )}

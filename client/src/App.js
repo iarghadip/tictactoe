@@ -5,9 +5,9 @@ import MatchingPage from './pages/MatchingPage';
 import GamePage from './pages/GamePage';
 import LeaderboardPage from './pages/LeaderboardPage';
 import AboutPage from './pages/AboutPage';
-import './App.css';
 
 function App() {
+    
     const { restoring, session } = useNakama();
     const [step, setStep] = useState('home');
     const [match, setMatch] = useState(null);

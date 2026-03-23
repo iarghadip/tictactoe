@@ -1,19 +1,7 @@
 .round-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: none;
     background: rgba(255, 255, 255, 0.1);
     color: #E6E0E9;
-    font-size: 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
     transition: background 0.2s ease, transform 0.15s ease;
-    position: relative;
-    overflow: visible;
 }
 
 .round-btn::after {
@@ -29,18 +17,16 @@
     pointer-events: none;
 }
 
-.round-btn:hover::after {
-    opacity: 0.3;
-}
-
 .round-btn:hover {
     background: rgba(255, 255, 255, 0.18);
     transform: scale(1.08);
 }
 
-.round-btn:disabled {
+.round-btn:hover::after {
     opacity: 0.3;
-    cursor: not-allowed;
+}
+
+.round-btn:disabled {
     transform: none;
 }
 
@@ -53,10 +39,6 @@
 }
 
 @keyframes round-btn-glow {
-    0%, 100% {
-        opacity: 0.15;
-    }
-    50% {
-        opacity: 0.45;
-    }
+    0%, 100% { opacity: 0.15; }
+    50%       { opacity: 0.45; }
 }

@@ -12,8 +12,11 @@ export default function CapitalText({ children, size = 13, fill = null }) {
     }
 
     return (
-        <span className={className} style={{ ...style, fontSize: `${size}px` }}>
-        {children}
+        <span
+            className={className}
+            style={{ ...style, fontSize: `${size}px` }}
+        >
+            {children}
         </span>
     );
 }

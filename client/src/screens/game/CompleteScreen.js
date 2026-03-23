@@ -10,15 +10,15 @@ export default function CompleteScreen({
     turnText, myStats, myVoted, opponentVoted, onRematch, onLeave, title
 }) {
     return (
-        <Layout center className="flex-gap-5">
-            <div className="flex flex-center flex-column flex-gap">
+        <Layout center className="gap-12">
+            <div className="flex items-center justify-center flex-col gap-4">
                 <NormalText size="1">Tic Tac Toe</NormalText>
                 <CapitalText>{title}</CapitalText>
             </div>
             <Score stats={myStats} />
-            <div className="flex flex-center flex-column flex-gap">
+            <div className="flex items-center justify-center flex-col gap-4">
                 <CapitalText>{turnText}</CapitalText>
-                <div className="flex flex-center flex-gap">
+                <div className="flex items-center justify-center gap-4">
                     <RoundButton glowing={opponentVoted} onClick={onRematch} disabled={myVoted}>
                         <RefreshIcon style={{ fontSize: 20 }} className={myVoted ? 'icon-spin' : ''} />
                     </RoundButton>
