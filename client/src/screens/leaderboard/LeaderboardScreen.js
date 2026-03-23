@@ -4,8 +4,6 @@ import { Score } from '../../components/score';
 import { CapitalText, NormalText } from '../../components/text';
 import './LeaderboardScreen.css';
 
-const MEDAL_COLORS = ['#FFD700', '#C0C0C0', '#CD7F32'];
-
 function PlayerRow({ player, isMe }) {
     const isTop = player.rank <= 3;
 
@@ -19,7 +17,7 @@ function PlayerRow({ player, isMe }) {
                 `}
             >
                 {isTop
-                    ? <MilitaryTechOutlinedIcon style={{ fontSize: 22, color: MEDAL_COLORS[player.rank - 1] }} />
+                    ? <MilitaryTechOutlinedIcon style={{ fontSize: 22, color: ['#FFD700', '#C0C0C0', '#CD7F32'][player.rank - 1] }} />
                     : `#${player.rank}`
                 }
             </div>

@@ -4,6 +4,10 @@
     text-overflow: ellipsis;
 }
 
+.normal-text--muted {
+    color: rgba(230, 224, 233, 0.4);
+}
+
 .normal-text--danger {
-    color: #e05c5c;
+    color: #E05C5C;
 }

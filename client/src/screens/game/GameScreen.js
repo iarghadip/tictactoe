@@ -5,9 +5,6 @@ import { RoundButton } from '../../components/button';
 import { CapitalText, NormalText } from '../../components/text';
 import './GameScreen.css';
 
-const TURN_LIMIT = 30;
-const DISCONNECT_GRACE = 60;
-
 export default function GameScreen({
     cells, winCombo, turnText, isMyTurn,
     timeLeft, gameMode, isLoading,
@@ -25,9 +22,9 @@ export default function GameScreen({
         : turnText;
 
     const fill = opponentDisconnected
-        ? ((DISCONNECT_GRACE - disconnectCountdown) / DISCONNECT_GRACE) * 100
+        ? ((60 - disconnectCountdown) / 60) * 100
         : isTimed && !isLoading
-        ? ((TURN_LIMIT - timeLeft) / TURN_LIMIT) * 100
+        ? ((30 - timeLeft) / 30) * 100
         : null;
 
     return (

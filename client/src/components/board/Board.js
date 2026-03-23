@@ -1,15 +1,10 @@
 import Square from './Square';
 import Line from './Line';
+import { GAME_WINNER_COMBINATIONS } from '../../constants/miscellaneous'
 import './Board.css';
 
-const WIN_COMBOS = [
-    [0,1,2], [3,4,5], [6,7,8],
-    [0,3,6], [1,4,7], [2,5,8],
-    [0,4,8], [2,4,6],
-];
-
 export function checkWinner(squares) {
-    for (const combo of WIN_COMBOS) {
+    for (const combo of GAME_WINNER_COMBINATIONS) {
         const [a, b, c] = combo;
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
             return { winner: squares[a], combo };
