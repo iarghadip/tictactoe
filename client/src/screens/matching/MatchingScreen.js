@@ -5,7 +5,9 @@ import { Layout } from '../../components/layout';
 import { CapitalText, NormalText } from '../../components/text';
 import './MatchingScreen.css';
 
-export default function MatchingScreen({ elapsed, displayName, onCancel, cancelBtnRef }) {
+export default function MatchingScreen({
+    elapsed, displayName, onCancel, cancelBtnRef
+}) {
     return (
         <Layout center>
             <div className="flex flex-col items-center w-full mx-auto matching__container">

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNakama } from '../contexts/nakamaContext';
 import { HomeScreen } from '../screens/home';
 import { MenuInput } from '../components/input';
+import { HOME_SCREEN_MENU } from '../constants/menus';
 
 export default function HomePage({ onFindMatch, onGlobalRanks, onAbout }) {
     const { session, connect, updateDisplayName, disconnect, account } = useNakama();
@@ -78,11 +79,17 @@ export default function HomePage({ onFindMatch, onGlobalRanks, onAbout }) {
         setNameError(null);
     };
 
+    const menuItems = [];
+    HOME_SCREEN_MENU.forEach((group, gi) => {
+        group.items.forEach((item) => menuItems.push({ ...item, gi }));
+    });
+
     return (
         <>
             <HomeScreen
                 displayName={displayName}
                 isLoggedIn={!!session}
+                menuItems={menuItems}
                 onMenuSelect={requireAuth}
                 onLogout={disconnect}
             />

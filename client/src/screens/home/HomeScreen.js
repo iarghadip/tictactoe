@@ -3,14 +3,11 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Layout } from '../../components/layout';
 import { MenuIcon } from '../../components/icon';
 import { CapitalText, NormalText } from '../../components/text';
-import { HOME_SCREEN_MENU } from '../../constants/menus';
 import './HomeScreen.css';
 
 export default function HomeScreen({
-    displayName, isLoggedIn, onMenuSelect, onLogout,
+    displayName, isLoggedIn, menuItems, onMenuSelect, onLogout,
 }) {
-    let cursor = 0;
-
     return (
         <Layout center>
             <div className="flex items-center justify-center flex-col gap-4">
@@ -18,23 +15,19 @@ export default function HomeScreen({
                 {isLoggedIn && <CapitalText>{displayName}</CapitalText>}
             </div>
             <div className="flex flex-col overflow-hidden home-menu">
-                {HOME_SCREEN_MENU.map((group, gi) => (
-                    <div key={group.group} className="flex flex-col">
-                        {gi > 0 && <div className="h-px home-menu__divider" />}
-                        {group.items.map(item => {
-                            const idx = cursor++;
-                            return (
-                                <div
-                                    key={item.key}
-                                    onClick={() => onMenuSelect(idx)}
-                                    className="flex items-center cursor-pointer home-menu__item"
-                                >
-                                    <MenuIcon icon={item.icon} color={item.color} size="md" />
-                                    <NormalText className="flex-1">{item.label}</NormalText>
-                                    <ChevronRightIcon className="shrink-0 home-menu__arrow" style={{ fontSize: 18 }} />
-                                </div>
-                            );
-                        })}
+                {menuItems.map((item, idx) => (
+                    <div key={item.key} className="flex flex-col">
+                        {item.gi > 0 && idx === menuItems.findIndex(i => i.gi === item.gi) && (
+                            <div className="h-px home-menu__divider" />
+                        )}
+                        <div
+                            onClick={() => onMenuSelect(idx)}
+                            className="flex items-center cursor-pointer home-menu__item"
+                        >
+                            <MenuIcon icon={item.icon} color={item.color} size="md" />
+                            <NormalText className="flex-1">{item.label}</NormalText>
+                            <ChevronRightIcon className="shrink-0 home-menu__arrow" style={{ fontSize: 18 }} />
+                        </div>
                     </div>
                 ))}
                 {isLoggedIn && (

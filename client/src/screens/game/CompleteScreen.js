@@ -20,7 +20,9 @@ export default function CompleteScreen({
             <div className="flex items-center justify-center flex-col gap-4">
                 <CapitalText>{turnText}</CapitalText>
                 <div className="flex items-center justify-center gap-4">
-                    <RoundButton onClick={onRematch} icon={RefreshIcon} disabled={myVoted} glowing={opponentVoted} className={myVoted ? 'icon-spin' : ''}/>
+                    <RoundButton
+                        onClick={onRematch} icon={RefreshIcon} disabled={myVoted}
+                        glowing={opponentVoted} className={myVoted ? 'icon-spin' : ''}/>
                     <RoundButton onClick={onLeave} icon={LogoutIcon}/>
                 </div>
             </div>
