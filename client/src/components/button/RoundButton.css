@@ -1,5 +1,6 @@
 .round-btn {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, .03);
+    border: 1px solid rgba(255, 255, 255, .1);
     color: #E6E0E9;
     transition: background 0.2s ease, transform 0.15s ease;
 }
@@ -39,6 +40,10 @@
 }
 
 @keyframes round-btn-glow {
-    0%, 100% { opacity: 0.15; }
-    50%       { opacity: 0.45; }
+    0%, 100% {
+        opacity: 0.15;
+    }
+    50% {
+        opacity: 0.45;
+    }
 }
