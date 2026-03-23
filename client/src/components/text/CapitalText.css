@@ -33,3 +33,12 @@
     );
     transition: --fill 1s linear;
 }
+
+@keyframes text-sweep {
+    from {
+        background-position: 200% center;
+    }
+    to {
+        background-position: -200% center;
+    }
+}

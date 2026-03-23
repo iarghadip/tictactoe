@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useNakama } from '../contexts/nakamaContext';
-import { GameScreen } from '../screens/game';
+import { GameScreen, CompleteScreen } from '../screens/game';
 import { SERVER_OPCODE, CLIENT_OPCODE } from '../constants/opcodes';
 import { checkWinner } from '../components/board';
 
@@ -15,9 +15,7 @@ export default function GamePage({ match, onLeave }) {
     const onLeaveRef = useRef(onLeave);
     const disconnectTimerRef = useRef(null);
 
-    useEffect(() => {
-        onLeaveRef.current = onLeave;
-    }, [onLeave]);
+    useEffect(() => { onLeaveRef.current = onLeave; }, [onLeave]);
 
     const [cells, setCells] = useState(Array(9).fill(null));
     const [marks, setMarks] = useState({});
@@ -35,9 +33,26 @@ export default function GamePage({ match, onLeave }) {
 
     const myMark = marks[myUserId];
     const opponentMark = myMark === 'X' ? 'O' : 'X';
-    const opponentName = players[opponentMark] ?? '...';
+    const opponentName = players[opponentMark];
     const isMyTurn = currentTurn === myUserId;
+    const isFinished = status === 'finished';
+    const isLoading = !players[myMark] || !players[opponentMark];
+
     const result = checkWinner(cells);
+    const winnerMark = result?.winner ?? gameOverWinner;
+    const iWon = winnerMark && marks[myUserId] === winnerMark;
+
+    const title = isLoading
+        ? 'Loading the game'
+        : `${players[myMark]} vs ${players[opponentMark]}`;
+
+    const turnText = isFinished
+        ? winnerMark
+            ? iWon ? 'You won!' : `${players[winnerMark]} won!`
+            : "It's a draw!"
+        : isMyTurn
+            ? 'Your turn'
+            : `${opponentName}'s turn`;
 
     const clearDisconnectTimer = useCallback(() => {
         if (disconnectTimerRef.current) {
@@ -49,27 +64,18 @@ export default function GamePage({ match, onLeave }) {
     const fetchMyStats = useCallback(async () => {
         if (!client || !session) return;
         try {
-            const result = await client.rpc(session, 'get_leaderboard', {});
-            const data = result.payload;
-            setMyStats(data.myStats || null);
+            const res = await client.rpc(session, 'get_leaderboard', {});
+            setMyStats(res.payload?.myStats || null);
         } catch (e) {
             console.error('Failed to fetch stats:', e);
         }
     }, [client, session]);
 
-    useEffect(() => {
-        fetchMyStats();
-    }, [fetchMyStats]);
-
-    useEffect(() => {
-        if (status === 'finished') {
-            fetchMyStats();
-        }
-    }, [status, fetchMyStats]);
+    useEffect(() => { fetchMyStats(); }, [fetchMyStats]);
+    useEffect(() => { if (isFinished) fetchMyStats(); }, [isFinished, fetchMyStats]);
 
     useEffect(() => {
         if (!socket) return;
-
         activeRef.current = true;
 
         socket.onmatchdata = (data) => {
@@ -115,10 +121,7 @@ export default function GamePage({ match, onLeave }) {
                     clearDisconnectTimer();
                     disconnectTimerRef.current = setInterval(() => {
                         setDisconnectCountdown(c => {
-                            if (c <= 1) {
-                                clearDisconnectTimer();
-                                return 0;
-                            }
+                            if (c <= 1) { clearDisconnectTimer(); return 0; }
                             return c - 1;
                         });
                     }, 1000);
@@ -131,9 +134,7 @@ export default function GamePage({ match, onLeave }) {
                     break;
 
                 case SERVER_OPCODE.REMATCH_VOTED:
-                    if (payload.userId !== myUserId) {
-                        setOpponentVoted(true);
-                    }
+                    if (payload.userId !== myUserId) setOpponentVoted(true);
                     break;
 
                 case SERVER_OPCODE.REMATCH_START:
@@ -166,64 +167,48 @@ export default function GamePage({ match, onLeave }) {
 
     const handleCellClick = useCallback((index) => {
         if (!isMyTurn || status !== 'playing' || cells[index] || opponentDisconnected) return;
-        socket.sendMatchState(
-            match.match_id,
-            CLIENT_OPCODE.MOVE,
-            JSON.stringify({ position: index })
-        );
+        socket.sendMatchState(match.match_id, CLIENT_OPCODE.MOVE, JSON.stringify({ position: index }));
     }, [isMyTurn, status, cells, socket, match, opponentDisconnected]);
 
     const handleRematch = useCallback(() => {
         if (myVoted) return;
         setMyVoted(true);
-        socket.sendMatchState(
-            match.match_id,
-            CLIENT_OPCODE.REMATCH_VOTE,
-            JSON.stringify({})
-        );
+        socket.sendMatchState(match.match_id, CLIENT_OPCODE.REMATCH_VOTE, JSON.stringify({}));
     }, [myVoted, socket, match]);
 
     const handleLeave = useCallback(() => {
-        socket.sendMatchState(
-            match.match_id,
-            CLIENT_OPCODE.LEAVE,
-            JSON.stringify({})
-        );
-        if (opponentDisconnected) {
-            onLeaveRef.current();
-        }
+        socket.sendMatchState(match.match_id, CLIENT_OPCODE.LEAVE, JSON.stringify({}));
+        if (opponentDisconnected) onLeaveRef.current();
     }, [socket, match, opponentDisconnected]);
 
-    const winnerMark = result ? result.winner : gameOverWinner;
-    const iWon = winnerMark && marks[myUserId] === winnerMark;
-
-    const turnText = status === 'finished'
-        ? winnerMark
-            ? iWon
-                ? 'You won!'
-                : `${players[winnerMark]} won!`
-            : "It's a draw!"
-        : isMyTurn
-        ? 'Your turn'
-        : `${players[myMark === 'X' ? 'O' : 'X']}'s turn`;
+    if (isFinished) {
+        return (
+            <CompleteScreen
+                turnText={turnText}
+                myStats={myStats}
+                myVoted={myVoted}
+                opponentVoted={opponentVoted}
+                onRematch={handleRematch}
+                onLeave={handleLeave}
+                title={title}
+            />
+        );
+    }
 
     return (
         <GameScreen
             cells={cells}
             winCombo={result?.combo ?? null}
             turnText={turnText}
-            status={status}
             isMyTurn={isMyTurn}
             timeLeft={timeLeft}
             gameMode={gameMode}
-            myVoted={myVoted}
-            opponentVoted={opponentVoted}
-            opponentDisconnected={opponentDisconnected}
+            isLoading={isLoading}
+            title={title}
             opponentName={opponentName}
+            opponentDisconnected={opponentDisconnected}
             disconnectCountdown={disconnectCountdown}
-            myStats={myStats}
             onCellClick={handleCellClick}
-            onRematch={handleRematch}
             onLeave={handleLeave}
         />
     );
