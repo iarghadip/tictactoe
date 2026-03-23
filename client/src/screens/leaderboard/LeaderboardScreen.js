@@ -1,4 +1,5 @@
 import MilitaryTechOutlinedIcon from '@mui/icons-material/MilitaryTechOutlined';
+import { Confetti } from '../../components/confetti';
 import { Layout } from '../../components/layout';
 import { Score } from '../../components/score';
 import { CapitalText, NormalText } from '../../components/text';
@@ -9,6 +10,7 @@ function PlayerRow({ player, isMe }) {
 
     return (
         <div className={`flex items-center leaderboard-row ${isMe ? 'leaderboard-row--me' : ''}`}>
+            <Confetti isWinner={isMe} />
             <div
                 className={`
                     flex items-center justify-center shrink-0 text-center
