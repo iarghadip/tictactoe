@@ -191,6 +191,7 @@ export default function GamePage({ match, onLeave }) {
                 onRematch={handleRematch}
                 onLeave={handleLeave}
                 title={title}
+                isWinner={iWon}
             />
         );
     }

@@ -1,14 +1,41 @@
+import { useEffect, useRef } from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import LogoutIcon from '@mui/icons-material/Logout';
+import confetti from 'canvas-confetti';
 import { Layout } from '../../components/layout';
 import { Score } from '../../components/score';
 import { RoundButton } from '../../components/button';
 import { CapitalText, NormalText } from '../../components/text';
-import './CompleteScreen.css';
 
 export default function CompleteScreen({
-    turnText, myStats, myVoted, opponentVoted, onRematch, onLeave, title
+    turnText, myStats, myVoted, opponentVoted, onRematch, onLeave, title, isWinner
 }) {
+    const firedRef = useRef(false);
+
+    useEffect(() => {
+        if (!isWinner || firedRef.current) return;
+        firedRef.current = true;
+
+        confetti({
+            particleCount: 60,
+            spread: 100,
+            origin: { x: 0.1, y: 0.5 },
+        });
+        confetti({
+            particleCount: 60,
+            spread: 100,
+            origin: { x: 0.9, y: 0.5 },
+        });
+
+        setTimeout(() => {
+            confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.4 },
+            });
+        }, 300);
+    }, [isWinner]);
+
     return (
         <Layout center className="gap-12">
             <div className="flex items-center justify-center flex-col gap-4">
