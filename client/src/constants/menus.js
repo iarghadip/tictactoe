@@ -1,6 +1,6 @@
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined';
-import ExploreOutlinedIcon from '@mui/icons-material/ExploreOutlined';
+import GroupsIcon from '@mui/icons-material/Groups';
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
@@ -21,7 +21,7 @@ export const HOME_SCREEN_MENU = [
     {
         group: 'social',
         items: [
-            { key: 'explore', label: 'Explore Rooms', icon: ExploreOutlinedIcon },
+            { key: 'explore', label: 'Explore Rooms', icon: GroupsIcon },
             { key: 'ranks', label: 'Global Ranks', icon: EmojiEventsOutlinedIcon },
         ],
     },

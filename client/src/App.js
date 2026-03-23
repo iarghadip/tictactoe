@@ -17,7 +17,7 @@ export default function App() {
     useEffect(() => {
         if (!restoring && session && localStorage.getItem('nk_in_match') === 'true') {
             localStorage.removeItem('nk_in_match');
-            setStep('finding');
+            setStep('match');
         }
     }, [restoring, session]);
 
@@ -27,7 +27,7 @@ export default function App() {
         localStorage.setItem('nk_mode', selectedMode);
         setMode(selectedMode);
         setMatchRoomId(roomId);
-        setStep('finding');
+        setStep('match');
     };
 
     const handleFound = (foundMatch) => {
@@ -39,16 +39,16 @@ export default function App() {
     const handleLeave = () => {
         localStorage.removeItem('nk_in_match');
         setMatch(null);
-        setStep('finding');
+        setStep('match');
     };
 
-    if (step === 'finding') {
+    if (step === 'match') {
         return (
             <MatchPage
                 mode={mode}
                 roomId={matchRoomId}
                 onFound={handleFound}
-                onCancel={() => setStep('home')}
+                onCancel={() => setStep(matchRoomId ? 'room' : 'home')}
             />
         );
     }
@@ -62,7 +62,7 @@ export default function App() {
         );
     }
 
-    if (step === 'leaderboard') {
+    if (step === 'rank') {
         return (
             <RankPage
                 onBack={() => setStep('home')}
@@ -78,11 +78,11 @@ export default function App() {
         );
     }
 
-    if (step === 'rooms') {
+    if (step === 'room') {
         return (
             <RoomPage
                 onBack={() => setStep('home')}
-                onRoomMatch={(roomId) => handleFindMatch('timed', roomId)}
+                onRoomMatch={(mode, roomId) => handleFindMatch(mode, roomId)}
             />
         );
     }
@@ -90,9 +90,9 @@ export default function App() {
     return (
         <HomePage
             onFindMatch={handleFindMatch}
-            onGlobalRanks={() => setStep('leaderboard')}
+            onGlobalRanks={() => setStep('rank')}
             onAbout={() => setStep('about')}
-            onRooms={() => setStep('rooms')}
+            onRooms={() => setStep('room')}
         />
     );
 }

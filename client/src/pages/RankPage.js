@@ -45,7 +45,7 @@ export default function RankPage({ onBack }) {
                     setMyStats(null);
                 }
             } catch (e) {
-                console.error('Failed to fetch leaderboard:', e);
+                console.error('Failed to fetch rank:', e);
             } finally {
                 setLoading(false);
             }

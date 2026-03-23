@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
+import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
@@ -109,7 +110,8 @@ export default function RoomScreen({
             <div className="flex items-center justify-center flex-col gap-4 mb-6">
                 <CapitalText>{selectedRoom.edge_count} / 100 Players</CapitalText>
                 <div className="flex items-center justify-center gap-4">
-                    <RoundButton icon={PlayArrowIcon} onClick={() => onStartRoomMatch(selectedRoom.id)} />
+                    <RoundButton icon={TimerOutlinedIcon} onClick={() => onStartRoomMatch('timed', selectedRoom.id)} />
+                    <RoundButton icon={AppsOutlinedIcon} onClick={() => onStartRoomMatch('classic', selectedRoom.id)} />
                     {isAdmin ? (
                         <RoundButton icon={DeleteIcon} onClick={() => onDelete(selectedRoom.id)} danger />
                     ) : (
