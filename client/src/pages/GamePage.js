@@ -103,14 +103,27 @@ export default function GamePage({ match, onLeave }) {
     }, [clearDisconnectTimer]);
 
     const fetchMyStats = useCallback(async () => {
-        if (!client || !session) return;
+        if (!client || !session || !myUserId) return;
         try {
-            const res = await client.rpc(session, 'get_leaderboard', {});
-            setMyStats(res.payload?.myStats || null);
+            const res = await client.listLeaderboardRecords(session, 'global_tictactoe', [myUserId], 1);
+            if (res.owner_records && res.owner_records.length > 0) {
+                const myRecord = res.owner_records[0];
+                setMyStats({
+                    id: myRecord.owner_id,
+                    display_name: myRecord.username || 'Anonymous',
+                    score: parseInt(myRecord.score, 10),
+                    rank: parseInt(myRecord.rank, 10),
+                    wins: myRecord.metadata?.wins || 0,
+                    losses: myRecord.metadata?.losses || 0,
+                    matches: myRecord.metadata?.matches || 0,
+                });
+            } else {
+                setMyStats(null);
+            }
         } catch (e) {
             console.error('Failed to fetch stats:', e);
         }
-    }, [client, session]);
+    }, [client, session, myUserId]);
 
     useEffect(() => {
         if (isFinished) {
