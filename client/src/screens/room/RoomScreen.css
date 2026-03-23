@@ -7,22 +7,22 @@
     transition: background .15s ease;
 }
 
-.room-screen-item:hover {
+.room-screen-item--clickable:hover {
     background: rgba(255, 255, 255, .05);
 }
 
-.room-screen-item:active {
+.room-screen-item--clickable:active {
     background: rgba(255, 255, 255, .08);
-}
-
-.room-screen-item--danger:hover {
-    background: rgba(224, 92, 92, .06);
-}
-
-.room-screen-item--danger:active {
-    background: rgba(224, 92, 92, .10);
 }
 
 .room-screen-header {
     padding: 20px;
+}
+
+.room-screen-item__body {
+    margin-left: 16px;
+}
+
+.room-screen-item--me {
+    background: rgba(128, 203, 196, .06);
 }

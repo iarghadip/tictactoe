@@ -8,27 +8,7 @@
 }
 
 .menu-icon--teal {
-    background: rgba(128, 203, 196, 0.12);
-}
-
-.menu-icon--purple {
-    background: rgba(208, 188, 255, 0.12);
-}
-
-.menu-icon--amber {
-    background: rgba(255, 183, 77, 0.12);
-}
-
-.menu-icon--blue {
-    background: rgba(100, 181, 246, 0.12);
-}
-
-.menu-icon--green {
-    background: rgba(129, 199, 132, 0.12);
-}
-
-.menu-icon--red {
-    background: rgba(224, 92, 92, 0.12);
+    background: rgba(127, 203, 196, .125)
 }
 
 .menu-icon--danger {

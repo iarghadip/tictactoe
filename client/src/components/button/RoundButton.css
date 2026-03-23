@@ -39,6 +39,19 @@
     animation: round-btn-glow 1s ease-in-out infinite;
 }
 
+.round-btn--danger {
+    color: #ff5252;
+    border-color: rgba(255, 82, 82, 0.3);
+}
+
+.round-btn--danger::after {
+    background: #ff5252;
+}
+
+.round-btn--danger:hover {
+    background: rgba(255, 82, 82, 0.15);
+}
+
 @keyframes round-btn-glow {
     0%, 100% {
         opacity: 0.15;

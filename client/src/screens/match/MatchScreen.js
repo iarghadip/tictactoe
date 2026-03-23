@@ -22,7 +22,7 @@ export default function MatchScreen({
                 </div>
                 <div className="flex items-center justify-center flex-col gap-4">
                     <CapitalText fill="-1">{elapsed}s</CapitalText>
-                    <RoundButton onClick={onCancel} icon={LogoutIcon} btnRef={cancelBtnRef}/>
+                    <RoundButton onClick={onCancel} icon={LogoutIcon} btnRef={cancelBtnRef} danger />
                 </div>
             </div>
         </Layout>

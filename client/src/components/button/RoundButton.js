@@ -1,7 +1,7 @@
 import './RoundButton.css';
 
 export default function RoundButton({
-    onClick, disabled, glowing, btnRef, icon: Icon, className = ''
+    onClick, disabled, glowing, danger, btnRef, icon: Icon, className = ''
 }) {
     return (
         <button
@@ -17,6 +17,7 @@ export default function RoundButton({
                 disabled:opacity-30 disabled:cursor-not-allowed
                 round-btn
                 ${glowing ? 'round-btn--glowing' : ''}
+                ${danger ? 'round-btn--danger' : ''}
                 ${className}
             `}
         >

@@ -23,7 +23,7 @@ export default function CompleteScreen({
                     <RoundButton
                         onClick={onRematch} icon={RefreshIcon} disabled={myVoted}
                         glowing={opponentVoted} className={myVoted ? 'icon-spin' : ''}/>
-                    <RoundButton onClick={onLeave} icon={LogoutIcon}/>
+                    <RoundButton onClick={onLeave} icon={LogoutIcon} danger />
                 </div>
             </div>
         </Layout>

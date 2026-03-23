@@ -26,7 +26,7 @@ export default function GameScreen({
             </div>
             <div className="flex items-center justify-center flex-col gap-4">
                 <CapitalText fill={bottomFill}>{bottomText}</CapitalText>
-                <RoundButton onClick={onLeave} icon={LogoutIcon} disabled={leaveDisabled}/>
+                <RoundButton onClick={onLeave} icon={LogoutIcon} disabled={leaveDisabled} danger />
             </div>
         </Layout>
     );

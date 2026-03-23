@@ -1,7 +1,7 @@
 import './MenuIcon.css';
 
 export default function MenuIcon({
-    icon, color, size = 'md'
+    icon: Icon, color = 'teal', size = 'md'
 }) {
     return (
         <span
@@ -11,7 +11,7 @@ export default function MenuIcon({
                 menu-icon menu-icon--${size} menu-icon--${color}
             `}
         >
-            {icon}
+            <Icon fontSize="small" />
         </span>
     );
 }

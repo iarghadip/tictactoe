@@ -24,7 +24,7 @@ export default function HomeScreen({
                             onClick={() => onMenuSelect(idx)}
                             className="flex items-center cursor-pointer card-theme-item home-screen__item"
                         >
-                            <MenuIcon icon={item.icon} color={item.color} size="md" />
+                            <MenuIcon icon={item.icon} size="md" />
                             <NormalText className="flex-1">{item.label}</NormalText>
                             <ChevronRightIcon className="shrink-0 home-screen__arrow" style={{ fontSize: 18 }} />
                         </div>
@@ -34,7 +34,7 @@ export default function HomeScreen({
                     <>
                         <div className="h-px home-screen__divider" />
                         <div onClick={onLogout} className="flex items-center cursor-pointer card-theme-item home-screen__item home-screen__item--danger">
-                            <MenuIcon icon={<LogoutOutlinedIcon fontSize="small" />} color="danger" size="md" />
+                            <MenuIcon icon={LogoutOutlinedIcon} color="danger" size="md" />
                             <NormalText className="flex-1" danger>Logout Player</NormalText>
                             <ChevronRightIcon className="shrink-0 home-screen__arrow" style={{ fontSize: 18 }} />
                         </div>

@@ -14,66 +14,59 @@ export const HOME_SCREEN_MENU = [
     {
         group: 'play',
         items: [
-            { key: 'timed', label: 'Timed Match', icon: <TimerOutlinedIcon fontSize="small" />, color: 'blue' },
-            { key: 'classic', label: 'Classic Match', icon: <AppsOutlinedIcon fontSize="small" />, color: 'teal' },
+            { key: 'timed', label: 'Timed Match', icon: TimerOutlinedIcon },
+            { key: 'classic', label: 'Classic Match', icon: AppsOutlinedIcon },
         ],
     },
     {
         group: 'social',
         items: [
-            { key: 'explore', label: 'Explore Rooms', icon: <ExploreOutlinedIcon fontSize="small" />, color: 'purple' },
-            { key: 'ranks', label: 'Global Ranks', icon: <EmojiEventsOutlinedIcon fontSize="small" />, color: 'amber' },
+            { key: 'explore', label: 'Explore Rooms', icon: ExploreOutlinedIcon },
+            { key: 'ranks', label: 'Global Ranks', icon: EmojiEventsOutlinedIcon },
         ],
     },
     {
         group: 'settings',
         items: [
-            { key: 'name-settings', label: 'Name Settings', icon: <BadgeOutlinedIcon fontSize="small" />, color: 'green' },
-            { key: 'about', label: 'About Game', icon: <InfoOutlinedIcon fontSize="small" />, color: 'purple' },
+            { key: 'name-settings', label: 'Name Settings', icon: BadgeOutlinedIcon },
+            { key: 'about', label: 'About Game', icon: InfoOutlinedIcon },
         ],
     }
 ];
 
 export const ABOUT_SCREEN_MENU_1 = [
     {
-        icon: <SecurityOutlinedIcon fontSize="small" />,
-        color: 'teal',
+        icon: SecurityOutlinedIcon,
         name: 'Server-Authoritative Logic',
         desc: 'All game state lives on the server. Every move is validated before being applied — no client-side manipulation or cheating possible.',
     },
     {
-        icon: <ShuffleOutlinedIcon fontSize="small" />,
-        color: 'purple',
+        icon: ShuffleOutlinedIcon,
         name: 'Smart Matchmaking',
         desc: 'Automatically pairs players by mode. Handles connections and disconnections gracefully with a reconnection grace period.',
     },
     {
-        icon: <BoltOutlinedIcon fontSize="small" />,
-        color: 'amber',
+        icon: BoltOutlinedIcon,
         name: 'Concurrent Sessions',
         desc: 'Multiple isolated game rooms run simultaneously. Each session is fully independent, keeping gameplay fair and scalable.',
     },
     {
-        icon: <EmojiEventsOutlinedIcon fontSize="small" />,
-        color: 'red',
+        icon: EmojiEventsOutlinedIcon,
         name: 'Global Leaderboard',
         desc: 'Tracks wins, losses, and score across all players. Persistent rankings with full per-player statistics.',
     },
     {
-        icon: <CalculateOutlinedIcon fontSize="small" />,
-        color: 'teal',
+        icon: CalculateOutlinedIcon,
         name: 'Score Calculation',
         desc: 'Every win earns 75 points. Every loss deducts 25. Draws don\'t count — no record, no penalty, no reward.',
     },
     {
-        icon: <TimerOutlinedIcon fontSize="small" />,
-        color: 'blue',
+        icon: TimerOutlinedIcon,
         name: 'Timed Mode',
         desc: '30 seconds per turn. Miss your window and the move is forfeited automatically. Choose between Classic or Timed wisely.',
     },
     {
-        icon: <WifiOffOutlinedIcon fontSize="small" />,
-        color: 'purple',
+        icon: WifiOffOutlinedIcon,
         name: 'Disconnect Tolerance',
         desc: 'If opponent loses connection, the game pauses and gives them 60 seconds to reconnect, otherwise the match only ends.',
     }
