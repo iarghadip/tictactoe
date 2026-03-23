@@ -1,6 +1,8 @@
 import './RoundButton.css';
 
-export default function RoundButton({ onClick, disabled, glowing, btnRef, icon: Icon, className = '' }) {
+export default function RoundButton({
+    onClick, disabled, glowing, btnRef, icon: Icon, className = ''
+}) {
     return (
         <button
             ref={btnRef}

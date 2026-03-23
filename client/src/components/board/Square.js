@@ -2,7 +2,9 @@ import Circle from '../shapes/Circle';
 import Cross from '../shapes/Cross';
 import './Square.css';
 
-export default function Square({ value, onClick, disabled, isMyTurn }) {
+export default function Square({
+    value, onClick, disabled, isMyTurn
+}) {
     return (
         <div
             onClick={disabled ? null : onClick}

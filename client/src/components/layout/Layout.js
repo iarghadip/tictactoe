@@ -3,7 +3,9 @@ import { RoundButton } from '../../components/button';
 import { NormalText } from '../../components/text';
 import './Layout.css';
 
-export default function Layout({ title, onBack, children, center = false, className = 'gap-6' }) {
+export default function Layout({
+    title, onBack, children, center = false, className = 'gap-6'
+}) {
     const hasHeader = onBack || title;
     return (
         <div className="flex min-h-screen w-full justify-center p-5 box-border">

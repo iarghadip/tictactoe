@@ -2,7 +2,9 @@ import Square from './Square';
 import Line from './Line';
 import './Board.css';
 
-export default function Board({ squares, onCellClick, disabled, winCombo, isMyTurn }) {
+export default function Board({
+    squares, onCellClick, disabled, winCombo, isMyTurn
+}) {
     return (
         <div className="grid overflow-visible rounded-2xl relative w-[300px] h-[300px] board">
             <div className="board-line horizontal h1 absolute w-full left-0 rounded-full z-0" />

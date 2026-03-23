@@ -33,12 +33,16 @@ function PlayerRow({ player, isMe }) {
     );
 }
 
-export default function RankScreen({ loading, top100, myStats, myUserId, onBack }) {
+export default function RankScreen({
+    loading, top100, myStats, myUserId, onBack
+}) {
     return (
         <Layout title="Global Ranks" onBack={onBack}>
             <Score stats={myStats} loading={loading} />
             {top100.length === 0 ? (
-                <CapitalText>No players ranked yet</CapitalText>
+                <div className="text-center mt-4">
+                    <CapitalText>No players are ranked yet</CapitalText>
+                </div>
             ) : (
                 <div className="flex flex-col overflow-hidden leaderboard-list">
                     {top100.map(player => (

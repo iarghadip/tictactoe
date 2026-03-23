@@ -1,6 +1,8 @@
 import './CapitalText.css';
 
-export default function CapitalText({ children, size = 13, fill = null }) {
+export default function CapitalText({
+    children, size = 13, fill = null
+}) {
     let className = 'capital-text';
     let style;
 

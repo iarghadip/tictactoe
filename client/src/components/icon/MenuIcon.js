@@ -1,6 +1,8 @@
 import './MenuIcon.css';
 
-export default function MenuIcon({ icon, color, size = 'md' }) {
+export default function MenuIcon({
+    icon, color, size = 'md'
+}) {
     return (
         <span
             className={`

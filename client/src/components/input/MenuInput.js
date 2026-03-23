@@ -3,7 +3,9 @@ import LoginIcon from '@mui/icons-material/Login';
 import { RoundButton } from '../button';
 import './MenuInput.css';
 
-export default function MenuInput({ open, title, fields, initialValues, onSubmit, onClose, loading, error }) {
+export default function MenuInput({
+    open, title, fields, initialValues, onSubmit, onClose, loading, error
+}) {
     const [values, setValues] = useState({});
 
     useEffect(() => {
@@ -16,7 +18,7 @@ export default function MenuInput({ open, title, fields, initialValues, onSubmit
             });
             setValues(initial);
         }
-    }, [open]);
+    }, [open, fields, initialValues]);
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') handleSubmit();
@@ -50,11 +52,11 @@ export default function MenuInput({ open, title, fields, initialValues, onSubmit
                             className="flex-1 bg-transparent border-none outline-none entry__input"
                             type="text"
                             placeholder={field.placeholder || ''}
-                            maxLength={field.maxLength || 20}
+                            maxLength={field.maxLength || 15} 
                             value={values[field.key] || ''}
                             onChange={e => setValues(v => ({ ...v, [field.key]: e.target.value }))}
                             onKeyDown={handleKeyDown}
-                            autoFocus={field.autoFocus && i === 0}
+                            autoFocus={(field.autoFocus !== false) && i === 0} 
                         />
                     </div>
                 ))}

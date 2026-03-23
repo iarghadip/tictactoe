@@ -4,7 +4,9 @@ import { HomeScreen } from '../screens/home';
 import { MenuInput } from '../components/input';
 import { HOME_SCREEN_MENU } from '../constants/menus';
 
-export default function HomePage({ onFindMatch, onGlobalRanks, onAbout }) {
+export default function HomePage({
+    onFindMatch, onGlobalRanks, onAbout, onRooms
+}) {
     const { session, connect, updateDisplayName, disconnect, account } = useNakama();
 
     const [authModal, setAuthModal] = useState(false);
@@ -22,7 +24,7 @@ export default function HomePage({ onFindMatch, onGlobalRanks, onAbout }) {
         switch (index) {
             case 0: onFindMatch('timed'); break;
             case 1: onFindMatch('classic'); break;
-            case 2: break;
+            case 2: onRooms(); break;
             case 3: onGlobalRanks(); break;
             case 4: setNameError(null); setNameModal(true); break;
             case 5: onAbout(); break;
@@ -97,7 +99,7 @@ export default function HomePage({ onFindMatch, onGlobalRanks, onAbout }) {
                 open={authModal}
                 title="Who are you?"
                 fields={[
-                    { key: 'username', placeholder: 'Username', maxLength: 10, autoFocus: true }
+                    { key: 'username', placeholder: 'User Name' }
                 ]}
                 onSubmit={handleAuth}
                 onClose={handleAuthClose}
@@ -108,7 +110,7 @@ export default function HomePage({ onFindMatch, onGlobalRanks, onAbout }) {
                 open={nameModal}
                 title="Name Settings"
                 fields={[
-                    { key: 'displayName', placeholder: 'Display name', maxLength: 10, autoFocus: true }
+                    { key: 'displayName', placeholder: 'Display Name' }
                 ]}
                 initialValues={{ displayName: rawDisplayName }}
                 onSubmit={handleNameUpdate}
