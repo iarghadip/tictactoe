@@ -28,7 +28,7 @@ export default function GamePage({ match, onLeave }) {
     const [gameOverWinner, setGameOverWinner] = useState(null);
     const [opponentDisconnected, setOpponentDisconnected] = useState(false);
     const [disconnectCountdown, setDisconnectCountdown] = useState(60);
-    const [gameMode, setGameMode] = useState('timed');
+    const [isTimed, setIsTimed] = useState(true);
     const [myStats, setMyStats] = useState(null);
     const [showComplete, setShowComplete] = useState(false);
 
@@ -55,12 +55,42 @@ export default function GamePage({ match, onLeave }) {
             ? 'Your turn'
             : `${opponentName}'s turn`;
 
+    const bottomText = isLoading
+        ? 'Loading the players'
+        : opponentDisconnected
+        ? `${opponentName} disconnected (${disconnectCountdown})`
+        : isTimed
+        ? `${turnText} (${timeLeft})`
+        : turnText;
+
+    const bottomFill = isLoading
+        ? '-1'
+        : opponentDisconnected
+        ? ((60 - disconnectCountdown) / 60) * 100
+        : isTimed
+        ? ((30 - timeLeft) / 30) * 100
+        : null;
+
+    const leaveDisabled = opponentDisconnected && disconnectCountdown > 30;
+
     const clearDisconnectTimer = useCallback(() => {
         if (disconnectTimerRef.current) {
             clearInterval(disconnectTimerRef.current);
             disconnectTimerRef.current = null;
         }
     }, []);
+    
+    const resetRound = useCallback((payload, initialCells = Array(9).fill(null)) => {
+        setCells(initialCells);
+        setCurrentTurn(payload.currentTurn);
+        setTimeLeft(payload.timeLeft ?? 30);
+        setStatus('playing');
+        setMyVoted(false);
+        setOpponentVoted(false);
+        setGameOverWinner(null);
+        setOpponentDisconnected(false);
+        clearDisconnectTimer();
+    }, [clearDisconnectTimer]);
 
     const fetchMyStats = useCallback(async () => {
         if (!client || !session) return;
@@ -97,16 +127,8 @@ export default function GamePage({ match, onLeave }) {
                 case SERVER_OPCODE.GAME_START:
                     setMarks(payload.marks);
                     setPlayers(payload.players);
-                    setCells(normalizeBoard(payload.board));
-                    setCurrentTurn(payload.currentTurn);
-                    setTimeLeft(payload.timeLeft ?? 30);
-                    setGameMode(payload.mode ?? 'timed');
-                    setStatus('playing');
-                    setMyVoted(false);
-                    setOpponentVoted(false);
-                    setGameOverWinner(null);
-                    setOpponentDisconnected(false);
-                    clearDisconnectTimer();
+                    setIsTimed((payload.mode ?? 'timed') === 'timed');
+                    resetRound(payload, normalizeBoard(payload.board));
                     break;
 
                 case SERVER_OPCODE.GAME_STATE:
@@ -148,15 +170,7 @@ export default function GamePage({ match, onLeave }) {
                     break;
 
                 case SERVER_OPCODE.REMATCH_START:
-                    setCells(Array(9).fill(null));
-                    setCurrentTurn(payload.currentTurn);
-                    setTimeLeft(payload.timeLeft ?? 30);
-                    setStatus('playing');
-                    setMyVoted(false);
-                    setOpponentVoted(false);
-                    setGameOverWinner(null);
-                    setOpponentDisconnected(false);
-                    clearDisconnectTimer();
+                    resetRound(payload);
                     break;
 
                 case SERVER_OPCODE.MATCH_ENDED:
@@ -173,7 +187,7 @@ export default function GamePage({ match, onLeave }) {
             activeRef.current = false;
             clearDisconnectTimer();
         };
-    }, [socket, myUserId, clearDisconnectTimer]);
+    }, [socket, myUserId, clearDisconnectTimer, resetRound]);
 
     const handleCellClick = useCallback((index) => {
         if (!isMyTurn || status !== 'playing' || cells[index] || opponentDisconnected) return;
@@ -210,17 +224,15 @@ export default function GamePage({ match, onLeave }) {
         <GameScreen
             cells={cells}
             winCombo={result?.combo ?? null}
-            turnText={turnText}
             isMyTurn={isMyTurn}
-            timeLeft={timeLeft}
-            gameMode={gameMode}
             isLoading={isLoading}
             title={title}
-            opponentName={opponentName}
+            bottomText={bottomText}
+            bottomFill={bottomFill}
             opponentDisconnected={opponentDisconnected}
-            disconnectCountdown={disconnectCountdown}
             onCellClick={handleCellClick}
             onLeave={handleLeave}
+            leaveDisabled={leaveDisabled}
         />
     );
 }

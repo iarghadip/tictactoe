@@ -6,27 +6,11 @@ import { CapitalText, NormalText } from '../../components/text';
 import './GameScreen.css';
 
 export default function GameScreen({
-    cells, winCombo, turnText, isMyTurn,
-    timeLeft, gameMode, isLoading,
-    opponentDisconnected, opponentName,
-    title, disconnectCountdown,
+    cells, winCombo, isMyTurn, isLoading,
+    title, bottomText, bottomFill,
+    opponentDisconnected, leaveDisabled,
     onCellClick, onLeave,
 }) {
-    const isTimed = gameMode === 'timed';
-    const leaveDisabled = opponentDisconnected && disconnectCountdown > 30;
-
-    const text = opponentDisconnected
-        ? `${opponentName} disconnected (${disconnectCountdown})`
-        : isTimed
-        ? `${turnText} (${timeLeft})`
-        : turnText;
-
-    const fill = opponentDisconnected
-        ? ((60 - disconnectCountdown) / 60) * 100
-        : isTimed && !isLoading
-        ? ((30 - timeLeft) / 30) * 100
-        : null;
-
     return (
         <Layout center className="gap-12">
             <div className="flex items-center justify-center flex-col gap-4">
@@ -37,13 +21,13 @@ export default function GameScreen({
                 <Board
                     squares={cells}
                     onCellClick={onCellClick}
-                    disabled={isLoading || opponentDisconnected}
                     winCombo={winCombo}
                     isMyTurn={isMyTurn && !opponentDisconnected && !isLoading}
+                    disabled={isLoading || opponentDisconnected}
                 />
             </div>
             <div className="flex items-center justify-center flex-col gap-4">
-                <CapitalText fill={fill}>{text}</CapitalText>
+                <CapitalText fill={bottomFill}>{bottomText}</CapitalText>
                 <RoundButton onClick={onLeave} disabled={leaveDisabled}>
                     <LogoutIcon style={{ fontSize: 20 }} />
                 </RoundButton>
