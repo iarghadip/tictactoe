@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNakama } from '../contexts/nakamaContext';
-import { MatchingScreen } from '../screens/match';
+import { MatchScreen } from '../screens/match';
 
 export default function MatchPage({ mode, onFound, onCancel }) {
     const { socket, account } = useNakama();
@@ -65,7 +65,7 @@ export default function MatchPage({ mode, onFound, onCancel }) {
     }, [socket, mode]);
 
     return (
-        <MatchingScreen
+        <MatchScreen
             elapsed={elapsed}
             displayName={displayName}
             onCancel={onCancel}

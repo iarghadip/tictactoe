@@ -3,9 +3,9 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { RoundButton } from '../../components/button';
 import { Layout } from '../../components/layout';
 import { CapitalText, NormalText } from '../../components/text';
-import './MatchingScreen.css';
+import './MatchScreen.css';
 
-export default function MatchingScreen({
+export default function MatchScreen({
     elapsed, displayName, onCancel, cancelBtnRef
 }) {
     return (
