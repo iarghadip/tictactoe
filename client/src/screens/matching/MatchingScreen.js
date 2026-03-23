@@ -5,7 +5,7 @@ import { Layout } from '../../components/layout';
 import { CapitalText, NormalText } from '../../components/text';
 import './MatchingScreen.css';
 
-export default function MatchingScreen({ elapsed, displayName, onCancel }) {
+export default function MatchingScreen({ elapsed, displayName, onCancel, cancelBtnRef }) {
     const canCancel = elapsed >= 30;
 
     return (
@@ -22,7 +22,11 @@ export default function MatchingScreen({ elapsed, displayName, onCancel }) {
                 </div>
                 <div className="flex items-center justify-center flex-col gap-4">
                     <CapitalText fill="-1">{elapsed}s</CapitalText>
-                    <RoundButton onClick={onCancel} disabled={!canCancel}>
+                    <RoundButton
+                        onClick={onCancel}
+                        disabled={!canCancel}
+                        btnRef={cancelBtnRef}
+                    >
                         <LogoutIcon style={{ fontSize: 20 }} />
                     </RoundButton>
                 </div>

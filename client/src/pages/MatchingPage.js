@@ -8,6 +8,7 @@ export default function MatchingPage({ mode, onFound, onCancel }) {
     const ticketRef = useRef(null);
     const onFoundRef = useRef(onFound);
     const activeRef = useRef(true);
+    const cancelBtnRef = useRef(null);
 
     useEffect(() => {
         onFoundRef.current = onFound;
@@ -16,8 +17,13 @@ export default function MatchingPage({ mode, onFound, onCancel }) {
     const displayName = account?.user?.display_name || 'Anonymous';
 
     useEffect(() => {
-        if (!socket) return;
+        if (elapsed === 300 && cancelBtnRef.current) {
+            cancelBtnRef.current.click();
+        }
+    }, [elapsed]);
 
+    useEffect(() => {
+        if (!socket) return;
         activeRef.current = true;
 
         socket.onmatchmakermatched = async (matched) => {
@@ -35,8 +41,7 @@ export default function MatchingPage({ mode, onFound, onCancel }) {
 
         socket.addMatchmaker(
             '+properties.mode:' + mode,
-            2,
-            2,
+            2, 2,
             { mode: mode },
             {}
         )
@@ -59,5 +64,12 @@ export default function MatchingPage({ mode, onFound, onCancel }) {
         };
     }, [socket, mode]);
 
-    return <MatchingScreen elapsed={elapsed} displayName={displayName} onCancel={onCancel} />;
+    return (
+        <MatchingScreen
+            elapsed={elapsed}
+            displayName={displayName}
+            onCancel={onCancel}
+            cancelBtnRef={cancelBtnRef}
+        />
+    );
 }
