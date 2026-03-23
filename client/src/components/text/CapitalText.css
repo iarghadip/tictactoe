@@ -28,7 +28,7 @@
 .capital-text--load {
     --gradient: linear-gradient(
         to right,
-        #e05c5c var(--fill),
+        #E05C5C var(--fill),
         #E6E0E9 var(--fill)
     );
     transition: --fill 1s linear;
