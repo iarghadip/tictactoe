@@ -3,7 +3,7 @@ import { Confetti } from '../../components/confetti';
 import { Layout } from '../../components/layout';
 import { Score } from '../../components/score';
 import { CapitalText, NormalText } from '../../components/text';
-import './LeaderboardScreen.css';
+import './RankScreen.css';
 
 function PlayerRow({ player, isMe }) {
     const isTop = player.rank <= 3;
@@ -33,7 +33,7 @@ function PlayerRow({ player, isMe }) {
     );
 }
 
-export default function LeaderboardScreen({ loading, top100, myStats, myUserId, onBack }) {
+export default function RankScreen({ loading, top100, myStats, myUserId, onBack }) {
     return (
         <Layout title="Global Ranks" onBack={onBack}>
             <Score stats={myStats} loading={loading} />

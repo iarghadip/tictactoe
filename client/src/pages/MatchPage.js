@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNakama } from '../contexts/nakamaContext';
-import { MatchingScreen } from '../screens/matching';
+import { MatchingScreen } from '../screens/match';
 
-export default function MatchingPage({ mode, onFound, onCancel }) {
+export default function MatchPage({ mode, onFound, onCancel }) {
     const { socket, account } = useNakama();
     const [elapsed, setElapsed] = useState(0);
     const ticketRef = useRef(null);
@@ -35,7 +35,7 @@ export default function MatchingPage({ mode, onFound, onCancel }) {
                 ticketRef.current = null;
                 onFoundRef.current(match);
             } catch (e) {
-                console.error('MatchingPage: failed to join match', JSON.stringify(e));
+                console.error('MatchPage: failed to join match', JSON.stringify(e));
             }
         };
 
@@ -49,7 +49,7 @@ export default function MatchingPage({ mode, onFound, onCancel }) {
                 ticketRef.current = result.ticket;
             })
             .catch((e) => {
-                console.error('MatchingPage: matchmaker error', JSON.stringify(e));
+                console.error('MatchPage: matchmaker error', JSON.stringify(e));
             });
 
         const timer = setInterval(() => setElapsed(s => s + 1), 1000);

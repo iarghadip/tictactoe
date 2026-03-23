@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNakama } from '../contexts/nakamaContext';
-import { LeaderboardScreen } from '../screens/leaderboard';
+import { RankScreen } from '../screens/rank';
 
-export default function LeaderboardPage({ onBack }) {
+export default function RankPage({ onBack }) {
     const { client, session, account } = useNakama();
     const [loading, setLoading] = useState(true);
     const [top100, setTop100] = useState([]);
@@ -28,7 +28,7 @@ export default function LeaderboardPage({ onBack }) {
     }, [client, session]);
 
     return (
-        <LeaderboardScreen
+        <RankScreen
             loading={loading}
             top100={top100}
             myStats={myStats}

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNakama } from './contexts/nakamaContext';
 import HomePage from './pages/HomePage';
-import MatchingPage from './pages/MatchingPage';
+import MatchPage from './pages/MatchPage';
 import GamePage from './pages/GamePage';
-import LeaderboardPage from './pages/LeaderboardPage';
+import RankPage from './pages/RankPage';
 import AboutPage from './pages/AboutPage';
 
 function App() {
@@ -42,7 +42,7 @@ function App() {
 
     if (step === 'finding') {
         return (
-            <MatchingPage
+            <MatchPage
                 mode={mode}
                 onFound={handleFound}
                 onCancel={() => setStep('home')}
@@ -61,7 +61,7 @@ function App() {
 
     if (step === 'leaderboard') {
         return (
-            <LeaderboardPage
+            <RankPage
                 onBack={() => setStep('home')}
             />
         );
