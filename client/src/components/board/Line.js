@@ -1,11 +1,6 @@
 import './Line.css';
 
-function getCenter(index) {
-    return {
-        x: (index % 3) * 100 + 100 / 2,
-        y: Math.floor(index / 3) * 100 + 100 / 2,
-    };
-}
+const getCenter = (i) => ({ x: (i % 3) * 100 + 100 / 2, y: Math.floor(i / 3) * 100 + 100 / 2 });
 
 export default function Line({ combo }) {
     const start = getCenter(combo[0]);
