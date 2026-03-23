@@ -7,24 +7,24 @@ import './AboutScreen.css';
 export default function AboutScreen({ onBack }) {
     return (
         <Layout title="About Game" onBack={onBack}>
-            <div className="flex flex-col overflow-hidden about-features">
+            <div className="flex flex-col overflow-hidden card-theme">
                 {ABOUT_SCREEN_MENU_1.map(feature => (
-                    <div key={feature.name} className="flex items-start about-feature">
+                    <div key={feature.name} className="flex items-start about-screen-feature">
                         <MenuIcon icon={feature.icon} color={feature.color} size="sm" />
-                        <div className="flex flex-col gap-1 flex-1 min-w-0 about-feature__body">
+                        <div className="flex flex-col gap-1 flex-1 min-w-0 about-screen-feature__body">
                             <NormalText>{feature.name}</NormalText>
                             <NormalText size="4">{feature.desc}</NormalText>
                         </div>
                     </div>
                 ))}
             </div>
-            <div className="flex flex-col overflow-hidden about-dev">
-                <div className="flex flex-col about-dev__top">
+            <div className="flex flex-col overflow-hidden card-theme">
+                <div className="flex flex-col about-screen-dev__top">
                     <NormalText size="3">Created by Arghadip Das</NormalText>
                 </div>
                 <div className="flex flex-col">
                     {ABOUT_SCREEN_MENU_2.map(row => (
-                        <div key={row.key} className="flex items-center justify-between about-dev__row">
+                        <div key={row.key} className="flex items-center justify-between about-screen-dev__row">
                             <NormalText size="4">{row.key}</NormalText>
                             <NormalText size="4" className="text-right">{row.val}</NormalText>
                         </div>

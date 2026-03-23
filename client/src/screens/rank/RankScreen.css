@@ -1,25 +1,19 @@
-.leaderboard-list {
-    background: rgba(255, 255, 255, .03);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, .06);
-}
-
-.leaderboard-row {
+.rank-screen-row {
     gap: 14px;
     padding: 14px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, .04);
     transition: background .15s ease;
 }
 
-.leaderboard-row:last-child {
+.rank-screen-row:last-child {
     border-bottom: none;
 }
 
-.leaderboard-row--me {
+.rank-screen-row--me {
     background: rgba(128, 203, 196, .06);
 }
 
-.leaderboard-row__rank {
+.rank-screen-row__rank {
     font-size: 13px;
     font-weight: 600;
     color: rgba(230, 224, 233, .35);
@@ -27,14 +21,14 @@
     font-variant-numeric: tabular-nums;
 }
 
-.leaderboard-row__rank--top {
+.rank-screen-row__rank--top {
     font-size: 18px;
 }
 
-.leaderboard-row__info {
+.rank-screen-row__info {
     gap: 3px;
 }
 
-.leaderboard-row__score {
+.rank-screen-row__score {
     color: #80CBC4 !important;
 }

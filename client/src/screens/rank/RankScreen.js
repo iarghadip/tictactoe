@@ -8,13 +8,13 @@ import './RankScreen.css';
 function PlayerRow({ player, isMe }) {
     const isTop = player.rank <= 3;
     return (
-        <div className={`flex items-center leaderboard-row ${isMe ? 'leaderboard-row--me' : ''}`}>
+        <div className={`flex items-center rank-screen-row ${isMe ? 'rank-screen-row--me' : ''}`}>
             <Confetti isWinner={isMe} />
             <div
                 className={`
                     flex items-center justify-center shrink-0 text-center
-                    leaderboard-row__rank
-                    ${isTop ? 'leaderboard-row__rank--top' : ''}
+                    rank-screen-row__rank
+                    ${isTop ? 'rank-screen-row__rank--top' : ''}
                 `}
             >
                 {isTop
@@ -22,11 +22,11 @@ function PlayerRow({ player, isMe }) {
                     : `#${player.rank}`
                 }
             </div>
-            <div className="flex flex-col flex-1 min-w-0 leaderboard-row__info">
+            <div className="flex flex-col flex-1 min-w-0 rank-screen-row__info">
                 <NormalText>{player.display_name}</NormalText>
                 <CapitalText size="11">{player.matches}P · {player.wins}W · {player.losses}L</CapitalText>
             </div>
-            <NormalText className="shrink-0 leaderboard-row__score">
+            <NormalText className="shrink-0 rank-screen-row__score">
                 {player.score.toLocaleString()}
             </NormalText>
         </div>
@@ -44,7 +44,7 @@ export default function RankScreen({
                     <CapitalText>No players are ranked yet</CapitalText>
                 </div>
             ) : (
-                <div className="flex flex-col overflow-hidden leaderboard-list">
+                <div className="flex flex-col overflow-hidden card-theme">
                     {top100.map(player => (
                         <PlayerRow key={player.id} player={player} isMe={player.id === myUserId} />
                     ))}

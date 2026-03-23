@@ -51,7 +51,7 @@ export default function HomePage({
             setPendingAction(null);
             executeAction(action);
         } catch (e) {
-            setAuthError(e.message || 'Choose a different username!');
+            setAuthError(e.message);
         } finally {
             setAuthLoading(false);
         }

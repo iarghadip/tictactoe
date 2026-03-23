@@ -13,7 +13,7 @@ function StatPill({ label, value }) {
 export default function Score({ stats, loading = false }) {
     if (!stats) {
         return (
-            <div className="flex items-center justify-center p-6 score-stats">
+            <div className="flex items-center justify-center p-6 card-theme score-stats">
                 {loading
                     ? <CapitalText fill="-1">Loading your stats</CapitalText>
                     : <CapitalText>You are not ranked yet</CapitalText>
@@ -23,7 +23,7 @@ export default function Score({ stats, loading = false }) {
     }
 
     return (
-        <div className="flex flex-col px-6 py-5 score-stats">
+        <div className="flex flex-col px-6 py-5 card-theme score-stats">
             <div className="flex items-baseline justify-between score-stats__top">
                 <NormalText size="1">#{stats.rank}</NormalText>
                 <NormalText size="2" className="score-stats__score">{stats.score.toLocaleString()} pts</NormalText>

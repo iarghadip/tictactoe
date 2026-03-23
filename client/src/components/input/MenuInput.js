@@ -38,18 +38,18 @@ export default function MenuInput({
     return (
         <div
             onClick={onClose}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-5 box-border modal-backdrop"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-5 box-border menu-input-backdrop"
         >
             <div
                 onClick={e => e.stopPropagation()}
-                className="flex flex-col items-center gap-5 w-full max-w-[320px] p-8 px-6 box-border modal"
+                className="flex flex-col items-center gap-5 w-full max-w-[320px] p-8 px-6 box-border menu-input"
             >
-                <div className="text-center modal__title">{title}</div>
-                {error && <p className="text-center mt-[-8px] entry__error">{error}</p>}
+                <div className="text-center menu-input__title">{title}</div>
+                {error && <p className="text-center mt-[-8px] menu-input__error">{error}</p>}
                 {fields.map((field, i) => (
-                    <div key={field.key} className="flex items-center w-full rounded-full px-6 py-2 pl-6 box-border entry__row">
+                    <div key={field.key} className="flex items-center w-full rounded-full px-6 py-2 pl-6 box-border menu-input__row">
                         <input
-                            className="flex-1 bg-transparent border-none outline-none entry__input"
+                            className="flex-1 bg-transparent border-none outline-none menu-input__input"
                             type="text"
                             placeholder={field.placeholder || ''}
                             maxLength={field.maxLength || 15} 

@@ -24,7 +24,7 @@ export default function RoomScreen({
 
     if (!selectedRoom) {
         return (
-            <Layout title="My Rooms" onBack={onBack}>
+            <Layout title="Explore Rooms" onBack={onBack}>
                 <div className="flex gap-4 justify-center mb-6">
                     <RoundButton icon={AddIcon} onClick={() => setCreateOpen(true)} />
                     <RoundButton icon={SearchIcon} onClick={() => setJoinOpen(true)} />
@@ -35,13 +35,13 @@ export default function RoomScreen({
                         <CapitalText>You are not in any rooms yet</CapitalText>
                     </div>
                 ) : (
-                    <div className="flex flex-col overflow-hidden room-container mb-6">
+                    <div className="flex flex-col overflow-hidden card-theme mb-6">
                         {rooms.map((room, idx) => (
                             <div key={room.group.id} className="flex flex-col">
-                                {idx > 0 && <div className="h-px room-divider" />}
+                                {idx > 0 && <div className="h-px room-screen-divider" />}
                                 <div
                                     onClick={() => onSelectRoom(room.group)}
-                                    className="flex items-center cursor-pointer room-item"
+                                    className="flex items-center cursor-pointer room-screen-item"
                                 >
                                     <div className="flex flex-col flex-1 min-w-0">
                                         <NormalText>{room.group.name}</NormalText>
@@ -57,11 +57,11 @@ export default function RoomScreen({
                 {requestedRooms?.length > 0 && (
                     <>
                         <CapitalText className="mb-3 px-2">Requested</CapitalText>
-                        <div className="flex flex-col overflow-hidden room-container">
+                        <div className="flex flex-col overflow-hidden card-theme">
                             {requestedRooms.map((room, idx) => (
                                 <div key={room.group.id} className="flex flex-col">
-                                    {idx > 0 && <div className="h-px room-divider" />}
-                                    <div className="flex items-center room-item opacity-50">
+                                    {idx > 0 && <div className="h-px room-screen-divider" />}
+                                    <div className="flex items-center room-screen-item opacity-50">
                                         <div className="flex flex-col flex-1 min-w-0">
                                             <NormalText>{room.group.name}</NormalText>
                                             <CapitalText size="11">Waiting for approval</CapitalText>
@@ -81,7 +81,6 @@ export default function RoomScreen({
                     onClose={() => { setCreateOpen(false); clearErrors(); }}
                     error={createError}
                 />
-
                 <MenuInput
                     open={joinOpen}
                     title="Join Room"
@@ -98,7 +97,7 @@ export default function RoomScreen({
 
     return (
         <Layout title={selectedRoom.name} onBack={() => onSelectRoom(null)}>
-            <div className="flex flex-col items-center gap-4 room-header mb-6">
+            <div className="flex flex-col items-center gap-4 card-theme room-screen-header mb-6">
                 <CapitalText>{selectedRoom.edge_count} / 100 Players</CapitalText>
                 <div className="flex gap-4">
                     <RoundButton icon={PlayArrowIcon} onClick={() => onStartRoomMatch(selectedRoom.id)} />
@@ -113,11 +112,11 @@ export default function RoomScreen({
             {isAdmin && pendingMembers.length > 0 && (
                 <div className="mb-6">
                     <CapitalText className="mb-3 px-2">Pending Requests</CapitalText>
-                    <div className="flex flex-col overflow-hidden room-container">
+                    <div className="flex flex-col overflow-hidden card-theme">
                         {pendingMembers.map((m, idx) => (
                             <div key={m.user.id} className="flex flex-col">
-                                {idx > 0 && <div className="h-px room-divider" />}
-                                <div className="flex items-center justify-between room-item">
+                                {idx > 0 && <div className="h-px room-screen-divider" />}
+                                <div className="flex items-center justify-between room-screen-item">
                                     <NormalText className="flex-1 truncate">{m.user.display_name}</NormalText>
                                     <div 
                                         className="cursor-pointer" 
@@ -137,11 +136,11 @@ export default function RoomScreen({
                     <CapitalText>No players are in this room</CapitalText>
                 </div>
             ) : (
-                <div className="flex flex-col overflow-hidden room-container">
+                <div className="flex flex-col overflow-hidden card-theme">
                     {roomMembers.map((m, idx) => (
                         <div key={m.user.id} className="flex flex-col">
-                            {idx > 0 && <div className="h-px room-divider" />}
-                            <div className={`flex items-center justify-between room-item ${isAdmin && m.user.id !== myUserId ? 'room-item--danger cursor-pointer' : ''}`}
+                            {idx > 0 && <div className="h-px room-screen-divider" />}
+                            <div className={`flex items-center justify-between room-screen-item ${isAdmin && m.user.id !== myUserId ? 'room-screen-item--danger cursor-pointer' : ''}`}
                                 onClick={() => isAdmin && m.user.id !== myUserId && onKick(selectedRoom.id, m.user.id)}>
                                 <NormalText className="flex-1 truncate">
                                     {m.user.display_name} {m.user.id === selectedRoom.creator_id ? '(Admin)' : ''}

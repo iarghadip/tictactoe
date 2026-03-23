@@ -1,36 +1,30 @@
-.home-menu {
-    background: rgba(255, 255, 255, .03);
-    border: 1px solid rgba(255, 255, 255, .06);
-    border-radius: 20px;
-}
-
-.home-menu__divider {
+.home-screen__divider {
     background: rgba(255, 255, 255, .06);
 }
 
-.home-menu__item {
+.home-screen__item {
     gap: 14px;
     padding: 18px 20px;
     color: #E6E0E9;
     transition: background .15s ease;
 }
 
-.home-menu__item:hover {
+.home-screen__item:hover {
     background: rgba(255, 255, 255, .05);
 }
 
-.home-menu__item:active {
+.home-screen__item:active {
     background: rgba(255, 255, 255, .08);
 }
 
-.home-menu__item--danger:hover {
+.home-screen__item--danger:hover {
     background: rgba(224, 92, 92, .06);
 }
 
-.home-menu__item--danger:active {
+.home-screen__item--danger:active {
     background: rgba(224, 92, 92, .10);
 }
 
-.home-menu__arrow {
+.home-screen__arrow {
     color: rgba(230, 224, 233, .2);
 }

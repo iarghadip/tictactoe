@@ -14,29 +14,29 @@ export default function HomeScreen({
                 <NormalText size="1">Tic Tac Toe</NormalText>
                 {isLoggedIn && <CapitalText>{displayName}</CapitalText>}
             </div>
-            <div className="flex flex-col overflow-hidden home-menu">
+            <div className="flex flex-col overflow-hidden card-theme">
                 {menuItems.map((item, idx) => (
                     <div key={item.key} className="flex flex-col">
                         {item.gi > 0 && idx === menuItems.findIndex(i => i.gi === item.gi) && (
-                            <div className="h-px home-menu__divider" />
+                            <div className="h-px home-screen__divider" />
                         )}
                         <div
                             onClick={() => onMenuSelect(idx)}
-                            className="flex items-center cursor-pointer home-menu__item"
+                            className="flex items-center cursor-pointer home-screen__item"
                         >
                             <MenuIcon icon={item.icon} color={item.color} size="md" />
                             <NormalText className="flex-1">{item.label}</NormalText>
-                            <ChevronRightIcon className="shrink-0 home-menu__arrow" style={{ fontSize: 18 }} />
+                            <ChevronRightIcon className="shrink-0 home-screen__arrow" style={{ fontSize: 18 }} />
                         </div>
                     </div>
                 ))}
                 {isLoggedIn && (
                     <>
-                        <div className="h-px home-menu__divider" />
-                        <div onClick={onLogout} className="flex items-center cursor-pointer home-menu__item home-menu__item--danger">
+                        <div className="h-px home-screen__divider" />
+                        <div onClick={onLogout} className="flex items-center cursor-pointer home-screen__item home-screen__item--danger">
                             <MenuIcon icon={<LogoutOutlinedIcon fontSize="small" />} color="danger" size="md" />
                             <NormalText className="flex-1" danger>Logout Player</NormalText>
-                            <ChevronRightIcon className="shrink-0 home-menu__arrow" style={{ fontSize: 18 }} />
+                            <ChevronRightIcon className="shrink-0 home-screen__arrow" style={{ fontSize: 18 }} />
                         </div>
                     </>
                 )}

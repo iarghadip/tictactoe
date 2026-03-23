@@ -1,35 +1,35 @@
-.modal-backdrop {
+.menu-input-backdrop {
     background: rgba(0, 0, 0, 0.65);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     animation: backdrop-in 0.2s ease forwards;
 }
 
-.modal {
-    background: #1C1B20;
-    border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.07);
+.menu-input {
+    background: #212024;
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 20px;
     animation: modal-in 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-.modal__title {
+.menu-input__title {
     font-size: 18px;
     font-weight: 700;
     color: #E6E0E9;
     letter-spacing: 0.5px;
 }
 
-.entry__row {
+.menu-input__row {
     background: rgba(255, 255, 255, 0.05);
     border: 1.5px solid rgba(255, 255, 255, 0.08);
     transition: border-color 0.2s ease;
 }
 
-.entry__row:focus-within {
+.menu-input__row:focus-within {
     border-color: rgba(255, 255, 255, 0.25);
 }
 
-.entry__input {
+.menu-input__input {
     font-size: 16px;
     font-weight: 500;
     color: #E6E0E9;
@@ -37,11 +37,11 @@
     caret-color: #E6E0E9;
 }
 
-.entry__input::placeholder {
+.menu-input__input::placeholder {
     color: rgba(230, 224, 233, 0.25);
 }
 
-.entry__error {
+.menu-input__error {
     color: #E05C5C;
     font-size: 13px;
     letter-spacing: 0.3px;
