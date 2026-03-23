@@ -9,9 +9,9 @@ export default function AboutScreen({ onBack }) {
         <Layout title="About Game" onBack={onBack}>
             <div className="about-features">
                 {ABOUT_SCREEN_MENU_1.map(feature => (
-                    <div className="about-feature" key={feature.name}>
+                    <div className="flex about-feature" key={feature.name}>
                         <MenuIcon icon={feature.icon} color={feature.color} size="sm" />
-                        <div className="about-feature__body">
+                        <div className="flex about-feature__body">
                             <NormalText>{feature.name}</NormalText>
                             <NormalText size="4">{feature.desc}</NormalText>
                         </div>
@@ -24,7 +24,7 @@ export default function AboutScreen({ onBack }) {
                 </div>
                 <div className="about-dev__rows">
                     {ABOUT_SCREEN_MENU_2.map(row => (
-                        <div className="about-dev__row" key={row.key}>
+                        <div className="flex about-dev__row" key={row.key}>
                             <NormalText size="4">{row.key}</NormalText>
                             <NormalText size="4" className="about-dev__val">{row.val}</NormalText>
                         </div>

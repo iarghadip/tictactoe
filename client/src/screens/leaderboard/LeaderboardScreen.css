@@ -1,52 +1,48 @@
-.lb-list {
-    display: flex;
+.leaderboard-list {
     flex-direction: column;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255,255,255,.03);
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255,255,255,.06);
     overflow: hidden;
 }
 
-.lb-row {
-    display: flex;
+.leaderboard-row {
     align-items: center;
     gap: 14px;
     padding: 14px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    transition: background 0.15s ease;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+    transition: background .15s ease;
 }
 
-.lb-row:last-child {
+.leaderboard-row:last-child {
     border-bottom: none;
 }
-
-.lb-row--me {
-    background: rgba(128, 203, 196, 0.06);
+.leaderboard-row--me {
+    background: rgba(128,203,196,.06);
 }
 
-.lb-row__rank {
+.leaderboard-row__rank {
     font-size: 13px;
     font-weight: 600;
-    color: rgba(230, 224, 233, 0.35);
+    color: rgba(230,224,233,.35);
     width: 32px;
     flex-shrink: 0;
     font-variant-numeric: tabular-nums;
     text-align: center;
 }
 
-.lb-row__rank--top {
+.leaderboard-row__rank--top {
     font-size: 18px;
 }
 
-.lb-row__info {
-    flex: 1;
-    display: flex;
+.leaderboard-row__info {
     flex-direction: column;
     gap: 3px;
+    flex: 1;
     min-width: 0;
 }
 
-.lb-row__score {
+.leaderboard-row__score {
     color: #80CBC4 !important;
     flex-shrink: 0;
 }
