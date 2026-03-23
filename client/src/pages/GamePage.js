@@ -30,6 +30,7 @@ export default function GamePage({ match, onLeave }) {
     const [disconnectCountdown, setDisconnectCountdown] = useState(60);
     const [gameMode, setGameMode] = useState('timed');
     const [myStats, setMyStats] = useState(null);
+    const [showComplete, setShowComplete] = useState(false);
 
     const myMark = marks[myUserId];
     const opponentMark = myMark === 'X' ? 'O' : 'X';
@@ -70,6 +71,15 @@ export default function GamePage({ match, onLeave }) {
             console.error('Failed to fetch stats:', e);
         }
     }, [client, session]);
+
+    useEffect(() => {
+        if (isFinished) {
+            const timer = setTimeout(() => setShowComplete(true), 1500);
+            return () => clearTimeout(timer);
+        } else {
+            setShowComplete(false);
+        }
+    }, [isFinished]);
 
     useEffect(() => { fetchMyStats(); }, [fetchMyStats]);
     useEffect(() => { if (isFinished) fetchMyStats(); }, [isFinished, fetchMyStats]);
@@ -181,7 +191,7 @@ export default function GamePage({ match, onLeave }) {
         if (opponentDisconnected) onLeaveRef.current();
     }, [socket, match, opponentDisconnected]);
 
-    if (isFinished) {
+    if (showComplete) {
         return (
             <CompleteScreen
                 turnText={turnText}
