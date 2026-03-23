@@ -6,8 +6,6 @@ import { CapitalText, NormalText } from '../../components/text';
 import './MatchingScreen.css';
 
 export default function MatchingScreen({ elapsed, displayName, onCancel, cancelBtnRef }) {
-    const canCancel = elapsed >= 30;
-
     return (
         <Layout center>
             <div className="flex flex-col items-center w-full mx-auto matching__container">
@@ -24,7 +22,6 @@ export default function MatchingScreen({ elapsed, displayName, onCancel, cancelB
                     <CapitalText fill="-1">{elapsed}s</CapitalText>
                     <RoundButton
                         onClick={onCancel}
-                        disabled={!canCancel}
                         btnRef={cancelBtnRef}
                     >
                         <LogoutIcon style={{ fontSize: 20 }} />
