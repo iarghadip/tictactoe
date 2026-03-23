@@ -2,7 +2,17 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { useNakama } from '../contexts/nakamaContext';
 import { GameScreen, CompleteScreen } from '../screens/game';
 import { SERVER_OPCODE, CLIENT_OPCODE } from '../constants/opcodes';
-import { checkWinner } from '../components/board';
+import { GAME_WINNER_COMBINATIONS } from '../constants/miscellaneous';
+
+function checkWinner(squares) {
+    for (const combo of GAME_WINNER_COMBINATIONS) {
+        const [a, b, c] = combo;
+        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+            return { winner: squares[a], combo };
+        }
+    }
+    return null;
+}
 
 function normalizeBoard(board) {
     return board.map(c => c === '' ? null : c);

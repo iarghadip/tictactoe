@@ -1,17 +1,6 @@
 import Square from './Square';
 import Line from './Line';
-import { GAME_WINNER_COMBINATIONS } from '../../constants/miscellaneous'
 import './Board.css';
-
-export function checkWinner(squares) {
-    for (const combo of GAME_WINNER_COMBINATIONS) {
-        const [a, b, c] = combo;
-        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return { winner: squares[a], combo };
-        }
-    }
-    return null;
-}
 
 export default function Board({ squares, onCellClick, disabled, winCombo, isMyTurn }) {
     return (
