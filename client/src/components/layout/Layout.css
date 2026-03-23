@@ -20,8 +20,7 @@
     z-index: 10;
     align-items: center;
     gap: 16px;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding: 8px 0;
     background: var(--bg, #141218);
 }
 

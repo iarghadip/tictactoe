@@ -19,7 +19,7 @@ export default function MenuInput({ open, title, fields, initialValues, onSubmit
     }, [open]);
 
     const handleKeyDown = (e) => {
-        if (e.key === 'MenuInput') handleSubmit();
+        if (e.key === 'Enter') handleSubmit();
         if (e.key === 'Escape') onClose();
     };
 
@@ -52,11 +52,8 @@ export default function MenuInput({ open, title, fields, initialValues, onSubmit
                         />
                     </div>
                 ))}
-                <RoundButton
-                    onClick={handleSubmit}
-                    disabled={!isValid || loading}
-                >
-                    {loading ? '...' : <LoginIcon style={{ fontSize: 20 }} />}
+                <RoundButton onClick={handleSubmit} disabled={!isValid || loading}>
+                    <LoginIcon style={{ fontSize: 20 }} />
                 </RoundButton>
             </div>
         </div>

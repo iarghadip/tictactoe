@@ -11,35 +11,27 @@ const TURN_LIMIT = 30;
 const DISCONNECT_GRACE = 60;
 
 export default function GameScreen({
-    cells,
-    winCombo,
-    turnText,
-    status,
-    isMyTurn,
-    timeLeft,
-    gameMode,
-    myVoted,
-    opponentVoted,
-    opponentDisconnected,
-    opponentName,
-    disconnectCountdown,
-    myStats,
-    onCellClick,
-    onRematch,
-    onLeave,
+    cells, winCombo, turnText, status, isMyTurn,
+    timeLeft, gameMode, myVoted, opponentVoted,
+    opponentDisconnected, opponentName, disconnectCountdown,
+    myStats, onCellClick, onRematch, onLeave,
 }) {
     const isTimed = gameMode === 'timed';
     const isPlaying = status === 'playing';
     const isFinished = status === 'finished';
     const leaveDisabled = opponentDisconnected && disconnectCountdown > 30;
 
-    const turnFill = isTimed && isPlaying && !opponentDisconnected
-        ? ((TURN_LIMIT - timeLeft) / TURN_LIMIT) * 100
-        : null;
+    const text = opponentDisconnected
+        ? `${opponentName} disconnected (${disconnectCountdown})`
+        : isPlaying
+            ? `${turnText} (${timeLeft})`
+            : turnText;
 
-    const disconnectFill = opponentDisconnected
+    const fill = opponentDisconnected
         ? ((DISCONNECT_GRACE - disconnectCountdown) / DISCONNECT_GRACE) * 100
-        : null;
+        : isTimed && isPlaying
+            ? ((TURN_LIMIT - timeLeft) / TURN_LIMIT) * 100
+            : null;
 
     return (
         <Layout>
@@ -54,10 +46,7 @@ export default function GameScreen({
                 />
             </div>
             <div className="flex-center">
-                {opponentDisconnected
-                    ? <CapitalText fill={disconnectFill}>{opponentName} disconnected</CapitalText>
-                    : <CapitalText fill={turnFill}>{turnText}</CapitalText>
-                }
+                <CapitalText fill={fill}>{text}</CapitalText>
             </div>
             <div className="flex-center gap">
                 {isFinished && (
