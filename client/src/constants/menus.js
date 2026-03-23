@@ -63,7 +63,7 @@ export const ABOUT_SCREEN_MENU_1 = [
         icon: <CalculateOutlinedIcon fontSize="small" />,
         color: 'teal',
         name: 'Score Calculation',
-        desc: 'Every win earns 100 points. Every loss deducts 25. Draws don\'t count — no record, no penalty, no reward.',
+        desc: 'Every win earns 75 points. Every loss deducts 25. Draws don\'t count — no record, no penalty, no reward.',
     },
     {
         icon: <TimerOutlinedIcon fontSize="small" />,
