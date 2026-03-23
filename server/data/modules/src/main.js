@@ -80,11 +80,11 @@ var getLeaderboard = function (ctx, logger, nk, payload) {
                 SELECT
                     u.id,
                     COALESCE(u.display_name, 'Anonymous') AS display_name,
-                    COUNT(CASE WHEN g.winner = u.id THEN 1 END)                                                           AS wins,
-                    COUNT(CASE WHEN g.loser = u.id THEN 1 END)                                                            AS losses,
-                    COUNT(CASE WHEN g.winner = u.id OR g.loser = u.id THEN 1 END)                                         AS matches,
-                    COUNT(CASE WHEN g.winner = u.id THEN 1 END) * 100
-                    - COUNT(CASE WHEN g.loser = u.id THEN 1 END) * 25                                                     AS score
+                    COUNT(CASE WHEN g.winner = u.id THEN 1 END) AS wins,
+                    COUNT(CASE WHEN g.loser = u.id THEN 1 END) AS losses,
+                    COUNT(CASE WHEN g.winner = u.id OR g.loser = u.id THEN 1 END) AS matches,
+                    COUNT(CASE WHEN g.winner = u.id THEN 1 END) * 75
+                    - COUNT(CASE WHEN g.loser = u.id THEN 1 END) * 25 AS score
                 FROM users u
                 INNER JOIN games g ON (g.winner = u.id OR g.loser = u.id)
                 GROUP BY u.id, u.display_name
@@ -105,11 +105,11 @@ var getLeaderboard = function (ctx, logger, nk, payload) {
                     SELECT
                         u.id,
                         COALESCE(u.display_name, 'Anonymous') AS display_name,
-                        COUNT(CASE WHEN g.winner = u.id THEN 1 END)                                                           AS wins,
-                        COUNT(CASE WHEN g.loser = u.id THEN 1 END)                                                            AS losses,
-                        COUNT(CASE WHEN g.winner = u.id OR g.loser = u.id THEN 1 END)                                         AS matches,
-                        COUNT(CASE WHEN g.winner = u.id THEN 1 END) * 100
-                        - COUNT(CASE WHEN g.loser = u.id THEN 1 END) * 25                                                     AS score
+                        COUNT(CASE WHEN g.winner = u.id THEN 1 END) AS wins,
+                        COUNT(CASE WHEN g.loser = u.id THEN 1 END) AS losses,
+                        COUNT(CASE WHEN g.winner = u.id OR g.loser = u.id THEN 1 END) AS matches,
+                        COUNT(CASE WHEN g.winner = u.id THEN 1 END) * 75
+                        - COUNT(CASE WHEN g.loser = u.id THEN 1 END) * 25 AS score
                     FROM users u
                     INNER JOIN games g ON (g.winner = u.id OR g.loser = u.id)
                     GROUP BY u.id, u.display_name
