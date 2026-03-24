@@ -3,6 +3,8 @@ import { Confetti } from '../../components/confetti';
 import { Layout } from '../../components/layout';
 import { Score } from '../../components/score';
 import { CapitalText, NormalText } from '../../components/text';
+import { MenuIcon } from '../../components/icon';
+import { MenuText } from '../../components/text';
 import './RankScreen.css';
 
 function PlayerRow({ player, isMe }) {
@@ -18,8 +20,8 @@ function PlayerRow({ player, isMe }) {
                 `}
             >
                 {isTop
-                    ? <MilitaryTechOutlinedIcon style={{ fontSize: 22, color: ['#FFD700', '#C0C0C0', '#CD7F32'][player.rank - 1] }} />
-                    : `#${player.rank}`
+                    ? <MenuIcon icon={MilitaryTechOutlinedIcon} color={['gold', 'silver', 'bronze'][player.rank - 1]} />
+                    : <MenuText text={`#${player.rank}`} />
                 }
             </div>
             <div className="flex flex-col flex-1 min-w-0 rank-screen-row__info">

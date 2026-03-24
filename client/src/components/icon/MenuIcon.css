@@ -4,7 +4,23 @@
 }
 
 .menu-icon--teal {
-    background: rgba(127, 203, 196, .125)
+    background: rgba(127, 203, 196, 0.125);
+    color: #7FCBC4;
+}
+
+.menu-icon--gold {
+    background: rgba(255, 215, 0, 0.125);
+    color: #FFD700;
+}
+
+.menu-icon--silver {
+    background: rgba(192, 192, 192, 0.125);
+    color: #C0C0C0;
+}
+
+.menu-icon--bronze {
+    background: rgba(205, 127, 50, 0.125);
+    color: #CD7F32;
 }
 
 .menu-icon--danger {

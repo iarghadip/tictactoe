@@ -1,0 +1,16 @@
+.menu-text {
+    font-weight: bold;
+    font-size: small;
+    color: rgba(230, 224, 233, 0.7);
+    border-radius: 10px;
+}
+
+.menu-text--teal {
+    background: rgba(127, 203, 196, 0.125);
+    color: #7FCBC4; 
+}
+
+.menu-text--danger {
+    background: rgba(224, 92, 92, 0.10);
+    color: #E05C5C;
+}
