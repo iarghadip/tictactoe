@@ -1,0 +1,18 @@
+name: tictactoe
+
+database:
+    address:
+        - nakama@localhost:26257/nakama?sslmode=disable
+
+runtime:
+    js_entrypoint: "src/main.js"
+
+console:
+    port: 7351
+
+socket:
+    port: 7350
+    server_key:
+
+api:
+    port: 7349

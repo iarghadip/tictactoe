@@ -42,3 +42,6 @@ service-account*.json
 .idea/
 *.swp
 *.swo
+
+server/config.yml
+server/config.local.yml

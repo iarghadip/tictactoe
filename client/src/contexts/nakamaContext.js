@@ -4,7 +4,12 @@ import { Client, Session } from '@heroiclabs/nakama-js';
 const NakamaContext = createContext(null);
 
 export function NakamaProvider({ children }) {
-    const [client] = useState(() => new Client('defaultkey', 'localhost', '7350', false));
+    const [client] = useState(() => new Client(
+        process.env.REACT_APP_NAKAMA_KEY,
+        process.env.REACT_APP_NAKAMA_HOST,
+        process.env.REACT_APP_NAKAMA_PORT,
+        process.env.REACT_APP_ENVIRONMENT === 'production'
+    ));
     const [session, setSession] = useState(null);
     const [socket, setSocket] = useState(null);
     const [account, setAccount] = useState(null);
