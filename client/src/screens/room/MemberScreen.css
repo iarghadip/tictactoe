@@ -1,0 +1,8 @@
+.member-screen-item {
+    color: #E6E0E9;
+    transition: background .15s ease;
+}
+
+.member-screen-item--me {
+    background: rgba(128, 203, 196, .06);
+}

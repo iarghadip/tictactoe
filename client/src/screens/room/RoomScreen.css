@@ -1,7 +1,3 @@
-.room-screen-divider {
-    background: rgba(255, 255, 255, .06);
-}
-
 .room-screen-item {
     color: #E6E0E9;
     transition: background .15s ease;
@@ -13,16 +9,4 @@
 
 .room-screen-item--clickable:active {
     background: rgba(255, 255, 255, .08);
-}
-
-.room-screen-header {
-    padding: 20px;
-}
-
-.room-screen-item__body {
-    margin-left: 16px;
-}
-
-.room-screen-item--me {
-    background: rgba(128, 203, 196, .06);
 }
