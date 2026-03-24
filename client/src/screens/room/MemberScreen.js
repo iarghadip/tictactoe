@@ -1,5 +1,5 @@
-import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
-import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined';
+import Timer from '@mui/icons-material/Timer';
+import Apps from '@mui/icons-material/Apps';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
@@ -26,11 +26,11 @@ export default function MemberScreen({
                 </CapitalText>
                 <div className="flex items-center justify-center gap-4">
                     <RoundButton
-                        icon={TimerOutlinedIcon}
+                        icon={Timer}
                         onClick={() => onStartRoomMatch('timed', selectedRoom.id)}
                     />
                     <RoundButton
-                        icon={AppsOutlinedIcon}
+                        icon={Apps}
                         onClick={() => onStartRoomMatch('classic', selectedRoom.id)}
                     />
                     {isAdmin ? (

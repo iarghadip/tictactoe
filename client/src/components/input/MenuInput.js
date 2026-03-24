@@ -49,7 +49,7 @@ export default function MenuInput({
                 {fields.map((field, i) => (
                     <div key={field.key} className="flex items-center w-full rounded-full px-6 py-2 pl-6 box-border menu-input__row">
                         <input
-                            className="flex-1 bg-transparent border-none outline-none menu-input__input"
+                            className="flex-1 bg-transparent border-none outline-none"
                             type="text"
                             placeholder={field.placeholder || ''}
                             maxLength={field.maxLength || 15} 

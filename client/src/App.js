@@ -6,6 +6,7 @@ import GamePage from './pages/GamePage';
 import RankPage from './pages/RankPage';
 import AboutPage from './pages/AboutPage';
 import RoomPage from './pages/RoomPage';
+import SettingsPage from './pages/SettingsPage';
 
 export default function App() {
     const { restoring, session } = useNakama();
@@ -82,7 +83,15 @@ export default function App() {
         return (
             <RoomPage
                 onBack={() => setStep('home')}
-                onRoomMatch={(mode, roomId) => handleFindMatch(mode, roomId)}
+                onRoomMatch={(selectedMode, roomId) => handleFindMatch(selectedMode, roomId)}
+            />
+        );
+    }
+
+    if (step === 'settings') {
+        return (
+            <SettingsPage
+                onBack={() => setStep('home')}
             />
         );
     }
@@ -93,6 +102,7 @@ export default function App() {
             onGlobalRanks={() => setStep('rank')}
             onAbout={() => setStep('about')}
             onRooms={() => setStep('room')}
+            onSettings={() => setStep('settings')}
         />
     );
 }

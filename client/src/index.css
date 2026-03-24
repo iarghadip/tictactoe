@@ -16,6 +16,13 @@ body, html {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+input {
+    color: #E6E0E9;
+    caret-color: #E6E0E9;
+}
+.input::placeholder {
+    color: rgba(230, 224, 233, 0.3);
+}
 
 .card-theme {
     background: rgba(255, 255, 255, .03);

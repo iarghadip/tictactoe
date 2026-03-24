@@ -1,4 +1,4 @@
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import Logout from '@mui/icons-material/Logout';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Layout } from '../../components/layout';
 import { MenuIcon } from '../../components/icon';
@@ -34,7 +34,7 @@ export default function HomeScreen({
                     <>
                         <div className="h-px home-screen__divider" />
                         <div onClick={onLogout} className="flex items-center cursor-pointer card-theme-item home-screen__item home-screen__item--danger">
-                            <MenuIcon icon={LogoutOutlinedIcon} color="danger" />
+                            <MenuIcon icon={Logout} color="danger" />
                             <NormalText className="flex-1" danger>Logout Player</NormalText>
                             <ChevronRightIcon className="shrink-0 home-screen__arrow" style={{ fontSize: 18 }} />
                         </div>

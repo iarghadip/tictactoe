@@ -3,6 +3,7 @@ import { useNakama } from '../contexts/nakamaContext';
 import { GameScreen, CompleteScreen } from '../screens/game';
 import { SERVER_OPCODE, CLIENT_OPCODE } from '../constants/opcodes';
 import { GAME_WINNER_COMBINATIONS } from '../constants/miscellaneous';
+import { playMusic, playSound } from '../components/audio';
 
 function checkWinner(squares) {
     for (const combo of GAME_WINNER_COMBINATIONS) {
@@ -24,6 +25,7 @@ export default function GamePage({ match, onLeave }) {
     const activeRef = useRef(true);
     const onLeaveRef = useRef(onLeave);
     const disconnectTimerRef = useRef(null);
+    const marksRef = useRef({});
 
     useEffect(() => { onLeaveRef.current = onLeave; }, [onLeave]);
 
@@ -89,7 +91,7 @@ export default function GamePage({ match, onLeave }) {
             disconnectTimerRef.current = null;
         }
     }, []);
-    
+
     const resetRound = useCallback((payload, initialCells = Array(9).fill(null)) => {
         setCells(initialCells);
         setCurrentTurn(payload.currentTurn);
@@ -127,7 +129,7 @@ export default function GamePage({ match, onLeave }) {
 
     useEffect(() => {
         if (isFinished) {
-            const timer = setTimeout(() => setShowComplete(true), 1500);
+            const timer = setTimeout(() => setShowComplete(true), 1000);
             return () => clearTimeout(timer);
         } else {
             setShowComplete(false);
@@ -148,6 +150,8 @@ export default function GamePage({ match, onLeave }) {
 
             switch (opcode) {
                 case SERVER_OPCODE.GAME_START:
+                    marksRef.current = payload.marks;
+                    playMusic();
                     setMarks(payload.marks);
                     setPlayers(payload.players);
                     setIsTimed((payload.mode ?? 'timed') === 'timed');
@@ -155,16 +159,23 @@ export default function GamePage({ match, onLeave }) {
                     break;
 
                 case SERVER_OPCODE.GAME_STATE:
+                    playSound('pop');
                     setCells(normalizeBoard(payload.board));
                     setCurrentTurn(payload.currentTurn);
                     setTimeLeft(payload.timeLeft ?? 30);
                     break;
 
-                case SERVER_OPCODE.GAME_OVER:
+                case SERVER_OPCODE.GAME_OVER: {
+                    const myMark_ = marksRef.current[myUserId];
+                    const winner = payload.winner ?? null;
+                    if (!winner || winner !== myMark_) {
+                        playSound('impact');
+                    }
                     setCells(normalizeBoard(payload.board));
                     setStatus('finished');
-                    setGameOverWinner(payload.winner ?? null);
+                    setGameOverWinner(winner);
                     break;
+                }
 
                 case SERVER_OPCODE.TIMER_UPDATE:
                     setTimeLeft(payload.timeLeft);

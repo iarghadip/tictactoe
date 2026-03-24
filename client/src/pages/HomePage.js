@@ -5,20 +5,16 @@ import { MenuInput } from '../components/input';
 import { HOME_SCREEN_MENU } from '../constants/menus';
 
 export default function HomePage({
-    onFindMatch, onGlobalRanks, onAbout, onRooms
+    onFindMatch, onGlobalRanks, onAbout, onRooms, onSettings
 }) {
-    const { session, connect, updateDisplayName, disconnect, account } = useNakama();
+    const { session, connect, disconnect, account } = useNakama();
 
     const [authModal, setAuthModal] = useState(false);
-    const [nameModal, setNameModal] = useState(false);
     const [pendingAction, setPendingAction] = useState(null);
     const [authLoading, setAuthLoading] = useState(false);
     const [authError, setAuthError] = useState(null);
-    const [nameLoading, setNameLoading] = useState(false);
-    const [nameError, setNameError] = useState(null);
 
     const displayName = account?.user?.display_name || 'Anonymous';
-    const rawDisplayName = account?.user?.display_name || '';
 
     const executeAction = (index) => {
         switch (index) {
@@ -26,7 +22,7 @@ export default function HomePage({
             case 1: onFindMatch('classic'); break;
             case 2: onRooms(); break;
             case 3: onGlobalRanks(); break;
-            case 4: setNameError(null); setNameModal(true); break;
+            case 4: onSettings(); break;
             case 5: onAbout(); break;
         }
     };
@@ -57,28 +53,10 @@ export default function HomePage({
         }
     };
 
-    const handleNameUpdate = async ({ displayName: newName }) => {
-        setNameLoading(true);
-        setNameError(null);
-        try {
-            await updateDisplayName(newName.trim() || '');
-            setNameModal(false);
-        } catch (e) {
-            setNameError(e.message || 'Failed to update name.');
-        } finally {
-            setNameLoading(false);
-        }
-    };
-
     const handleAuthClose = () => {
         setAuthModal(false);
         setPendingAction(null);
         setAuthError(null);
-    };
-
-    const handleNameClose = () => {
-        setNameModal(false);
-        setNameError(null);
     };
 
     const menuItems = [];
@@ -98,25 +76,11 @@ export default function HomePage({
             <MenuInput
                 open={authModal}
                 title="Who are you?"
-                fields={[
-                    { key: 'username', placeholder: 'User Name' }
-                ]}
+                fields={[{ key: 'username', placeholder: 'User Name' }]}
                 onSubmit={handleAuth}
                 onClose={handleAuthClose}
                 loading={authLoading}
                 error={authError}
-            />
-            <MenuInput
-                open={nameModal}
-                title="Name Settings"
-                fields={[
-                    { key: 'displayName', placeholder: 'Display Name' }
-                ]}
-                initialValues={{ displayName: rawDisplayName }}
-                onSubmit={handleNameUpdate}
-                onClose={handleNameClose}
-                loading={nameLoading}
-                error={nameError}
             />
         </>
     );
