@@ -2,7 +2,7 @@ name: tictactoe
 
 database:
     address:
-        - nakama@localhost:26257/nakama?sslmode=disable
+        - root@localhost:26257/nakama?sslmode=disable
 
 runtime:
     js_entrypoint: "src/main.js"
