@@ -12,7 +12,7 @@ console:
 
 socket:
     port: 7350
-    server_key:
+    server_key: "NULL"
 
 api:
     port: 7349
