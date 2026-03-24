@@ -54,7 +54,7 @@ export default function RoomScreen({
                                     onClick={() => onSelectRoom(room.group)}
                                     className="flex items-center cursor-pointer card-theme-item room-screen-item room-screen-item--clickable"
                                 >
-                                    <MenuIcon icon={GroupsIcon} size="sm" />
+                                    <MenuIcon icon={GroupsIcon} />
                                     <div className="flex flex-col gap-1 flex-1 min-w-0 room-screen-item__body">
                                         <NormalText>{room.group.name}</NormalText>
                                         <CapitalText size="11">{room.group.edge_count}/100 Members</CapitalText>
@@ -72,7 +72,7 @@ export default function RoomScreen({
                             <div key={room.group.id} className="flex flex-col">
                                 {idx > 0 && <div className="h-px room-screen-divider" />}
                                 <div className="flex items-center card-theme-item room-screen-item opacity-50">
-                                    <MenuIcon icon={GroupsIcon} size="sm" />
+                                    <MenuIcon icon={GroupsIcon} />
                                     <div className="flex flex-col gap-1 flex-1 min-w-0 room-screen-item__body">
                                         <NormalText>{room.group.name}</NormalText>
                                         <CapitalText size="11">Membership Requested</CapitalText>
@@ -135,11 +135,7 @@ export default function RoomScreen({
                                 {idx > 0 && <div className="h-px room-screen-divider" />}
                                 <div className={`flex items-center justify-between card-theme-item room-screen-item ${isMe ? 'room-screen-item--me' : ''}`}>
                                     <div className="flex items-center flex-1 min-w-0">
-                                        {isRoomAdmin ? (
-                                            <MenuIcon icon={VerifiedIcon} size="sm" />
-                                        ) : (
-                                            <MenuIcon icon={PersonIcon} size="sm" />
-                                        )}
+                                        <MenuIcon icon={PersonIcon} />
                                         <div className="flex flex-col gap-1 flex-1 min-w-0 room-screen-item__body">
                                             <NormalText className="truncate">
                                                 {m.user.display_name || 'Anonymous'}
@@ -165,7 +161,7 @@ export default function RoomScreen({
                                 {idx > 0 && <div className="h-px room-screen-divider" />}
                                 <div className="flex items-center justify-between card-theme-item room-screen-item">
                                     <div className="flex items-center flex-1 min-w-0">
-                                        <MenuIcon icon={PendingIcon} size="sm" />
+                                        <MenuIcon icon={PendingIcon} />
                                         <div className="flex flex-col gap-1 flex-1 min-w-0 room-screen-item__body">
                                             <NormalText className="truncate">
                                                 {m.user.display_name || 'Anonymous'}
