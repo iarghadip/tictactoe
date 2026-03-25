@@ -11,9 +11,8 @@ import { MenuIcon } from '../../components/icon';
 import './RoomScreen.css';
 
 export default function RoomScreen({
-    loading, rooms, requestedRooms,
-    onSelectRoom, onBack, onCreateRoom, onRequestJoin,
-    createError, joinError, clearErrors
+    loading, rooms, requestedRooms, onSelectRoom, onBack,
+    onCreateRoom, onRequestJoin, createError, joinError, clearErrors
 }) {
     const [createOpen, setCreateOpen] = useState(false);
     const [joinOpen, setJoinOpen] = useState(false);
@@ -22,7 +21,7 @@ export default function RoomScreen({
         <Layout title="Explore Rooms" onBack={onBack}>
             <div className="flex items-center justify-center flex-col gap-4 mb-6">
                 <CapitalText fill={loading ? '-1' : undefined}>
-                    {loading ? 'Loading your rooms' : (rooms.length === 0 ? 'You are not a member yet' : `You are in ${rooms.length} rooms.`)}
+                    {loading ? 'Loading your rooms' : (rooms.length === 0 ? 'You are not a member yet' : `${rooms.length}/100 Rooms`)}
                 </CapitalText>
                 <div className="flex items-center justify-center gap-4">
                     <RoundButton icon={AddIcon} onClick={() => setCreateOpen(true)} />

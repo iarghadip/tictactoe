@@ -22,7 +22,7 @@ export default function MemberScreen({
         <Layout title={selectedRoom.name} onBack={onBack}>
             <div className="flex items-center justify-center flex-col gap-4 mb-6">
                 <CapitalText fill={loading ? '-1' : undefined}>
-                    {loading ? 'Loading room members' : `${selectedRoom.edge_count} / 100 Players`}
+                    {loading ? 'Loading room members' : `${selectedRoom.edge_count}/100 Members`}
                 </CapitalText>
                 <div className="flex items-center justify-center gap-4">
                     <RoundButton
