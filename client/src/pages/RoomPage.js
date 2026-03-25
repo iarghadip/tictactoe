@@ -9,8 +9,9 @@ export default function RoomPage({ onBack, onSelectRoom, onRoomMatch }) {
     const [requestedRooms, setRequestedRooms] = useState([]);
     const [createError, setCreateError] = useState(null);
     const [joinError, setJoinError] = useState(null);
-
     const myUserId = account?.user?.id;
+    const joinedChannelIdsRef = useRef([]);
+    const joinedRoomIdsRef = useRef(new Set());
 
     const fetchRooms = useCallback(async () => {
         try {
@@ -29,15 +30,59 @@ export default function RoomPage({ onBack, onSelectRoom, onRoomMatch }) {
     }, [client, session, myUserId]);
 
     useEffect(() => { fetchRooms(); }, [fetchRooms]);
-    
+
+    useEffect(() => {
+        if (!socket || rooms.length === 0) return;
+
+        let alive = true;
+
+        const joinNew = async () => {
+            for (const r of rooms) {
+                const groupId = r.group.id;
+                if (joinedRoomIdsRef.current.has(groupId)) continue;
+
+                try {
+                    const channel = await socket.joinChat(groupId, 3, false, false);
+                    if (!alive) {
+                        socket.leaveChat(channel.id).catch(() => {});
+                        return;
+                    }
+                    joinedChannelIdsRef.current.push(channel.id);
+                    joinedRoomIdsRef.current.add(groupId);
+                } catch (e) {
+                    console.warn('RoomPage: Room was deleted.', e);
+                }
+            }
+        };
+
+        joinNew();
+
+        const prevMessage  = socket.onchannelmessage;
+        const prevPresence = socket.onchannelpresence;
+
+        socket.onchannelmessage  = () => fetchRooms();
+        socket.onchannelpresence = () => fetchRooms();
+
+        return () => {
+            alive = false;
+            socket.onchannelmessage  = prevMessage;
+            socket.onchannelpresence = prevPresence;
+        };
+    }, [socket, rooms, fetchRooms]);
+
+    useEffect(() => {
+        return () => {
+            if (!socket) return;
+            joinedChannelIdsRef.current.forEach(id => socket.leaveChat(id).catch(() => {}));
+            joinedChannelIdsRef.current = [];
+            joinedRoomIdsRef.current.clear();
+        };
+    }, []);
+
     useEffect(() => {
         if (!socket) return;
         const prev = socket.onnotification;
-
-        socket.onnotification = async () => {
-            await fetchRooms();
-        };
-
+        socket.onnotification = () => { fetchRooms(); };
         return () => { socket.onnotification = prev; };
     }, [socket, fetchRooms]);
 
