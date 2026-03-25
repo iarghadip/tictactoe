@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import LoginIcon from '@mui/icons-material/Login';
+import LoginIcon from '@mui/icons-material/LoginTwoTone';
 import { RoundButton } from '../button';
 import './MenuInput.css';
 

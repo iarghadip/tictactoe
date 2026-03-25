@@ -1,69 +1,69 @@
-import Timer from '@mui/icons-material/Timer';
-import Apps from '@mui/icons-material/Apps';
-import GroupsIcon from '@mui/icons-material/Groups';
-import EmojiEvents from '@mui/icons-material/EmojiEvents';
-import Badge from '@mui/icons-material/Badge';
-import Info from '@mui/icons-material/Info';
-import Security from '@mui/icons-material/Security';
-import Shuffle from '@mui/icons-material/Shuffle';
-import Bolt from '@mui/icons-material/Bolt';
-import Calculate from '@mui/icons-material/Calculate';
-import WifiOff from '@mui/icons-material/WifiOff';
+import TimerIcon from '@mui/icons-material/TimerTwoTone';
+import AppsIcon from '@mui/icons-material/AppsTwoTone';
+import GroupsIcon from '@mui/icons-material/GroupsTwoTone';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEventsTwoTone';
+import SettingsIcon from '@mui/icons-material/SettingsTwoTone';
+import InfoIcon from '@mui/icons-material/InfoTwoTone';
+import SecurityIcon from '@mui/icons-material/SecurityTwoTone';
+import ShuffleIcon from '@mui/icons-material/ShuffleTwoTone';
+import BoltIcon from '@mui/icons-material/BoltTwoTone';
+import CalculateIcon from '@mui/icons-material/CalculateTwoTone';
+import WifiOffIcon from '@mui/icons-material/WifiOffTwoTone';
 
 export const HOME_SCREEN_MENU = [
     {
         items: [
-            { label: 'Timed Match', icon: Timer },
-            { label: 'Classic Match', icon: Apps },
+            { label: 'Timed Match', icon: TimerIcon },
+            { label: 'Classic Match', icon: AppsIcon },
         ],
     },
     {
         items: [
             { label: 'Explore Rooms', icon: GroupsIcon },
-            { label: 'Global Ranks', icon: EmojiEvents },
+            { label: 'Global Ranks', icon: EmojiEventsIcon },
         ],
     },
     {
         items: [
-            { label: 'Player Settings', icon: Badge },
-            { label: 'About Game', icon: Info },
+            { label: 'Player Settings', icon: SettingsIcon },
+            { label: 'About Game', icon: InfoIcon },
         ],
     }
 ];
 
 export const ABOUT_SCREEN_MENU_1 = [
     {
-        icon: Security,
+        icon: SecurityIcon,
         name: 'Server-Authoritative Logic',
         desc: 'All game state lives on the server. Every move is validated before being applied — no client-side manipulation or cheating possible.',
     },
     {
-        icon: Shuffle,
+        icon: ShuffleIcon,
         name: 'Smart Matchmaking',
         desc: 'Automatically pairs players by mode. Handles connections and disconnections gracefully with a reconnection grace period.',
     },
     {
-        icon: Bolt,
+        icon: BoltIcon,
         name: 'Concurrent Sessions',
         desc: 'Multiple isolated game rooms run simultaneously. Each session is fully independent, keeping gameplay fair and scalable.',
     },
     {
-        icon: EmojiEvents,
+        icon: EmojiEventsIcon,
         name: 'Global Leaderboard',
         desc: 'Tracks wins, losses, and score across all players. Persistent rankings with full per-player statistics.',
     },
     {
-        icon: Calculate,
+        icon: CalculateIcon,
         name: 'Score Calculation',
         desc: 'Every win earns 75 points. Every loss deducts 25. Draws don\'t count — no record, no penalty, no reward.',
     },
     {
-        icon: Timer,
+        icon: TimerIcon,
         name: 'Timed Mode',
         desc: '30 seconds per turn. Miss your window and the move is forfeited automatically. Choose between Classic or Timed wisely.',
     },
     {
-        icon: WifiOff,
+        icon: WifiOffIcon,
         name: 'Disconnect Tolerance',
         desc: 'If opponent loses connection, the game pauses and gives them 60 seconds to reconnect, otherwise the match only ends.',
     }

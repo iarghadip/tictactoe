@@ -1,8 +1,8 @@
-import Person from '@mui/icons-material/Person';
-import VolumeUp from '@mui/icons-material/VolumeUp';
-import VolumeOff from '@mui/icons-material/VolumeOff';
-import MusicNote from '@mui/icons-material/MusicNote';
-import MusicOff from '@mui/icons-material/MusicOff';
+import PersonIcon from '@mui/icons-material/PersonTwoTone';
+import VolumeUpIcon from '@mui/icons-material/VolumeUpTwoTone';
+import VolumeOffIcon from '@mui/icons-material/VolumeOffTwoTone';
+import MusicNoteIcon from '@mui/icons-material/MusicNoteTwoTone';
+import MusicOffIcon from '@mui/icons-material/MusicOffTwoTone';
 import { Layout } from '../../components/layout';
 import { RoundButton } from '../../components/button';
 import { NormalText, CapitalText } from '../../components/text';
@@ -17,7 +17,7 @@ export default function SettingsScreen({
         <Layout title="Player Settings" onBack={onBack}>
             <div className="flex flex-col overflow-hidden card-theme">
                 <div className="flex items-center card-theme-item">
-                    <MenuIcon icon={Person} />
+                    <MenuIcon icon={PersonIcon} />
                     <input
                         className="text-[15px] font-medium flex-1 bg-transparent outline-none"
                         value={nameValue}
@@ -31,18 +31,18 @@ export default function SettingsScreen({
             </div>
             <div className="flex flex-col overflow-hidden card-theme divide-y divide-white/[.04]">
                 <div className="flex items-center card-theme-item">
-                    <MenuIcon icon={MusicNote} />
+                    <MenuIcon icon={MusicNoteIcon} />
                     <NormalText className="flex-1">Game Music</NormalText>
                     <RoundButton
-                        icon={musicEnabled ? MusicNote : MusicOff}
+                        icon={musicEnabled ? MusicNoteIcon : MusicOffIcon}
                         onClick={onToggleMusic}
                     />
                 </div>
                 <div className="flex items-center card-theme-item">
-                    <MenuIcon icon={VolumeUp} />
+                    <MenuIcon icon={VolumeUpIcon} />
                     <NormalText className="flex-1">Sound Effects</NormalText>
                     <RoundButton
-                        icon={soundEnabled ? VolumeUp : VolumeOff}
+                        icon={soundEnabled ? VolumeUpIcon : VolumeOffIcon}
                         onClick={onToggleSound}
                     />
                 </div>

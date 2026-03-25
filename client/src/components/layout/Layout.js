@@ -1,4 +1,4 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIcon from '@mui/icons-material/ArrowBackTwoTone';
 import { RoundButton } from '../../components/button';
 import { NormalText } from '../../components/text';
 import './Layout.css';

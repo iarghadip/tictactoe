@@ -1,4 +1,4 @@
-import MilitaryTech from '@mui/icons-material/MilitaryTech';
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTechTwoTone';
 import { Confetti } from '../../components/confetti';
 import { Layout } from '../../components/layout';
 import { Score } from '../../components/score';
@@ -20,7 +20,7 @@ function PlayerRow({ player, isMe }) {
                 `}
             >
                 {isTop
-                    ? <MenuIcon icon={MilitaryTech} color={['gold', 'silver', 'bronze'][player.rank - 1]} />
+                    ? <MenuIcon icon={MilitaryTechIcon} color={['gold', 'silver', 'bronze'][player.rank - 1]} />
                     : <MenuText text={`#${player.rank}`} />
                 }
             </div>

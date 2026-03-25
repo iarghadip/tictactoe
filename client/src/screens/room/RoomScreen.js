@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import AddIcon from '@mui/icons-material/Add';
-import SearchIcon from '@mui/icons-material/Search';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import GroupsIcon from '@mui/icons-material/Groups';
+import AddIcon from '@mui/icons-material/AddTwoTone';
+import SearchIcon from '@mui/icons-material/SearchTwoTone';
+import ChevronRightIcon from '@mui/icons-material/ChevronRightTwoTone';
+import GroupsIcon from '@mui/icons-material/GroupsTwoTone';
 import { Layout } from '../../components/layout';
 import { RoundButton } from '../../components/button';
 import { CapitalText, NormalText } from '../../components/text';

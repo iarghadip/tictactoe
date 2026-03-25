@@ -1,4 +1,4 @@
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from '@mui/icons-material/LogoutTwoTone';
 import { Layout } from '../../components/layout';
 import { Board } from '../../components/board';
 import { RoundButton } from '../../components/button';

@@ -1,11 +1,11 @@
-import Timer from '@mui/icons-material/Timer';
-import Apps from '@mui/icons-material/Apps';
-import LogoutIcon from '@mui/icons-material/Logout';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
-import PersonIcon from '@mui/icons-material/Person';
-import PendingIcon from '@mui/icons-material/Pending';
+import TimerIcon from '@mui/icons-material/TimerTwoTone';
+import AppsIcon from '@mui/icons-material/AppsTwoTone';
+import LogoutIcon from '@mui/icons-material/LogoutTwoTone';
+import DeleteIcon from '@mui/icons-material/DeleteTwoTone';
+import CheckIcon from '@mui/icons-material/CheckTwoTone';
+import CloseIcon from '@mui/icons-material/CloseTwoTone';
+import PersonIcon from '@mui/icons-material/PersonTwoTone';
+import PendingIcon from '@mui/icons-material/PendingTwoTone';
 import { Layout } from '../../components/layout';
 import { RoundButton } from '../../components/button';
 import { CapitalText, NormalText } from '../../components/text';
@@ -26,11 +26,11 @@ export default function MemberScreen({
                 </CapitalText>
                 <div className="flex items-center justify-center gap-4">
                     <RoundButton
-                        icon={Timer}
+                        icon={TimerIcon}
                         onClick={() => onStartRoomMatch('timed', selectedRoom.id)}
                     />
                     <RoundButton
-                        icon={Apps}
+                        icon={AppsIcon}
                         onClick={() => onStartRoomMatch('classic', selectedRoom.id)}
                     />
                     {isAdmin ? (

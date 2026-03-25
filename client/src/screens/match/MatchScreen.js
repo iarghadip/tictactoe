@@ -1,5 +1,5 @@
-import HourglassEmpty from '@mui/icons-material/HourglassEmpty';
-import LogoutIcon from '@mui/icons-material/Logout';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmptyTwoTone';
+import LogoutIcon from '@mui/icons-material/LogoutTwoTone';
 import { RoundButton } from '../../components/button';
 import { Layout } from '../../components/layout';
 import { CapitalText, NormalText } from '../../components/text';
@@ -13,7 +13,7 @@ export default function MatchScreen({
             <div className="flex flex-col items-center w-full mx-auto matching__container">
                 <div className="flex items-center justify-center card-theme card-theme-item">
                     <div className="flex items-center justify-center matching__hourglass">
-                        <HourglassEmpty style={{ fontSize: 32 }} />
+                        <HourglassEmptyIcon style={{ fontSize: 32 }} />
                     </div>
                 </div>
             </div>

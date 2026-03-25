@@ -1,5 +1,5 @@
-import RefreshIcon from '@mui/icons-material/Refresh';
-import LogoutIcon from '@mui/icons-material/Logout';
+import RefreshIcon from '@mui/icons-material/RefreshTwoTone';
+import LogoutIcon from '@mui/icons-material/LogoutTwoTone';
 import { Confetti } from '../../components/confetti';
 import { Layout } from '../../components/layout';
 import { Score } from '../../components/score';
