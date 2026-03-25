@@ -12,6 +12,10 @@ body, html {
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    touch-action: manipulation;
+}
+body {
+  touch-action: pan-x pan-y;
 }
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
@@ -20,7 +24,7 @@ input {
     color: #E6E0E9;
     caret-color: #E6E0E9;
 }
-.input::placeholder {
+input::placeholder {
     color: rgba(230, 224, 233, 0.3);
 }
 
