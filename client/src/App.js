@@ -6,6 +6,7 @@ import GamePage from './pages/GamePage';
 import RankPage from './pages/RankPage';
 import AboutPage from './pages/AboutPage';
 import RoomPage from './pages/RoomPage';
+import MemberPage from './pages/MemberPage';
 import SettingsPage from './pages/SettingsPage';
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
     const [match, setMatch] = useState(null);
     const [mode, setMode] = useState(() => localStorage.getItem('nk_mode') || 'timed');
     const [matchRoomId, setMatchRoomId] = useState(null);
+    const [selectedRoom, setSelectedRoom] = useState(null);
 
     useEffect(() => {
         if (!restoring && session && localStorage.getItem('nk_in_match') === 'true') {
@@ -41,6 +43,11 @@ export default function App() {
         localStorage.removeItem('nk_in_match');
         setMatch(null);
         setStep('match');
+    };
+
+    const handleSelectRoom = (room) => {
+        setSelectedRoom(room);
+        setStep('member');
     };
 
     if (step === 'match') {
@@ -83,6 +90,17 @@ export default function App() {
         return (
             <RoomPage
                 onBack={() => setStep('home')}
+                onSelectRoom={handleSelectRoom}
+                onRoomMatch={(selectedMode, roomId) => handleFindMatch(selectedMode, roomId)}
+            />
+        );
+    }
+
+    if (step === 'member' && selectedRoom) {
+        return (
+            <MemberPage
+                room={selectedRoom}
+                onBack={() => setStep('room')}
                 onRoomMatch={(selectedMode, roomId) => handleFindMatch(selectedMode, roomId)}
             />
         );

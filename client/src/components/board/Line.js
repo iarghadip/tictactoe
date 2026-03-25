@@ -1,3 +1,4 @@
+import { playSound } from '../audio';
 import './Line.css';
 
 const getCenter = (i) => ({ x: (i % 3) * 100 + 100 / 2, y: Math.floor(i / 3) * 100 + 100 / 2 });
@@ -11,6 +12,8 @@ export default function Line({ combo }) {
     const angleDeg = Math.atan2(dy, dx) * (180 / Math.PI);
     const mx = (start.x + end.x) / 2;
     const my = (start.y + end.y) / 2;
+
+    playSound('swoosh');
 
     return (
         <div

@@ -7,6 +7,8 @@ import music5 from '../../assets/music/track5.ogg';
 import sound1 from '../../assets/sound/track1.ogg';
 import sound2 from '../../assets/sound/track2.ogg';
 import sound3 from '../../assets/sound/track3.ogg';
+import sound4 from '../../assets/sound/track4.ogg';
+import sound5 from '../../assets/sound/track5.ogg';
 
 const getPreference = (type) => localStorage.getItem(`pref_${type}`) !== '0';
 
@@ -14,6 +16,8 @@ const sfxCache = {
     confetti: new Howl({ src: [sound1], preload: true }),
     impact: new Howl({ src: [sound2], preload: true }),
     pop: new Howl({ src: [sound3], preload: true }),
+    bonus: new Howl({ src: [sound4], preload: true }),
+    swoosh: new Howl({ src: [sound5], preload: true })
 };
 
 export const getMusicEnabled = () => getPreference('music');
@@ -38,12 +42,27 @@ export const playSound = (name) => {
     }
 };
 
+let musicSession = 0;
+let currentMusicHowl = null;
 let musicQueue = [];
 
+export const stopMusic = () => {
+    musicSession++;
+    if (currentMusicHowl) {
+        currentMusicHowl.stop();
+        currentMusicHowl = null;
+    }
+};
+
 export const playMusic = () => {
+    stopMusic();
+    const session = musicSession;
+
     const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
 
     const playNextTrack = () => {
+        if (musicSession !== session) return;
+
         if (musicQueue.length === 0) {
             musicQueue = shuffleArray([music1, music2, music3, music4, music5]);
         }
@@ -59,6 +78,8 @@ export const playMusic = () => {
                 howl.once('unlock', () => howl.play());
             },
         });
+
+        currentMusicHowl = howl;
 
         if (getPreference('music')) {
             howl.play();

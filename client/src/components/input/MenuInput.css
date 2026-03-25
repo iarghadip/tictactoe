@@ -29,6 +29,19 @@
     border-color: rgba(255, 255, 255, 0.25);
 }
 
+.menu-input__row input {
+    color: #E6E0E9;
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    caret-color: #E6E0E9;
+}
+
+.menu-input__row input::placeholder {
+    color: rgba(230, 224, 233, 0.35);
+    font-weight: 400;
+}
+
 .menu-input__error {
     color: #E05C5C;
     font-size: 13px;

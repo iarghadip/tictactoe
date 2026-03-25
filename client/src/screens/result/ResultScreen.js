@@ -5,8 +5,9 @@ import { Layout } from '../../components/layout';
 import { Score } from '../../components/score';
 import { RoundButton } from '../../components/button';
 import { CapitalText, NormalText } from '../../components/text';
+import './ResultScreen.css';
 
-export default function CompleteScreen({
+export default function ResultScreen({
     turnText, myStats, myVoted, opponentVoted, onRematch, onLeave, title, isWinner
 }) {
     return (
