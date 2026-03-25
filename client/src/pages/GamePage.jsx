@@ -3,7 +3,7 @@ import { useNakama } from '../contexts/nakamaContext';
 import { GameScreen } from '../screens/game';
 import ResultPage from './ResultPage';
 import { SERVER_OPCODE, CLIENT_OPCODE } from '../constants/opcodes';
-import { GAME_WINNER_COMBINATIONS } from '../constants/miscellaneous';
+import { GAME_WINNER_COMBINATIONS } from '../constants/misc';
 import { playSound, playMusic, stopMusic } from '../components/audio';
 
 function checkWinner(squares) {

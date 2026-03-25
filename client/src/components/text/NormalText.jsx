@@ -1,4 +1,4 @@
-import { NORMAL_TEXT_FONT_SIZE } from '../../constants/miscellaneous';
+import { NORMAL_TEXT_FONT_SIZE } from '../../constants/misc';
 import './NormalText.css';
 
 export default function NormalText({
