@@ -41,11 +41,7 @@ export default function RankScreen({
     return (
         <Layout title="Global Ranks" onBack={onBack}>
             <Score stats={myStats} loading={loading} />
-            {top100.length === 0 ? (
-                <div className="text-center mt-4">
-                    <CapitalText>No players are ranked yet</CapitalText>
-                </div>
-            ) : (
+            {top100.length > 0 && (
                 <div className="flex flex-col overflow-hidden card-theme">
                     {top100.map(player => (
                         <PlayerRow key={player.id} player={player} isMe={player.id === myUserId} />

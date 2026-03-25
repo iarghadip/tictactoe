@@ -22,19 +22,13 @@ export default function RoomScreen({
         <Layout title="Explore Rooms" onBack={onBack}>
             <div className="flex items-center justify-center flex-col gap-4 mb-6">
                 <CapitalText fill={loading ? '-1' : undefined}>
-                    {loading ? 'Loading your rooms' : 'Create or Request'}
+                    {loading ? 'Loading your rooms' : (rooms.length === 0 ? 'You are not a member yet' : `You are in ${rooms.length} rooms.`)}
                 </CapitalText>
                 <div className="flex items-center justify-center gap-4">
                     <RoundButton icon={AddIcon} onClick={() => setCreateOpen(true)} />
                     <RoundButton icon={SearchIcon} onClick={() => setJoinOpen(true)} />
                 </div>
             </div>
-
-            {!loading && rooms.length === 0 && (
-                <div className="text-center mt-4 mb-6">
-                    <CapitalText>You are not a member yet</CapitalText>
-                </div>
-            )}
 
             {rooms.length > 0 && (
                 <div className="flex flex-col overflow-hidden card-theme divide-y divide-white/[.04] mb-6">
