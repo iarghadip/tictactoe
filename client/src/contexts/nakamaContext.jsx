@@ -4,11 +4,12 @@ import { Client, Session } from '@heroiclabs/nakama-js';
 const NakamaContext = createContext(null);
 
 export function NakamaProvider({ children }) {
+
     const [client] = useState(() => new Client(
-        process.env.REACT_APP_NAKAMA_KEY,
-        process.env.REACT_APP_NAKAMA_HOST,
-        process.env.REACT_APP_NAKAMA_PORT,
-        process.env.REACT_APP_ENVIRONMENT === 'production'
+        import.meta.env.VITE_NAKAMA_KEY,
+        import.meta.env.VITE_NAKAMA_HOST,
+        import.meta.env.VITE_NAKAMA_PORT,
+        import.meta.env.VITE_NAKAMA_SSL === 'true'
     ));
     const [session, setSession] = useState(null);
     const [socket, setSocket] = useState(null);
@@ -29,7 +30,9 @@ export function NakamaProvider({ children }) {
         }
         connectingRef.current = true;
         try {
-            const newSocket = client.createSocket(false, false);
+            const newSocket = client.createSocket(
+                import.meta.env.VITE_NAKAMA_SSL === 'true', false
+            );
             await newSocket.connect(s, true);
             socketRef.current = newSocket;
             setSocket(newSocket);
