@@ -1,0 +1,39 @@
+name: Deploy
+
+on:
+    push:
+        branches:
+            - production
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        environment: production
+
+        steps:
+            - name: SSH into VM and Deploy
+              uses: appleboy/ssh-action@v1.0.3
+              env:
+                  DOMAIN: ${{ secrets.DOMAIN }}
+                  EMAIL: ${{ secrets.EMAIL }}
+              with:
+                  host: ${{ secrets.SERVER_IP }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  envs: DOMAIN,EMAIL
+                  script: |
+                      PROJECT_DIR=~/tictactoe
+                      
+                      if [ ! -d "$PROJECT_DIR" ]; then
+                          git clone https://github.com/${{ github.repository }}.git $PROJECT_DIR
+                      fi
+                      
+                      cd $PROJECT_DIR
+                      git fetch origin production
+                      git reset --hard origin/production
+                      
+                      export VITE_NAKAMA_KEY=$(node -e "console.log(require('crypto').randomBytes(64).toString('hex'))")
+                      export VITE_NAKAMA_HOST=$DOMAIN
+                      export CERTBOT_EMAIL=$EMAIL
+                      
+                      docker-compose up --build -d

@@ -1,0 +1,58 @@
+name: tictactoe
+
+services:
+
+    cockroachdb:
+        image: cockroachdb/cockroach:latest-v23.1
+        command: start-single-node --insecure --store=attrs=ssd,path=/var/lib/cockroach/ --max-offset=5s
+        volumes:
+            - cockroach_data:/var/lib/cockroach
+        networks:
+            - internal
+        restart: unless-stopped
+
+    nakama:
+        build:
+            context: ./server
+            args:
+                VITE_NAKAMA_KEY: ${VITE_NAKAMA_KEY}
+        depends_on:
+            - cockroachdb
+        entrypoint:
+            - "/bin/sh"
+            - "-ecx"
+            - >
+                /nakama/nakama migrate up --database.address root@cockroachdb:26257 &&
+                exec /nakama/nakama --config /nakama/data/local.yml
+        networks:
+            - internal
+        restart: unless-stopped
+
+    react_client:
+        build:
+            context: ./client
+            args:
+                VITE_NAKAMA_KEY: ${VITE_NAKAMA_KEY}
+                VITE_NAKAMA_HOST: ${VITE_NAKAMA_HOST}
+                VITE_NAKAMA_PORT: "443"
+                VITE_NAKAMA_SSL: "true"
+        environment:
+            CERTBOT_EMAIL: ${CERTBOT_EMAIL}
+            VITE_NAKAMA_HOST: ${VITE_NAKAMA_HOST}
+        depends_on:
+            - nakama
+        ports:
+            - "443:443"
+        volumes:
+            - certbot_certs:/etc/letsencrypt
+        networks:
+            - internal
+        restart: unless-stopped
+
+volumes:
+    cockroach_data:
+    certbot_certs:
+
+networks:
+    internal:
+        driver: bridge
