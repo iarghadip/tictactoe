@@ -3,6 +3,7 @@ node_modules/
 
 # react
 /client/build
+/client/dist
 /client/coverage
 
 # cockroach
