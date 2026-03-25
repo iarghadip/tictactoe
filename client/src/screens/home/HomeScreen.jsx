@@ -16,7 +16,7 @@ export default function HomeScreen({
             </div>
             <div className="flex flex-col overflow-hidden card-theme">
                 {menuItems.map((item, idx) => (
-                    <div key={item.key} className="flex flex-col">
+                    <div key={idx} className="flex flex-col">
                         {item.gi > 0 && idx === menuItems.findIndex(i => i.gi === item.gi) && (
                             <div className="h-px home-screen__divider" />
                         )}
