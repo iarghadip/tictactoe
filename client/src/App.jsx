@@ -4,7 +4,7 @@ import HomePage from './pages/HomePage';
 import MatchPage from './pages/MatchPage';
 import GamePage from './pages/GamePage';
 import RankPage from './pages/RankPage';
-import AboutPage from './pages/AboutPage';
+import AboutPage from './modules/About/Page';
 import RoomPage from './pages/RoomPage';
 import MemberPage from './pages/MemberPage';
 import SettingsPage from './pages/SettingsPage';

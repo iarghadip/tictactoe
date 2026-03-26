@@ -1,12 +1,3 @@
-.about-screen-feature {
-    border-bottom: 1px solid rgba(255, 255, 255, .04);
-}
-
-.about-screen-feature:last-child,
-.about-screen-dev__row:last-child {
-    border-bottom: none;
-}
-
 .about-screen-dev__top {
     gap: 4px;
     padding: 20px 20px 16px;
@@ -23,4 +14,8 @@
 .about-screen-dev__row {
     padding: 13px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, .04);
+}
+
+.about-screen-dev__row:last-child {
+    border-bottom: none;
 }

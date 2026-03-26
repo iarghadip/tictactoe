@@ -1,8 +1,7 @@
 import { Layout } from '../../components/layout';
-import { MenuIcon } from '../../components/icon';
 import { NormalText } from '../../components/text';
 import { ABOUT_SCREEN_MENU } from '../../constants/menus';
-import './AboutScreen.css';
+import './Screen.css';
 
 export default function AboutScreen({ onBack }) {
     return (
