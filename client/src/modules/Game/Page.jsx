@@ -1,10 +1,10 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useNakama } from '../contexts/nakamaContext';
-import { GameScreen } from '../screens/game';
-import ResultPage from './ResultPage';
-import { SERVER_OPCODE, CLIENT_OPCODE } from '../constants/opcodes';
-import { GAME_WINNER_COMBINATIONS } from '../constants/misc';
-import { playSound, playMusic, stopMusic, waitForAudio } from '../components/audio';
+import { useNakama } from '../../contexts/nakamaContext';
+import { SERVER_OPCODE, CLIENT_OPCODE } from '../../constants/opcodes';
+import { GAME_WINNER_COMBINATIONS } from '../../constants/misc';
+import { playSound, playMusic, stopMusic, waitForAudio } from '../../components/audio';
+import ResultPage from '../Result/Page';
+import Screen from './Screen';
 
 function checkWinner(squares) {
     for (const combo of GAME_WINNER_COMBINATIONS) {
@@ -288,7 +288,7 @@ export default function GamePage({ match, onLeave }) {
     }
 
     return (
-        <GameScreen
+        <Screen
             cells={cells}
             winCombo={result?.combo ?? null}
             isMyTurn={isMyTurn}

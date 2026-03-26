@@ -3,9 +3,9 @@ import { Layout } from '../../components/layout';
 import { Board } from '../../components/board';
 import { RoundButton } from '../../components/button';
 import { CapitalText, NormalText } from '../../components/text';
-import './GameScreen.css';
+import './Screen.css';
 
-export default function GameScreen({
+export default function Screen({
     cells, winCombo, isMyTurn, isLoading, title, bottomText, bottomFill,
     opponentDisconnected, leaveDisabled, onCellClick, onLeave,
 }) {

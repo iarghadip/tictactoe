@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { useNakama } from './contexts/nakamaContext';
 import HomePage from './pages/HomePage';
 import MatchPage from './pages/MatchPage';
-import GamePage from './pages/GamePage';
 import RankPage from './pages/RankPage';
-
 import RoomPage from './pages/RoomPage';
 import MemberPage from './pages/MemberPage';
+
+import GamePage from './modules/Game/Page';
 
 import ControlPage from './modules/Control/Page';
 import AboutPage from './modules/About/Page';

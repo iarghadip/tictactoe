@@ -1,10 +1,11 @@
-import { ResultScreen } from '../screens/result';
+import Screen from './Screen';
 
 export default function ResultPage({
-    turnText, myStats, myVoted, opponentVoted, onRematch, onLeave, title, isWinner
+    turnText, myStats, myVoted, opponentVoted,
+    onRematch, onLeave, title, isWinner
 }) {
     return (
-        <ResultScreen
+        <Screen
             turnText={turnText}
             myStats={myStats}
             myVoted={myVoted}
