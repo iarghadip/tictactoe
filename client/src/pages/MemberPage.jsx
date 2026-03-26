@@ -18,17 +18,15 @@ export default function MemberPage({ room, onBack, onRoomMatch }) {
     const fetchMembers = useCallback(async (silent = false) => {
         if (!silent) setLoading(true);
         try {
-            const result = await client.listGroupUsers(session, room.id, undefined, 100);
-            const active = result.group_users?.filter(u => u.state <= 2) || [];
+            const [activeResult, pendingResult] = await Promise.all([
+                client.listGroupUsers(session, room.id, undefined, 100),
+                isAdmin ? client.listGroupUsers(session, room.id, 3, 100) : Promise.resolve({ group_users: [] })
+            ]);
+            const active = activeResult.group_users?.filter(u => u.state <= 2) || [];
+            const pending = pendingResult.group_users || [];
             setRoomMembers(active);
             setEdgeCount(active.length);
-
-            if (isAdmin) {
-                const pendingResult = await client.listGroupUsers(session, room.id, 3, 100);
-                setPendingMembers(pendingResult.group_users || []);
-            } else {
-                setPendingMembers([]);
-            }
+            setPendingMembers(pending);
         } catch (e) {
             console.error('Failed to fetch members:', e);
         } finally {
