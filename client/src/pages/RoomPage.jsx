@@ -1,14 +1,19 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useNakama } from '../contexts/nakamaContext';
 import { RoomScreen } from '../screens/room';
+import { MenuInput } from '../components/input';
 
-export default function RoomPage({ onBack, onSelectRoom, onRoomMatch }) {
+export default function RoomPage({ onBack, onSelectRoom }) {
     const { client, session, account, socket } = useNakama();
     const [loading, setLoading] = useState(true);
     const [rooms, setRooms] = useState([]);
     const [requestedRooms, setRequestedRooms] = useState([]);
     const [createError, setCreateError] = useState(null);
     const [joinError, setJoinError] = useState(null);
+    
+    const [createOpen, setCreateOpen] = useState(false);
+    const [joinOpen, setJoinOpen] = useState(false);
+
     const myUserId = account?.user?.id;
     const joinedChannelIdsRef = useRef([]);
     const joinedRoomIdsRef = useRef(new Set());
@@ -77,7 +82,7 @@ export default function RoomPage({ onBack, onSelectRoom, onRoomMatch }) {
             joinedChannelIdsRef.current = [];
             joinedRoomIdsRef.current.clear();
         };
-    }, []);
+    }, [socket]);
 
     useEffect(() => {
         if (!socket) return;
@@ -157,17 +162,32 @@ export default function RoomPage({ onBack, onSelectRoom, onRoomMatch }) {
     };
 
     return (
-        <RoomScreen
-            loading={loading}
-            rooms={rooms}
-            requestedRooms={requestedRooms}
-            onSelectRoom={onSelectRoom}
-            onBack={onBack}
-            onCreateRoom={handleCreateRoom}
-            onRequestJoin={handleRequestJoin}
-            createError={createError}
-            joinError={joinError}
-            clearErrors={clearErrors}
-        />
+        <>
+            <RoomScreen
+                loading={loading}
+                rooms={rooms}
+                requestedRooms={requestedRooms}
+                onSelectRoom={onSelectRoom}
+                onBack={onBack}
+                onOpenCreate={() => setCreateOpen(true)}
+                onOpenJoin={() => setJoinOpen(true)}
+            />
+            <MenuInput
+                open={createOpen}
+                title="Create Room"
+                fields={[{ key: 'name', placeholder: 'Room Name' }]}
+                onSubmit={(v) => { handleCreateRoom(v.name, () => setCreateOpen(false)); }}
+                onClose={() => { setCreateOpen(false); clearErrors(); }}
+                error={createError}
+            />
+            <MenuInput
+                open={joinOpen}
+                title="Join Room"
+                fields={[{ key: 'name', placeholder: 'Room Name' }]}
+                onSubmit={(v) => { handleRequestJoin(v.name, () => setJoinOpen(false)); }}
+                onClose={() => { setJoinOpen(false); clearErrors(); }}
+                error={joinError}
+            />
+        </>
     );
 }

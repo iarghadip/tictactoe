@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import AddIcon from '@mui/icons-material/AddTwoTone';
 import SearchIcon from '@mui/icons-material/SearchTwoTone';
 import ChevronRightIcon from '@mui/icons-material/ChevronRightTwoTone';
@@ -6,16 +5,13 @@ import GroupsIcon from '@mui/icons-material/GroupsTwoTone';
 import { Layout } from '../../components/layout';
 import { RoundButton } from '../../components/button';
 import { CapitalText, NormalText } from '../../components/text';
-import { MenuInput } from '../../components/input';
 import { MenuIcon } from '../../components/icon';
 import './RoomScreen.css';
 
 export default function RoomScreen({
-    loading, rooms, requestedRooms, onSelectRoom, onBack,
-    onCreateRoom, onRequestJoin, createError, joinError, clearErrors
+    loading, rooms, requestedRooms, onSelectRoom,
+    onBack, onOpenCreate, onOpenJoin
 }) {
-    const [createOpen, setCreateOpen] = useState(false);
-    const [joinOpen, setJoinOpen] = useState(false);
     const totalRooms = (rooms?.length || 0) + (requestedRooms?.length || 0);
     const isAtLimit = totalRooms >= 25;
 
@@ -23,18 +19,18 @@ export default function RoomScreen({
         <Layout title="Explore Rooms" onBack={onBack}>
             <div className="flex items-center justify-center flex-col gap-4 mb-6">
                 <CapitalText fill={loading ? '-1' : undefined}>
-                    {loading ? 'Loading your rooms' : (rooms.length === 0 ? 'You are not a member yet' : `${totalRooms}/25 Rooms`)}
+                    {loading ? 'Loading your rooms' : (rooms.length === 0 ? 'You have no rooms' : `${totalRooms}/25 Rooms`)}
                 </CapitalText>
                 <div className={`flex items-center justify-center gap-4 ${isAtLimit ? 'opacity-50' : ''}`}>
                     <RoundButton 
                         icon={AddIcon} 
                         disabled={isAtLimit}
-                        onClick={() => { if (!isAtLimit) setCreateOpen(true); }} 
+                        onClick={() => { if (!isAtLimit) onOpenCreate(); }} 
                     />
                     <RoundButton 
                         icon={SearchIcon} 
                         disabled={isAtLimit}
-                        onClick={() => { if (!isAtLimit) setJoinOpen(true); }} 
+                        onClick={() => { if (!isAtLimit) onOpenJoin(); }} 
                     />
                 </div>
             </div>
@@ -74,23 +70,6 @@ export default function RoomScreen({
                     ))}
                 </div>
             )}
-
-            <MenuInput
-                open={createOpen}
-                title="Create Room"
-                fields={[{ key: 'name', placeholder: 'Room Name' }]}
-                onSubmit={(v) => { onCreateRoom(v.name, () => setCreateOpen(false)); }}
-                onClose={() => { setCreateOpen(false); clearErrors(); }}
-                error={createError}
-            />
-            <MenuInput
-                open={joinOpen}
-                title="Join Room"
-                fields={[{ key: 'name', placeholder: 'Room Name' }]}
-                onSubmit={(v) => { onRequestJoin(v.name, () => setJoinOpen(false)); }}
-                onClose={() => { setJoinOpen(false); clearErrors(); }}
-                error={joinError}
-            />
         </Layout>
     );
 }

@@ -91,7 +91,6 @@ export default function App() {
             <RoomPage
                 onBack={() => setStep('home')}
                 onSelectRoom={handleSelectRoom}
-                onRoomMatch={(selectedMode, roomId) => handleFindMatch(selectedMode, roomId)}
             />
         );
     }
