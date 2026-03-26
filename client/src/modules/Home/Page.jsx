@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNakama } from '../../contexts/nakamaContext';
 import { MenuInput } from '../../components/input';
 import { HOME_SCREEN_MENU } from '../../constants/menus';
@@ -16,6 +16,18 @@ export default function HomePage({
 
     const displayName = account?.user?.display_name || 'Anonymous';
 
+    useEffect(() => {
+        const storedUsername = localStorage.getItem('username');
+        if (storedUsername && !session) {
+            setAuthLoading(true);
+            connect(storedUsername)
+                .catch(e => {
+                    console.error("Auto-login failed:", e);
+                })
+                .finally(() => setAuthLoading(false));
+        }
+    }, [session, connect]);
+
     const executeAction = (index) => {
         switch (index) {
             case 0: onFindMatch('timed'); break;
@@ -24,6 +36,7 @@ export default function HomePage({
             case 3: onGlobalRanks(); break;
             case 4: onSettings(); break;
             case 5: onAbout(); break;
+            default: break;
         }
     };
 
@@ -41,11 +54,18 @@ export default function HomePage({
         setAuthLoading(true);
         setAuthError(null);
         try {
-            await connect(username.trim());
+            const cleanUsername = username.trim();
+            await connect(cleanUsername);
+
+            localStorage.setItem('username', cleanUsername);
+
             setAuthModal(false);
             const action = pendingAction;
             setPendingAction(null);
-            executeAction(action);
+            
+            if (action !== null) {
+                executeAction(action);
+            }
         } catch (e) {
             setAuthError(e.message);
         } finally {
@@ -57,6 +77,11 @@ export default function HomePage({
         setAuthModal(false);
         setPendingAction(null);
         setAuthError(null);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('username');
+        disconnect();
     };
 
     const menuItems = [];
@@ -71,7 +96,7 @@ export default function HomePage({
                 isLoggedIn={!!session}
                 menuItems={menuItems}
                 onMenuSelect={requireAuth}
-                onLogout={disconnect}
+                onLogout={handleLogout}
             />
             <MenuInput
                 open={authModal}
