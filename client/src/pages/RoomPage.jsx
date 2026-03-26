@@ -10,9 +10,10 @@ export default function RoomPage({ onBack, onSelectRoom }) {
     const [requestedRooms, setRequestedRooms] = useState([]);
     const [createError, setCreateError] = useState(null);
     const [joinError, setJoinError] = useState(null);
-    
     const [createOpen, setCreateOpen] = useState(false);
     const [joinOpen, setJoinOpen] = useState(false);
+    const [isCreating, setIsCreating] = useState(false);
+    const [isJoining, setIsJoining] = useState(false);
 
     const myUserId = account?.user?.id;
     const joinedChannelIdsRef = useRef([]);
@@ -93,66 +94,35 @@ export default function RoomPage({ onBack, onSelectRoom }) {
 
     const handleCreateRoom = async (name, onSuccess) => {
         setCreateError(null);
+        setIsCreating(true);
         try {
             await client.rpc(session, 'create_room', name.trim());
             await fetchRooms();
             onSuccess();
         } catch (e) {
-            let errorText = 'Failed to create room!';
-            let rawString = String(e);
-
-            if (e instanceof Response) {
-                try {
-                    const errObj = await e.json();
-                    rawString = errObj.message || errObj.error || String(errObj);
-                } catch (_) {
-                    try { rawString = await e.text(); } catch (_) {}
-                }
-            } else if (e?.message) {
-                rawString = e.message;
-            }
-
-            if (rawString.includes('already exists') || rawString.includes('already in use')) {
-                errorText = 'Room name already exists!';
-            } else {
-                errorText = rawString.replace('Error: ', '');
-            }
-
             setCreateError(errorText);
+        } finally {
+            setIsCreating(false);
         }
     };
 
     const handleRequestJoin = async (name, onSuccess) => {
         setJoinError(null);
+        setIsJoining(true);
         try {
             const result = await client.listGroups(session, name, undefined, 1);
             const targetGroup = result.groups?.find(g => g.name.toLowerCase() === name.toLowerCase());
-            
             if (!targetGroup) {
                 setJoinError('Room does not exist!');
                 return;
             }
-            
             await client.joinGroup(session, targetGroup.id);
             await fetchRooms();
             onSuccess();
         } catch (e) {
-            let errorText = 'Failed to join room!';
-            let rawString = String(e);
-
-            if (e instanceof Response) {
-                try {
-                    const errObj = await e.json();
-                    rawString = errObj.message || errObj.error || String(errObj);
-                } catch (_) {
-                    try { rawString = await e.text(); } catch (_) {}
-                }
-            } else if (e?.message) {
-                rawString = e.message;
-            }
-
-            errorText = rawString.replace('Error: ', '');
             setJoinError(errorText);
+        } finally {
+            setIsJoining(false);
         }
     };
 
