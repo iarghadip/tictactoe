@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNakama } from './contexts/nakamaContext';
-import HomePage from './pages/HomePage';
-import MatchPage from './pages/MatchPage';
-import GamePage from './pages/GamePage';
-import RankPage from './pages/RankPage';
-import AboutPage from './pages/AboutPage';
-import RoomPage from './pages/RoomPage';
-import MemberPage from './pages/MemberPage';
-import SettingsPage from './pages/SettingsPage';
+import HomePage from './modules/Home/Page';
+import PairPage from './modules/Pair/Page';
+import GamePage from './modules/Game/Page';
+import RoomPage from './modules/Room/Page';
+import MemberPage from './modules/Member/Page';
+import RankPage from './modules/Rank/Page';
+import ControlPage from './modules/Control/Page';
+import AboutPage from './modules/About/Page';
 
 export default function App() {
     const { restoring, session } = useNakama();
@@ -20,7 +20,7 @@ export default function App() {
     useEffect(() => {
         if (!restoring && session && localStorage.getItem('nk_in_match') === 'true') {
             localStorage.removeItem('nk_in_match');
-            setStep('match');
+            setStep('pair');
         }
     }, [restoring, session]);
 
@@ -30,7 +30,7 @@ export default function App() {
         localStorage.setItem('nk_mode', selectedMode);
         setMode(selectedMode);
         setMatchRoomId(roomId);
-        setStep('match');
+        setStep('pair');
     };
 
     const handleFound = (foundMatch) => {
@@ -42,7 +42,7 @@ export default function App() {
     const handleLeave = () => {
         localStorage.removeItem('nk_in_match');
         setMatch(null);
-        setStep('match');
+        setStep('pair');
     };
 
     const handleSelectRoom = (room) => {
@@ -50,9 +50,9 @@ export default function App() {
         setStep('member');
     };
 
-    if (step === 'match') {
+    if (step === 'pair') {
         return (
-            <MatchPage
+            <PairPage
                 mode={mode}
                 roomId={matchRoomId}
                 onFound={handleFound}
@@ -105,9 +105,9 @@ export default function App() {
         );
     }
 
-    if (step === 'settings') {
+    if (step === 'control') {
         return (
-            <SettingsPage
+            <ControlPage
                 onBack={() => setStep('home')}
             />
         );
@@ -119,7 +119,7 @@ export default function App() {
             onGlobalRanks={() => setStep('rank')}
             onAbout={() => setStep('about')}
             onRooms={() => setStep('room')}
-            onSettings={() => setStep('settings')}
+            onSettings={() => setStep('control')}
         />
     );
 }

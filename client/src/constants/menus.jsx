@@ -20,7 +20,7 @@ export const HOME_SCREEN_MENU = [
     },
     {
         items: [
-            { label: 'Player Settings', icon: SettingsIcon },
+            { label: 'Control Panel', icon: SettingsIcon },
             { label: 'About Game', icon: InfoIcon },
         ],
     }

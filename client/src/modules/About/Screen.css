@@ -1,0 +1,21 @@
+.about-screen-dev__top {
+    gap: 4px;
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, .04);
+}
+
+.about-screen-dev__tag {
+    font-size: 11px;
+    color: rgba(230, 224, 233, .3);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.about-screen-dev__row {
+    padding: 13px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, .04);
+}
+
+.about-screen-dev__row:last-child {
+    border-bottom: none;
+}
