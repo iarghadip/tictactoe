@@ -26,7 +26,7 @@ var TURN_LIMIT = 30;
 var DISCONNECT_GRACE = 60;
 var ROOM_LIMIT = 25;
 
-var LEADERBOARD_ID = "global_tictactoe_v2";
+var LEADERBOARD_ID = "tictactoe";
 
 function checkWinner(board) {
     for (var i = 0; i < WIN_COMBOS.length; i++) {
