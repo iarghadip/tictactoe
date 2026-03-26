@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNakama } from './contexts/nakamaContext';
 
-import MatchPage from './pages/MatchPage';
 import RankPage from './pages/RankPage';
 import RoomPage from './pages/RoomPage';
 import MemberPage from './pages/MemberPage';
 
 import HomePage from './modules/Home/Page';
+import PairPage from './modules/Pair/Page';
 import GamePage from './modules/Game/Page';
 
 import ControlPage from './modules/Control/Page';
@@ -23,7 +23,7 @@ export default function App() {
     useEffect(() => {
         if (!restoring && session && localStorage.getItem('nk_in_match') === 'true') {
             localStorage.removeItem('nk_in_match');
-            setStep('match');
+            setStep('pair');
         }
     }, [restoring, session]);
 
@@ -33,7 +33,7 @@ export default function App() {
         localStorage.setItem('nk_mode', selectedMode);
         setMode(selectedMode);
         setMatchRoomId(roomId);
-        setStep('match');
+        setStep('pair');
     };
 
     const handleFound = (foundMatch) => {
@@ -45,7 +45,7 @@ export default function App() {
     const handleLeave = () => {
         localStorage.removeItem('nk_in_match');
         setMatch(null);
-        setStep('match');
+        setStep('pair');
     };
 
     const handleSelectRoom = (room) => {
@@ -53,9 +53,9 @@ export default function App() {
         setStep('member');
     };
 
-    if (step === 'match') {
+    if (step === 'pair') {
         return (
-            <MatchPage
+            <PairPage
                 mode={mode}
                 roomId={matchRoomId}
                 onFound={handleFound}
@@ -108,7 +108,7 @@ export default function App() {
         );
     }
 
-    if (step === 'settings') {
+    if (step === 'control') {
         return (
             <ControlPage
                 onBack={() => setStep('home')}
@@ -122,7 +122,7 @@ export default function App() {
             onGlobalRanks={() => setStep('rank')}
             onAbout={() => setStep('about')}
             onRooms={() => setStep('room')}
-            onSettings={() => setStep('settings')}
+            onSettings={() => setStep('control')}
         />
     );
 }
