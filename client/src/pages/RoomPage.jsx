@@ -100,7 +100,7 @@ export default function RoomPage({ onBack, onSelectRoom }) {
             await fetchRooms();
             onSuccess();
         } catch (e) {
-            setCreateError(errorText);
+            setCreateError(e.message || 'Failed to create room!');
         } finally {
             setIsCreating(false);
         }
@@ -120,7 +120,7 @@ export default function RoomPage({ onBack, onSelectRoom }) {
             await fetchRooms();
             onSuccess();
         } catch (e) {
-            setJoinError(errorText);
+            setJoinError(e.message || 'Failed to join room!');
         } finally {
             setIsJoining(false);
         }
@@ -148,6 +148,7 @@ export default function RoomPage({ onBack, onSelectRoom }) {
                 fields={[{ key: 'name', placeholder: 'Room Name' }]}
                 onSubmit={(v) => { handleCreateRoom(v.name, () => setCreateOpen(false)); }}
                 onClose={() => { setCreateOpen(false); clearErrors(); }}
+                loading={isCreating}
                 error={createError}
             />
             <MenuInput
@@ -156,6 +157,7 @@ export default function RoomPage({ onBack, onSelectRoom }) {
                 fields={[{ key: 'name', placeholder: 'Room Name' }]}
                 onSubmit={(v) => { handleRequestJoin(v.name, () => setJoinOpen(false)); }}
                 onClose={() => { setJoinOpen(false); clearErrors(); }}
+                loading={isJoining}
                 error={joinError}
             />
         </>

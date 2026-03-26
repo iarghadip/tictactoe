@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import TimerIcon from '@mui/icons-material/TimerTwoTone';
 import AppsIcon from '@mui/icons-material/AppsTwoTone';
 import LogoutIcon from '@mui/icons-material/LogoutTwoTone';
@@ -12,21 +11,13 @@ import { Layout } from '../../components/layout';
 import { RoundButton } from '../../components/button';
 import { CapitalText, NormalText } from '../../components/text';
 import { MenuIcon } from '../../components/icon';
-import { MenuInput } from '../../components/input';
 import './MemberScreen.css';
 
 export default function MemberScreen({
-    loading, myUserId, selectedRoom, roomMembers, pendingMembers,
-    onBack, onApprove, onKick, onLeave, onDelete, onStartRoomMatch,
-    onRename, renameLoading, renameError, clearRenameError
+    loading, myUserId, selectedRoom, roomMembers, pendingMembers, pendingIds,
+    onBack, onApprove, onKick, onLeave, onDelete, onStartRoomMatch, onEditOpen,
 }) {
     const isAdmin = selectedRoom.creator_id === myUserId;
-    const [editOpen, setEditOpen] = useState(false);
-
-    const handleEditClose = () => {
-        setEditOpen(false);
-        clearRenameError?.();
-    };
 
     return (
         <Layout title={selectedRoom.name} onBack={onBack}>
@@ -46,7 +37,7 @@ export default function MemberScreen({
                     {isAdmin && (
                         <RoundButton
                             icon={EditIcon}
-                            onClick={() => setEditOpen(true)}
+                            onClick={onEditOpen}
                         />
                     )}
                     {isAdmin ? (
@@ -62,6 +53,7 @@ export default function MemberScreen({
                     {roomMembers.map((m) => {
                         const isMe = m.user.id === myUserId;
                         const isRoomAdmin = m.user.id === selectedRoom.creator_id;
+                        const isMemberPending = pendingIds.has(m.user.id);
 
                         return (
                             <div
@@ -83,6 +75,7 @@ export default function MemberScreen({
                                     <RoundButton
                                         icon={CloseIcon}
                                         onClick={() => onKick(selectedRoom.id, m.user.id)}
+                                        disabled={isMemberPending}
                                         danger
                                     />
                                 )}
@@ -94,40 +87,32 @@ export default function MemberScreen({
 
             {isAdmin && pendingMembers.length > 0 && (
                 <div className="flex flex-col overflow-hidden card-theme divide-y divide-white/[.04] mb-6">
-                    {pendingMembers.map((m) => (
-                        <div
-                            key={m.user.id}
-                            className="flex items-center justify-between card-theme-item member-screen-item"
-                        >
-                            <div className="flex items-center flex-1 min-w-0">
-                                <MenuIcon icon={PendingIcon} />
-                                <div className="flex flex-col gap-1 flex-1 min-w-0 ml-4">
-                                    <NormalText className="truncate">
-                                        {m.user.display_name || 'Anonymous'}
-                                    </NormalText>
-                                    <CapitalText size="11">Membership Requested</CapitalText>
-                                </div>
-                            </div>
-                            <RoundButton
-                                icon={CheckIcon}
-                                onClick={() => onApprove(selectedRoom.id, m.user.id)}
-                            />
-                        </div>
-                    ))}
-                </div>
-            )}
+                    {pendingMembers.map((m) => {
+                        const isMemberPending = pendingIds.has(m.user.id);
 
-            {isAdmin && (
-                <MenuInput
-                    open={editOpen}
-                    title="Rename Room"
-                    fields={[{ key: 'name', placeholder: 'New Room Name' }]}
-                    initialValues={{ name: selectedRoom.name }}
-                    onSubmit={(v) => onRename(selectedRoom.id, v.name, () => setEditOpen(false))}
-                    onClose={handleEditClose}
-                    loading={renameLoading}
-                    error={renameError}
-                />
+                        return (
+                            <div
+                                key={m.user.id}
+                                className="flex items-center justify-between card-theme-item member-screen-item"
+                            >
+                                <div className="flex items-center flex-1 min-w-0">
+                                    <MenuIcon icon={PendingIcon} />
+                                    <div className="flex flex-col gap-1 flex-1 min-w-0 ml-4">
+                                        <NormalText className="truncate">
+                                            {m.user.display_name || 'Anonymous'}
+                                        </NormalText>
+                                        <CapitalText size="11">Membership Requested</CapitalText>
+                                    </div>
+                                </div>
+                                <RoundButton
+                                    icon={CheckIcon}
+                                    onClick={() => onApprove(selectedRoom.id, m.user.id)}
+                                    disabled={isMemberPending}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
             )}
         </Layout>
     );

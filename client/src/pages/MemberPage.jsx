@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useNakama } from '../contexts/nakamaContext';
 import { MemberScreen } from '../screens/member';
+import { MenuInput } from '../components/input';
 
 export default function MemberPage({ room, onBack, onRoomMatch }) {
     const { client, session, account, socket } = useNakama();
@@ -11,6 +12,9 @@ export default function MemberPage({ room, onBack, onRoomMatch }) {
     const [roomName, setRoomName] = useState(room.name);
     const [renameLoading, setRenameLoading] = useState(false);
     const [renameError, setRenameError] = useState(null);
+    const [editOpen, setEditOpen] = useState(false);
+    const [pendingIds, setPendingIds] = useState(new Set());
+
     const myUserId = account?.user?.id;
     const isAdmin = room.creator_id === myUserId;
     const channelIdRef = useRef(null);
@@ -43,10 +47,7 @@ export default function MemberPage({ room, onBack, onRoomMatch }) {
         const setup = async () => {
             try {
                 const channel = await socket.joinChat(room.id, 3, false, false);
-                if (!alive) {
-                    socket.leaveChat(channel.id).catch(() => {});
-                    return;
-                }
+                if (!alive) { socket.leaveChat(channel.id).catch(() => {}); return; }
                 channelIdRef.current = channel.id;
             } catch (e) {
                 console.error('Failed to join group channel:', e);
@@ -95,25 +96,39 @@ export default function MemberPage({ room, onBack, onRoomMatch }) {
         ).catch(() => {});
     }, [socket]);
 
-    const handleApprove = async (groupId, userId) => {
+    const addPending = useCallback((id) => {
+        setPendingIds(prev => new Set([...prev, id]));
+    }, []);
+
+    const removePending = useCallback((id) => {
+        setPendingIds(prev => { const s = new Set(prev); s.delete(id); return s; });
+    }, []);
+    
+    const handleApprove = useCallback(async (groupId, userId) => {
+        addPending(userId);
         try {
             await client.addGroupUsers(session, groupId, [userId]);
             broadcastRefresh();
             fetchMembers(true);
         } catch (e) {
             console.error('Failed to approve member:', e);
+        } finally {
+            removePending(userId);
         }
-    };
+    }, [client, session, broadcastRefresh, fetchMembers, addPending, removePending]);
 
-    const handleKick = async (groupId, userId) => {
+    const handleKick = useCallback(async (groupId, userId) => {
+        addPending(userId);
         try {
             await client.kickGroupUsers(session, groupId, [userId]);
             broadcastRefresh();
             fetchMembers(true);
         } catch (e) {
             console.error('Failed to kick member:', e);
+        } finally {
+            removePending(userId);
         }
-    };
+    }, [client, session, broadcastRefresh, fetchMembers, addPending, removePending]);
 
     const handleLeave = async (groupId) => {
         try {
@@ -134,15 +149,15 @@ export default function MemberPage({ room, onBack, onRoomMatch }) {
         }
     };
 
-    const handleRename = async (groupId, name, onSuccess) => {
+    const handleRename = async ({ name }) => {
         setRenameLoading(true);
         setRenameError(null);
         try {
-            await client.updateGroup(session, groupId, { name: name.trim() });
+            await client.updateGroup(session, room.id, { name: name.trim() });
             setRoomName(name.trim());
             broadcastRefresh();
             fetchMembers(true);
-            onSuccess();
+            setEditOpen(false);
         } catch (e) {
             console.error('Failed to rename room:', e);
             setRenameError(e.message || 'Room name already taken!');
@@ -151,25 +166,40 @@ export default function MemberPage({ room, onBack, onRoomMatch }) {
         }
     };
 
-    const clearRenameError = () => setRenameError(null);
+    const handleEditClose = () => {
+        setEditOpen(false);
+        setRenameError(null);
+    };
 
     return (
-        <MemberScreen
-            loading={loading}
-            myUserId={myUserId}
-            selectedRoom={{ ...room, edge_count: edgeCount, name: roomName }}
-            roomMembers={roomMembers}
-            pendingMembers={pendingMembers}
-            onBack={onBack}
-            onApprove={handleApprove}
-            onKick={handleKick}
-            onLeave={handleLeave}
-            onDelete={handleDelete}
-            onStartRoomMatch={onRoomMatch}
-            onRename={handleRename}
-            renameLoading={renameLoading}
-            renameError={renameError}
-            clearRenameError={clearRenameError}
-        />
+        <>
+            <MemberScreen
+                loading={loading}
+                myUserId={myUserId}
+                selectedRoom={{ ...room, edge_count: edgeCount, name: roomName }}
+                roomMembers={roomMembers}
+                pendingMembers={pendingMembers}
+                pendingIds={pendingIds}
+                onBack={onBack}
+                onApprove={handleApprove}
+                onKick={handleKick}
+                onLeave={handleLeave}
+                onDelete={handleDelete}
+                onStartRoomMatch={onRoomMatch}
+                onEditOpen={() => setEditOpen(true)}
+            />
+            {isAdmin && (
+                <MenuInput
+                    open={editOpen}
+                    title="Rename Room"
+                    fields={[{ key: 'name', placeholder: 'New Room Name' }]}
+                    initialValues={{ name: roomName }}
+                    onSubmit={handleRename}
+                    onClose={handleEditClose}
+                    loading={renameLoading}
+                    error={renameError}
+                />
+            )}
+        </>
     );
 }
