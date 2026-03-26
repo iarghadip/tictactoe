@@ -43,3 +43,4 @@ service-account*.json
 .idea/
 *.swp
 *.swo
+*.pem
