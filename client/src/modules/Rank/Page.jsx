@@ -16,7 +16,7 @@ export default function RankPage({ onBack }) {
             
             setLoading(true);
             try {
-                const result = await client.listLeaderboardRecords(session, 'global_tictactoe', [myUserId], 100);
+                const result = await client.listLeaderboardRecords(session, 'tictactoe', [myUserId], 100);
                 
                 const mappedPlayers = (result.records || []).map(record => ({
                     id: record.owner_id,

@@ -118,7 +118,7 @@ export default function GamePage({ match, onLeave }) {
     const fetchMyStats = useCallback(async () => {
         if (!client || !session || !myUserId) return;
         try {
-            const res = await client.listLeaderboardRecords(session, 'global_tictactoe', [myUserId], 1);
+            const res = await client.listLeaderboardRecords(session, 'tictactoe', [myUserId], 1);
             if (res.owner_records && res.owner_records.length > 0) {
                 const myRecord = res.owner_records[0];
                 setMyStats({
