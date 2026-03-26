@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNakama } from './contexts/nakamaContext';
-import HomePage from './modules/Home/Page';
 import PairPage from './modules/Pair/Page';
 import GamePage from './modules/Game/Page';
 import RoomPage from './modules/Room/Page';
@@ -8,6 +7,7 @@ import MemberPage from './modules/Member/Page';
 import RankPage from './modules/Rank/Page';
 import ControlPage from './modules/Control/Page';
 import AboutPage from './modules/About/Page';
+import HomePage from './modules/Home/Page';
 
 function Screen({
     page, match, mode, matchRoomId, selectedRoom, setAppState,
@@ -29,18 +29,6 @@ function Screen({
                 onLeave={handleLeave}
             />
         );
-    } else if (page === 'RankPage') {
-        return (
-            <RankPage
-                onBack={() => setAppState({ page: 'HomePage' })}
-            />
-        );
-    } else if (page === 'AboutPage') {
-        return (
-            <AboutPage
-                onBack={() => setAppState({ page: 'HomePage' })}
-            />
-        );
     } else if (page === 'RoomPage') {
         return (
             <RoomPage
@@ -56,9 +44,21 @@ function Screen({
                 onRoomMatch={handleFindMatch}
             />
         );
+    } else if (page === 'RankPage') {
+        return (
+            <RankPage
+                onBack={() => setAppState({ page: 'HomePage' })}
+            />
+        );
     } else if (page === 'ControlPage') {
         return (
             <ControlPage
+                onBack={() => setAppState({ page: 'HomePage' })}
+            />
+        );
+    } else if (page === 'AboutPage') {
+        return (
+            <AboutPage
                 onBack={() => setAppState({ page: 'HomePage' })}
             />
         );
