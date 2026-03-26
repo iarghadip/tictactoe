@@ -29,7 +29,6 @@ yarn-error.log*
 .LSOverride
 
 # docker
-.dockerignore
 docker-compose.override.yml
 
 # gcp
