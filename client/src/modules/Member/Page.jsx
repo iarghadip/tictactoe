@@ -14,6 +14,7 @@ export default function MemberPage({ room, onBack, onRoomMatch }) {
     const [renameError, setRenameError] = useState(null);
     const [editOpen, setEditOpen] = useState(false);
     const [pendingIds, setPendingIds] = useState(new Set());
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const myUserId = account?.user?.id;
     const isAdmin = room.creator_id === myUserId;
@@ -140,12 +141,14 @@ export default function MemberPage({ room, onBack, onRoomMatch }) {
     };
 
     const handleDelete = async (groupId) => {
+        setIsDeleting(true);
         try {
             broadcastRefresh();
             await client.deleteGroup(session, groupId);
             onBack();
         } catch (e) {
             console.error('Failed to delete room:', e);
+            setIsDeleting(false);
         }
     };
 
@@ -180,6 +183,7 @@ export default function MemberPage({ room, onBack, onRoomMatch }) {
                 roomMembers={roomMembers}
                 pendingMembers={pendingMembers}
                 pendingIds={pendingIds}
+                isDeleting={isDeleting}
                 onBack={onBack}
                 onApprove={handleApprove}
                 onKick={handleKick}

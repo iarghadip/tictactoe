@@ -14,7 +14,7 @@ import { MenuIcon } from '../../components/icon';
 import './Screen.css';
 
 export default function Screen({
-    loading, myUserId, selectedRoom, roomMembers, pendingMembers, pendingIds,
+    loading, myUserId, selectedRoom, roomMembers, pendingMembers, pendingIds, isDeleting,
     onBack, onApprove, onKick, onLeave, onDelete, onStartRoomMatch, onEditOpen,
 }) {
     const isAdmin = selectedRoom.creator_id === myUserId;
@@ -41,9 +41,18 @@ export default function Screen({
                         />
                     )}
                     {isAdmin ? (
-                        <RoundButton icon={DeleteIcon} onClick={() => onDelete(selectedRoom.id)} danger />
+                        <RoundButton
+                            icon={DeleteIcon}
+                            onClick={() => onDelete(selectedRoom.id)}
+                            disabled={isDeleting}
+                            danger
+                        />
                     ) : (
-                        <RoundButton icon={LogoutIcon} onClick={() => onLeave(selectedRoom.id)} danger />
+                        <RoundButton
+                            icon={LogoutIcon}
+                            onClick={() => onLeave(selectedRoom.id)}
+                            danger
+                        />
                     )}
                 </div>
             </div>
