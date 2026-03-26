@@ -8,7 +8,7 @@ export default function Layout({
 }) {
     const hasHeader = onBack || title;
     return (
-        <div className="flex min-h-screen w-full justify-center p-5 box-border">
+        <div className="flex min-h-[100dvh] w-full justify-center p-5 box-border">
             <div
                 className={`
                     flex flex-col !items-stretch
