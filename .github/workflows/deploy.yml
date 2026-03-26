@@ -36,5 +36,5 @@ jobs:
                       export VITE_NAKAMA_KEY=$(node -e "console.log(require('crypto').randomBytes(64).toString('hex'))")
                       export VITE_NAKAMA_HOST=$DOMAIN
                       export CERTBOT_EMAIL=$EMAIL
-                      
+                      docker builder prune -af
                       docker-compose up --build -d
