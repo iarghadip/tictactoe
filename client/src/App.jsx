@@ -9,117 +9,136 @@ import RankPage from './modules/Rank/Page';
 import ControlPage from './modules/Control/Page';
 import AboutPage from './modules/About/Page';
 
-export default function App() {
-    const { restoring, session } = useNakama();
-    const [step, setStep] = useState('home');
-    const [match, setMatch] = useState(null);
-    const [mode, setMode] = useState(() => localStorage.getItem('nk_mode') || 'timed');
-    const [matchRoomId, setMatchRoomId] = useState(null);
-    const [selectedRoom, setSelectedRoom] = useState(null);
-
-    useEffect(() => {
-        if (!restoring && session && localStorage.getItem('nk_in_match') === 'true') {
-            localStorage.removeItem('nk_in_match');
-            setStep('pair');
-        }
-    }, [restoring, session]);
-
-    if (restoring) return null;
-
-    const handleFindMatch = (selectedMode, roomId = null) => {
-        localStorage.setItem('nk_mode', selectedMode);
-        setMode(selectedMode);
-        setMatchRoomId(roomId);
-        setStep('pair');
-    };
-
-    const handleFound = (foundMatch) => {
-        localStorage.setItem('nk_in_match', 'true');
-        setMatch(foundMatch);
-        setStep('game');
-    };
-
-    const handleLeave = () => {
-        localStorage.removeItem('nk_in_match');
-        setMatch(null);
-        setStep('pair');
-    };
-
-    const handleSelectRoom = (room) => {
-        setSelectedRoom(room);
-        setStep('member');
-    };
-
-    if (step === 'pair') {
+function Screen({
+    page, match, mode, matchRoomId, selectedRoom, setAppState,
+    handleFindMatch, handleFound, handleLeave, handleSelectRoom
+}) {
+    if (page === 'PairPage') {
         return (
             <PairPage
                 mode={mode}
                 roomId={matchRoomId}
                 onFound={handleFound}
-                onCancel={() => setStep(matchRoomId ? 'room' : 'home')}
+                onCancel={() => setAppState({ page: matchRoomId ? 'RoomPage' : 'HomePage' })}
             />
         );
-    }
-
-    if (step === 'game' && match) {
+    } else if (page === 'GamePage') {
         return (
             <GamePage
                 match={match}
                 onLeave={handleLeave}
             />
         );
-    }
-
-    if (step === 'rank') {
+    } else if (page === 'RankPage') {
         return (
             <RankPage
-                onBack={() => setStep('home')}
+                onBack={() => setAppState({ page: 'HomePage' })}
             />
         );
-    }
-
-    if (step === 'about') {
+    } else if (page === 'AboutPage') {
         return (
             <AboutPage
-                onBack={() => setStep('home')}
+                onBack={() => setAppState({ page: 'HomePage' })}
             />
         );
-    }
-
-    if (step === 'room') {
+    } else if (page === 'RoomPage') {
         return (
             <RoomPage
-                onBack={() => setStep('home')}
+                onBack={() => setAppState({ page: 'HomePage' })}
                 onSelectRoom={handleSelectRoom}
             />
         );
-    }
-
-    if (step === 'member' && selectedRoom) {
+    } else if (page === 'MemberPage') {
         return (
             <MemberPage
                 room={selectedRoom}
-                onBack={() => setStep('room')}
-                onRoomMatch={(selectedMode, roomId) => handleFindMatch(selectedMode, roomId)}
+                onBack={() => setAppState({ page: 'RoomPage' })}
+                onRoomMatch={handleFindMatch}
             />
         );
-    }
-
-    if (step === 'control') {
+    } else if (page === 'ControlPage') {
         return (
             <ControlPage
-                onBack={() => setStep('home')}
+                onBack={() => setAppState({ page: 'HomePage' })}
+            />
+        );
+    } else {
+        return (
+            <HomePage
+                onFindMatch={handleFindMatch}
+                onGlobalRanks={() => setAppState({ page: 'RankPage' })}
+                onAbout={() => setAppState({ page: 'AboutPage' })}
+                onRooms={() => setAppState({ page: 'RoomPage' })}
+                onSettings={() => setAppState({ page: 'ControlPage' })}
             />
         );
     }
+}
+
+export default function App() {
+    const { restoring, session } = useNakama();
+
+    const [state, setState] = useState({
+        page: 'HomePage',
+        match: null,
+        mode: localStorage.getItem('mode') || 'timed',
+        matchRoomId: null,
+        selectedRoom: null,
+    });
+
+    const setAppState = (updates) => {
+        setState((prev) => ({ ...prev, ...updates }));
+    };
+
+    useEffect(() => {
+        if (!restoring && session && localStorage.getItem('playing') === 'true') {
+            localStorage.removeItem('playing');
+            setAppState({ page: 'PairPage' });
+        }
+    }, [restoring, session]);
+
+    if (restoring) return null;
+
+    const handleFindMatch = (selectedMode, roomId = null) => {
+        localStorage.setItem('mode', selectedMode);
+        setAppState({
+            mode: selectedMode,
+            matchRoomId: roomId,
+            page: 'PairPage',
+        });
+    };
+
+    const handleFound = (foundMatch) => {
+        localStorage.setItem('GamePage', 'true');
+        setAppState({
+            match: foundMatch,
+            page: 'GamePage',
+        });
+    };
+
+    const handleLeave = () => {
+        localStorage.removeItem('playing');
+        setAppState({
+            match: null,
+            page: 'PairPage',
+        });
+    };
+
+    const handleSelectRoom = (room) => {
+        setAppState({
+            selectedRoom: room,
+            page: 'MemberPage',
+        });
+    };
 
     return (
-        <HomePage
-            onFindMatch={handleFindMatch}
-            onGlobalRanks={() => setStep('rank')}
-            onAbout={() => setStep('about')}
-            onRooms={() => setStep('room')}
-            onSettings={() => setStep('control')}
+        <Screen
+            {...state}
+            handleFindMatch={handleFindMatch}
+            handleFound={handleFound}
+            handleLeave={handleLeave}
+            handleSelectRoom={handleSelectRoom}
+            setAppState={setAppState}
         />
     );
 }
