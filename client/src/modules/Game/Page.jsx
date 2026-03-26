@@ -46,11 +46,10 @@ export default function GamePage({ match, onLeave }) {
     const [myStats, setMyStats] = useState(null);
     const [showResult, setShowResult] = useState(false);
     const [audioLoaded, setAudioLoaded] = useState(false);
+    const [gameReady, setGameReady] = useState(false);
 
     useEffect(() => {
-        waitForAudio().then(() => {
-            setAudioLoaded(true);
-        });
+        waitForAudio().then(() => setAudioLoaded(true));
     }, []);
 
     const myMark = marks[myUserId];
@@ -58,7 +57,7 @@ export default function GamePage({ match, onLeave }) {
     const opponentName = players[opponentMark];
     const isMyTurn = currentTurn === myUserId;
     const isFinished = status === 'finished';
-    const isLoading = !players[myMark] || !players[opponentMark] || !audioLoaded;
+    const isLoading = !players[myMark] || !players[opponentMark] || !audioLoaded || !gameReady;
 
     const result = checkWinner(cells);
     const winnerMark = result?.winner ?? gameOverWinner;
@@ -111,6 +110,7 @@ export default function GamePage({ match, onLeave }) {
         setGameOverWinner(null);
         setOpponentDisconnected(false);
         setShowResult(false);
+        setGameReady(true);
         pendingSoundRef.current = null;
         clearDisconnectTimer();
     }, [clearDisconnectTimer]);
@@ -143,13 +143,9 @@ export default function GamePage({ match, onLeave }) {
             const timer = setTimeout(() => {
                 stopMusic();
                 const sound = pendingSoundRef.current;
-                if (sound === 'win') {
-                    playSound('bonus');
-                } else if (sound === 'loss') {
-                    playSound('impact');
-                } else {
-                    playSound('bonus');
-                }
+                if (sound === 'win') playSound('bonus');
+                else if (sound === 'loss') playSound('impact');
+                else playSound('bonus');
                 pendingSoundRef.current = null;
                 setShowResult(true);
             }, 1000);
@@ -174,10 +170,19 @@ export default function GamePage({ match, onLeave }) {
             switch (opcode) {
                 case SERVER_OPCODE.GAME_START:
                     marksRef.current = payload.marks;
-                    playMusic();
                     setMarks(payload.marks);
                     setPlayers(payload.players);
                     setIsTimed((payload.mode ?? 'timed') === 'timed');
+                    setGameReady(false);
+                    socket.sendMatchState(
+                        match.match_id,
+                        CLIENT_OPCODE.READY_ACK,
+                        JSON.stringify({})
+                    );
+                    break;
+
+                case SERVER_OPCODE.GAME_BEGIN:
+                    playMusic();
                     resetRound(payload, normalizeBoard(payload.board));
                     break;
 
@@ -191,13 +196,9 @@ export default function GamePage({ match, onLeave }) {
                 case SERVER_OPCODE.GAME_OVER: {
                     const myMark_ = marksRef.current[myUserId];
                     const winner = payload.winner ?? null;
-                    if (!winner) {
-                        pendingSoundRef.current = 'draw';
-                    } else if (winner === myMark_) {
-                        pendingSoundRef.current = 'win';
-                    } else {
-                        pendingSoundRef.current = 'loss';
-                    }
+                    if (!winner) pendingSoundRef.current = 'draw';
+                    else if (winner === myMark_) pendingSoundRef.current = 'win';
+                    else pendingSoundRef.current = 'loss';
                     setCells(normalizeBoard(payload.board));
                     setStatus('finished');
                     setGameOverWinner(winner);
@@ -230,11 +231,6 @@ export default function GamePage({ match, onLeave }) {
                     if (payload.userId !== myUserId) setOpponentVoted(true);
                     break;
 
-                case SERVER_OPCODE.REMATCH_START:
-                    playMusic();
-                    resetRound(payload);
-                    break;
-
                 case SERVER_OPCODE.MATCH_ENDED:
                     clearDisconnectTimer();
                     stopMusic();
@@ -251,7 +247,7 @@ export default function GamePage({ match, onLeave }) {
             clearDisconnectTimer();
             stopMusic();
         };
-    }, [socket, myUserId, clearDisconnectTimer, resetRound]);
+    }, [socket, myUserId, match, clearDisconnectTimer, resetRound]);
 
     const handleCellClick = useCallback((index) => {
         if (!isMyTurn || status !== 'playing' || cells[index] || opponentDisconnected) return;

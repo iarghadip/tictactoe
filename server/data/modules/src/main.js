@@ -8,7 +8,7 @@ var SERVER_OPCODE = {
     GAME_START: 11,
     GAME_STATE: 12,
     GAME_OVER: 13,
-    REMATCH_START: 14,
+    GAME_BEGIN: 14,
     MATCH_ENDED: 15,
     REMATCH_VOTED: 16,
     TIMER_UPDATE: 17,
@@ -20,11 +20,14 @@ var CLIENT_OPCODE = {
     MOVE: 21,
     REMATCH_VOTE: 22,
     LEAVE: 23,
+    READY_ACK: 24,
 };
 
 var TURN_LIMIT = 30;
 var DISCONNECT_GRACE = 60;
 var ROOM_LIMIT = 25;
+var CONFIRM_TIMEOUT = 15;
+var CONFIRM_RETRY = 2;
 
 var LEADERBOARD_ID = "tictactoe";
 
@@ -49,19 +52,14 @@ function updatePlayerStats(nk, logger, userId, result) {
 
     try {
         var records = nk.storageRead([{ collection: collection, key: key, userId: userId }]);
-        if (records.length > 0) {
-            stats = records[0].value;
-        }
+        if (records.length > 0) stats = records[0].value;
     } catch (e) {
         logger.error('Failed to read stats for %s: %s', userId, e.message);
     }
 
     stats.matches += 1;
-    if (result === 'win') {
-        stats.wins += 1;
-    } else if (result === 'loss') {
-        stats.losses += 1;
-    }
+    if (result === 'win') stats.wins += 1;
+    else if (result === 'loss') stats.losses += 1;
 
     try {
         nk.storageWrite([{
@@ -70,7 +68,7 @@ function updatePlayerStats(nk, logger, userId, result) {
             userId: userId,
             value: stats,
             permissionRead: 2,
-            permissionWrite: 0
+            permissionWrite: 0,
         }]);
     } catch (e) {
         logger.error('Failed to write stats for %s: %s', userId, e.message);
@@ -82,31 +80,44 @@ function updatePlayerStats(nk, logger, userId, result) {
 function updateLeaderboard(nk, logger, winnerId, winnerName, loserId, loserName) {
     var winnerStats = updatePlayerStats(nk, logger, winnerId, 'win');
     var loserStats = updatePlayerStats(nk, logger, loserId, 'loss');
-
     try {
         nk.leaderboardRecordWrite(LEADERBOARD_ID, winnerId, winnerName, 75, 0, winnerStats);
         nk.leaderboardRecordWrite(LEADERBOARD_ID, loserId, loserName, -25, 0, loserStats);
-        logger.info('Leaderboard updated. Winner: %s, Loser: %s', winnerId, loserId);
+        logger.info('Leaderboard updated. Winner: %s Loser: %s', winnerId, loserId);
     } catch (e) {
         logger.error('Failed to update leaderboard: %s', e.message);
     }
 }
 
-var rpcCreateRoom = function (ctx, logger, nk, payload) {
-
-    var name = payload || '';
-    
+function updateLeaderboardDraw(nk, logger, playerIds, playerNames) {
+    var stats0 = updatePlayerStats(nk, logger, playerIds[0], 'draw');
+    var stats1 = updatePlayerStats(nk, logger, playerIds[1], 'draw');
     try {
-        name = JSON.parse(name);
+        nk.leaderboardRecordWrite(LEADERBOARD_ID, playerIds[0], playerNames[0], 0, 0, stats0);
+        nk.leaderboardRecordWrite(LEADERBOARD_ID, playerIds[1], playerNames[1], 0, 0, stats1);
+        logger.info('Leaderboard draw updated. Players: %s  %s', playerIds[0], playerIds[1]);
     } catch (e) {
-        
+        logger.error('Failed to update leaderboard for draw: %s', e.message);
     }
+}
 
+function buildGameStartPayload(state) {
+    return JSON.stringify({
+        marks: state.marks,
+        players: state.players,
+        currentTurn: state.currentTurn,
+        board: state.board,
+        timeLeft: TURN_LIMIT,
+        scores: { O: 0, X: 0 },
+        mode: state.mode,
+    });
+}
+
+var rpcCreateRoom = function (ctx, logger, nk, payload) {
+    var name = payload || '';
+    try { name = JSON.parse(name); } catch (e) {}
     name = (typeof name === 'string' ? name : '').trim();
-
-    if (!name) {
-        throw new Error('Room name is required.');
-    }
+    if (!name) throw new Error('Room name is required.');
 
     var userId = ctx.userId;
     var totalCount = 0;
@@ -114,8 +125,7 @@ var rpcCreateRoom = function (ctx, logger, nk, payload) {
         var cursor = undefined;
         do {
             var result = nk.userGroupsList(userId, 100, null, cursor);
-            var groups = result.userGroups || [];
-            totalCount += groups.length;
+            totalCount += (result.userGroups || []).length;
             cursor = result.cursor || undefined;
         } while (cursor);
     } catch (e) {
@@ -123,9 +133,7 @@ var rpcCreateRoom = function (ctx, logger, nk, payload) {
         throw new Error('Failed to check room count.');
     }
 
-    if (totalCount >= ROOM_LIMIT) {
-        throw new Error('You can only join or create up to ' + ROOM_LIMIT + ' rooms.');
-    }
+    if (totalCount >= ROOM_LIMIT) throw new Error('You can only join or create up to ' + ROOM_LIMIT + ' rooms.');
 
     var group;
     try {
@@ -143,23 +151,17 @@ var beforeJoinGroup = function (ctx, logger, nk, data) {
     var userId = ctx.userId;
     var totalCount = 0;
     var cursor = undefined;
-
     try {
         do {
             var result = nk.userGroupsList(userId, 100, null, cursor);
-            var groups = result.userGroups || [];
-            totalCount += groups.length;
+            totalCount += (result.userGroups || []).length;
             cursor = result.cursor || undefined;
         } while (cursor);
     } catch (e) {
         logger.error('beforeJoinGroup: failed to list groups for %s: %s', userId, e.message);
         throw new Error('Failed to check room count.');
     }
-
-    if (totalCount >= ROOM_LIMIT) {
-        throw new Error('You cannot join or request more than ' + ROOM_LIMIT + ' rooms.');
-    }
-
+    if (totalCount >= ROOM_LIMIT) throw new Error('You cannot join or request more than ' + ROOM_LIMIT + ' rooms.');
     return data;
 };
 
@@ -180,6 +182,7 @@ var matchInit = function (ctx, logger, nk, params) {
             board: makeInitialBoard(),
             marks: {},
             players: {},
+            presences: {},
             currentTurn: null,
             moveCount: 0,
             rematchVotes: {},
@@ -187,6 +190,8 @@ var matchInit = function (ctx, logger, nk, params) {
             turnStartTick: null,
             disconnectedPlayers: {},
             mode: mode,
+            readyAcks: {},
+            confirmingTick: null,
         },
         tickRate: 1,
         label: 'tictactoe',
@@ -201,6 +206,8 @@ var matchJoinAttempt = function (ctx, logger, nk, dispatcher, tick, state, prese
 
 var matchJoin = function (ctx, logger, nk, dispatcher, tick, state, presences) {
     presences.forEach(function (p) {
+        state.presences[p.userId] = p;
+
         if (state.disconnectedPlayers[p.userId] !== undefined) {
             delete state.disconnectedPlayers[p.userId];
             dispatcher.broadcastMessage(SERVER_OPCODE.OPPONENT_RECONNECTED, JSON.stringify({}));
@@ -210,7 +217,6 @@ var matchJoin = function (ctx, logger, nk, dispatcher, tick, state, presences) {
         if (!state.marks[p.userId]) {
             var mark = Object.keys(state.marks).length === 0 ? 'O' : 'X';
             state.marks[p.userId] = mark;
-
             var users = nk.usersGetId([p.userId]);
             var displayName = (users && users[0] && users[0].displayName) ? users[0].displayName : 'Anonymous';
             state.players[mark] = displayName;
@@ -227,7 +233,9 @@ var matchJoin = function (ctx, logger, nk, dispatcher, tick, state, presences) {
 
 var matchLeave = function (ctx, logger, nk, dispatcher, tick, state, presences) {
     presences.forEach(function (p) {
-        if (state.status === 'playing' || state.status === 'ready') {
+        delete state.presences[p.userId];
+
+        if (state.status === 'playing' || state.status === 'ready' || state.status === 'confirming') {
             state.disconnectedPlayers[p.userId] = tick;
             dispatcher.broadcastMessage(SERVER_OPCODE.OPPONENT_DISCONNECTED, JSON.stringify({
                 gracePeriod: DISCONNECT_GRACE,
@@ -236,45 +244,83 @@ var matchLeave = function (ctx, logger, nk, dispatcher, tick, state, presences) 
             dispatcher.broadcastMessage(SERVER_OPCODE.MATCH_ENDED, JSON.stringify({}));
         }
     });
-
     return { state: state };
 };
 
 var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
+
     if (state.status === 'ready') {
-        state.status = 'playing';
-        if (state.mode === 'timed') {
-            state.turnStartTick = tick;
+        state.status = 'confirming';
+        state.readyAcks = {};
+        state.confirmingTick = tick;
+        dispatcher.broadcastMessage(SERVER_OPCODE.GAME_START, buildGameStartPayload(state));
+        return { state: state };
+    }
+
+    if (state.status === 'confirming') {
+        messages.forEach(function (msg) {
+            if (msg.opCode === CLIENT_OPCODE.READY_ACK) {
+                state.readyAcks[msg.sender.userId] = true;
+            }
+        });
+
+        var unackedIds = Object.keys(state.marks).filter(function (id) {
+            return !state.readyAcks[id];
+        });
+
+        if (unackedIds.length === 0) {
+            state.status = 'playing';
+            if (state.mode === 'timed') state.turnStartTick = tick;
+            dispatcher.broadcastMessage(SERVER_OPCODE.GAME_BEGIN, JSON.stringify({
+                currentTurn: state.currentTurn,
+                board: state.board,
+                timeLeft: TURN_LIMIT,
+            }));
+            return { state: state };
         }
 
-        dispatcher.broadcastMessage(SERVER_OPCODE.GAME_START, JSON.stringify({
-            marks: state.marks,
-            players: state.players,
-            currentTurn: state.currentTurn,
-            board: state.board,
-            timeLeft: TURN_LIMIT,
-            scores: { O: 0, X: 0 },
-            mode: state.mode,
-        }));
+        var confirmElapsed = tick - state.confirmingTick;
+
+        if (confirmElapsed >= CONFIRM_TIMEOUT) {
+            state.status = 'finished';
+            state.turnStartTick = null;
+            dispatcher.broadcastMessage(SERVER_OPCODE.MATCH_ENDED, JSON.stringify({}));
+            return { state: state };
+        }
+
+        if (confirmElapsed > 0 && confirmElapsed % CONFIRM_RETRY === 0) {
+            var unackedPresences = unackedIds
+                .map(function (id) { return state.presences[id]; })
+                .filter(Boolean);
+            if (unackedPresences.length > 0) {
+                dispatcher.broadcastMessage(
+                    SERVER_OPCODE.GAME_START,
+                    buildGameStartPayload(state),
+                    unackedPresences
+                );
+            }
+        }
+
         return { state: state };
     }
 
     var disconnectedIds = Object.keys(state.disconnectedPlayers);
 
-    if (disconnectedIds.length > 0 && (state.status === 'playing' || state.status === 'ready')) {
+    if (disconnectedIds.length > 0 && state.status === 'playing') {
         for (var d = 0; d < disconnectedIds.length; d++) {
             var dcId = disconnectedIds[d];
-            var dcTick = state.disconnectedPlayers[dcId];
-            var dcElapsed = tick - dcTick;
+            var dcElapsed = tick - state.disconnectedPlayers[dcId];
 
             if (dcElapsed >= DISCONNECT_GRACE) {
                 var playerIds = Object.keys(state.marks);
                 var winnerId = playerIds.find(function (id) { return id !== dcId; });
 
-                if (state.status === 'playing' && playerIds.length === 2) {
-                    var winnerName = state.players[state.marks[winnerId]];
-                    var loserName = state.players[state.marks[dcId]];
-                    updateLeaderboard(nk, logger, winnerId, winnerName, dcId, loserName);
+                if (playerIds.length === 2) {
+                    updateLeaderboard(
+                        nk, logger,
+                        winnerId, state.players[state.marks[winnerId]],
+                        dcId, state.players[state.marks[dcId]]
+                    );
                 }
 
                 state.status = 'finished';
@@ -307,11 +353,11 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
                 state.turnStartTick = null;
                 var playerIds = Object.keys(state.marks);
                 var loserId = playerIds.find(function (id) { return id !== senderId; });
-
-                var winnerName = state.players[state.marks[senderId]];
-                var loserName = state.players[state.marks[loserId]];
-                updateLeaderboard(nk, logger, senderId, winnerName, loserId, loserName);
-
+                updateLeaderboard(
+                    nk, logger,
+                    senderId, state.players[state.marks[senderId]],
+                    loserId, state.players[state.marks[loserId]]
+                );
                 dispatcher.broadcastMessage(SERVER_OPCODE.GAME_OVER, JSON.stringify({
                     board: state.board,
                     winner: result.winner,
@@ -323,11 +369,12 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
             if (state.moveCount === 9) {
                 state.status = 'finished';
                 state.turnStartTick = null;
-
                 var playerIds = Object.keys(state.marks);
-                updatePlayerStats(nk, logger, playerIds[0], 'draw');
-                updatePlayerStats(nk, logger, playerIds[1], 'draw');
-
+                var playerNames = [
+                    state.players[state.marks[playerIds[0]]],
+                    state.players[state.marks[playerIds[1]]],
+                ];
+                updateLeaderboardDraw(nk, logger, playerIds, playerNames);
                 dispatcher.broadcastMessage(SERVER_OPCODE.GAME_OVER, JSON.stringify({
                     board: state.board,
                     winner: null,
@@ -337,9 +384,7 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
             }
 
             state.currentTurn = Object.keys(state.marks).find(function (id) { return id !== senderId; });
-            if (state.mode === 'timed') {
-                state.turnStartTick = tick;
-            }
+            if (state.mode === 'timed') state.turnStartTick = tick;
             dispatcher.broadcastMessage(SERVER_OPCODE.GAME_STATE, JSON.stringify({
                 board: state.board,
                 currentTurn: state.currentTurn,
@@ -359,16 +404,12 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
                 state.board = makeInitialBoard();
                 state.moveCount = 0;
                 state.rematchVotes = {};
-                state.status = 'playing';
                 state.currentTurn = Object.keys(state.marks)[0];
-                if (state.mode === 'timed') {
-                    state.turnStartTick = tick;
-                }
-                dispatcher.broadcastMessage(SERVER_OPCODE.REMATCH_START, JSON.stringify({
-                    board: state.board,
-                    currentTurn: state.currentTurn,
-                    timeLeft: TURN_LIMIT,
-                }));
+                state.turnStartTick = null;
+                state.status = 'confirming';
+                state.readyAcks = {};
+                state.confirmingTick = tick;
+                dispatcher.broadcastMessage(SERVER_OPCODE.GAME_START, buildGameStartPayload(state));
             }
         }
 
@@ -376,10 +417,11 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
             if (state.status === 'playing') {
                 var playerIds = Object.keys(state.marks);
                 var winnerId = playerIds.find(function (id) { return id !== senderId; });
-
-                var winnerName = state.players[state.marks[winnerId]];
-                var loserName = state.players[state.marks[senderId]];
-                updateLeaderboard(nk, logger, winnerId, winnerName, senderId, loserName);
+                updateLeaderboard(
+                    nk, logger,
+                    winnerId, state.players[state.marks[winnerId]],
+                    senderId, state.players[state.marks[senderId]]
+                );
             }
             state.status = 'finished';
             state.turnStartTick = null;
@@ -396,10 +438,11 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
             var timedOutId = state.currentTurn;
             var winnerId = playerIds.find(function (id) { return id !== timedOutId; });
             var winnerMark = state.marks[winnerId];
-            var winnerName = state.players[winnerMark];
-            var loserName = state.players[state.marks[timedOutId]];
-            updateLeaderboard(nk, logger, winnerId, winnerName, timedOutId, loserName);
-
+            updateLeaderboard(
+                nk, logger,
+                winnerId, state.players[winnerMark],
+                timedOutId, state.players[state.marks[timedOutId]]
+            );
             state.status = 'finished';
             state.turnStartTick = null;
             dispatcher.broadcastMessage(SERVER_OPCODE.GAME_OVER, JSON.stringify({
@@ -427,23 +470,14 @@ var matchTerminate = function (ctx, logger, nk, dispatcher, tick, state, graceSe
 
 var InitModule = function (ctx, logger, nk, initializer) {
     try {
-        nk.leaderboardCreate(
-            LEADERBOARD_ID,
-            true,
-            "desc",
-            "incr",
-            null,
-            {}
-        );
+        nk.leaderboardCreate(LEADERBOARD_ID, true, "desc", "incr", null, {});
         logger.info('Leaderboard "%s" initialized.', LEADERBOARD_ID);
     } catch (e) {
         logger.error('Failed to initialize leaderboard: %s', e.message);
     }
 
     initializer.registerRpc('create_room', rpcCreateRoom);
-    
     initializer.registerBeforeJoinGroup(beforeJoinGroup);
-
     initializer.registerMatchmakerMatched(matchmakerMatched);
     initializer.registerMatch('tictactoe', {
         matchInit: matchInit,
