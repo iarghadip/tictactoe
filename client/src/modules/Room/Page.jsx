@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useNakama } from '../../contexts/nakamaContext';
-import { MenuInput } from '../../components/input';
+import { Input } from '../../components/input';
 import Screen from './Screen';
 
 export default function RoomPage({ onBack, onSelectRoom }) {
@@ -142,7 +142,7 @@ export default function RoomPage({ onBack, onSelectRoom }) {
                 onOpenCreate={() => setCreateOpen(true)}
                 onOpenJoin={() => setJoinOpen(true)}
             />
-            <MenuInput
+            <Input
                 open={createOpen}
                 title="Create Room"
                 fields={[{ key: 'name', placeholder: 'Room Name' }]}
@@ -151,7 +151,7 @@ export default function RoomPage({ onBack, onSelectRoom }) {
                 loading={isCreating}
                 error={createError}
             />
-            <MenuInput
+            <Input
                 open={joinOpen}
                 title="Join Room"
                 fields={[{ key: 'name', placeholder: 'Room Name' }]}

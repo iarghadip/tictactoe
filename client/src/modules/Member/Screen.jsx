@@ -8,7 +8,7 @@ import PersonIcon from '@mui/icons-material/PersonTwoTone';
 import PendingIcon from '@mui/icons-material/PendingTwoTone';
 import EditIcon from '@mui/icons-material/EditTwoTone';
 import { Layout } from '../../components/layout';
-import { RoundButton } from '../../components/button';
+import { Button } from '../../components/button';
 import { CapitalText, NormalText } from '../../components/text';
 import { MenuIcon } from '../../components/icon';
 import './Screen.css';
@@ -26,29 +26,29 @@ export default function Screen({
                     {loading ? 'Loading room members' : `${selectedRoom.edge_count}/100 Members`}
                 </CapitalText>
                 <div className="flex items-center justify-center gap-4">
-                    <RoundButton
+                    <Button
                         icon={TimerIcon}
                         onClick={() => onStartRoomMatch('timed', selectedRoom.id)}
                     />
-                    <RoundButton
+                    <Button
                         icon={AppsIcon}
                         onClick={() => onStartRoomMatch('classic', selectedRoom.id)}
                     />
                     {isAdmin && (
-                        <RoundButton
+                        <Button
                             icon={EditIcon}
                             onClick={onEditOpen}
                         />
                     )}
                     {isAdmin ? (
-                        <RoundButton
+                        <Button
                             icon={DeleteIcon}
                             onClick={() => onDelete(selectedRoom.id)}
                             disabled={isDeleting}
                             danger
                         />
                     ) : (
-                        <RoundButton
+                        <Button
                             icon={LogoutIcon}
                             onClick={() => onLeave(selectedRoom.id)}
                             danger
@@ -81,7 +81,7 @@ export default function Screen({
                                     </div>
                                 </div>
                                 {isAdmin && !isMe && (
-                                    <RoundButton
+                                    <Button
                                         icon={CloseIcon}
                                         onClick={() => onKick(selectedRoom.id, m.user.id)}
                                         disabled={isMemberPending}
@@ -113,7 +113,7 @@ export default function Screen({
                                         <CapitalText size="11">Membership Requested</CapitalText>
                                     </div>
                                 </div>
-                                <RoundButton
+                                <Button
                                     icon={CheckIcon}
                                     onClick={() => onApprove(selectedRoom.id, m.user.id)}
                                     disabled={isMemberPending}

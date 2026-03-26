@@ -4,7 +4,7 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOffTwoTone';
 import MusicNoteIcon from '@mui/icons-material/MusicNoteTwoTone';
 import MusicOffIcon from '@mui/icons-material/MusicOffTwoTone';
 import { Layout } from '../../components/layout';
-import { RoundButton } from '../../components/button';
+import { Button } from '../../components/button';
 import { NormalText, CapitalText } from '../../components/text';
 import { MenuIcon } from '../../components/icon';
 import './Screen.css';
@@ -33,7 +33,7 @@ export default function Screen({
                 <div className="flex items-center card-theme-item">
                     <MenuIcon icon={MusicNoteIcon} />
                     <NormalText className="flex-1">Game Music</NormalText>
-                    <RoundButton
+                    <Button
                         icon={musicEnabled ? MusicNoteIcon : MusicOffIcon}
                         onClick={onToggleMusic}
                     />
@@ -41,7 +41,7 @@ export default function Screen({
                 <div className="flex items-center card-theme-item">
                     <MenuIcon icon={VolumeUpIcon} />
                     <NormalText className="flex-1">Sound Effects</NormalText>
-                    <RoundButton
+                    <Button
                         icon={soundEnabled ? VolumeUpIcon : VolumeOffIcon}
                         onClick={onToggleSound}
                     />

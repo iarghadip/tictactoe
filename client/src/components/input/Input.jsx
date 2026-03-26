@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import LoginIcon from '@mui/icons-material/LoginTwoTone';
 import SyncIcon from '@mui/icons-material/SyncTwoTone';
-import { RoundButton } from '../button';
-import './MenuInput.css';
+import { Button } from '../button';
+import './Input.css';
 
-export default function MenuInput({
+export default function Input({
     open, title, fields, initialValues, onSubmit, onClose, loading, error
 }) {
     const [values, setValues] = useState({});
@@ -46,16 +46,16 @@ export default function MenuInput({
     return (
         <div
             onClick={handleBackdropClick}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-5 box-border menu-input-backdrop"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-5 box-border input-backdrop"
         >
             <div
                 onClick={e => e.stopPropagation()}
-                className="flex flex-col items-center gap-5 w-full max-w-[320px] p-8 px-6 box-border menu-input"
+                className="flex flex-col items-center gap-5 w-full max-w-[320px] p-8 px-6 box-border input"
             >
-                <div className="text-center menu-input__title">{title}</div>
-                {error && <p className="text-center mt-[-8px] menu-input__error">{error}</p>}
+                <div className="text-center input__title">{title}</div>
+                {error && <p className="text-center mt-[-8px] input__error">{error}</p>}
                 {fields.map((field, i) => (
-                    <div key={field.key} className={`flex items-center w-full rounded-full px-6 py-2 pl-6 box-border menu-input__row ${loading ? 'menu-input__row--locked' : ''}`}>
+                    <div key={field.key} className={`flex items-center w-full rounded-full px-6 py-2 pl-6 box-border input__row ${loading ? 'input__row--locked' : ''}`}>
                         <input
                             className="flex-1 bg-transparent border-none outline-none"
                             type="text"
@@ -73,7 +73,7 @@ export default function MenuInput({
                         />
                     </div>
                 ))}
-                <RoundButton
+                <Button
                     onClick={handleSubmit}
                     icon={loading ? SyncIcon : LoginIcon}
                     disabled={!isValid || loading}

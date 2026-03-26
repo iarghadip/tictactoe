@@ -1,44 +1,44 @@
-.menu-input-backdrop {
+.input-backdrop {
     background: rgba(0, 0, 0, 0.65);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     animation: backdrop-in 0.2s ease forwards;
 }
 
-.menu-input {
+.input {
     background: #1C1A21;
     border: 1px solid rgba(255, 255, 255, .1);
     border-radius: 20px;
     animation: modal-in 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-.menu-input__title {
+.input__title {
     font-size: 18px;
     font-weight: 700;
     color: #E6E0E9;
     letter-spacing: 0.5px;
 }
 
-.menu-input__row {
+.input__row {
     background: rgba(255, 255, 255, 0.05);
     border: 1.5px solid rgba(255, 255, 255, 0.08);
     transition: border-color 0.2s ease, opacity 0.2s ease;
 }
 
-.menu-input__row:focus-within {
+.input__row:focus-within {
     border-color: rgba(255, 255, 255, 0.25);
 }
 
-.menu-input__row--locked {
+.input__row--locked {
     opacity: 0.4;
     pointer-events: none;
 }
 
-.menu-input__row--locked:focus-within {
+.input__row--locked:focus-within {
     border-color: rgba(255, 255, 255, 0.08);
 }
 
-.menu-input__row input {
+.input__row input {
     color: #E6E0E9;
     font-size: 15px;
     font-weight: 400;
@@ -46,12 +46,12 @@
     caret-color: #E6E0E9;
 }
 
-.menu-input__row input::placeholder {
+.input__row input::placeholder {
     color: rgba(230, 224, 233, 0.35);
     font-weight: 400;
 }
 
-.menu-input__error {
+.input__error {
     color: #E05C5C;
     font-size: 13px;
     letter-spacing: 0.3px;

@@ -1,1 +1,1 @@
-export { default as MenuInput } from './MenuInput';
+export { default as Input } from './Input';

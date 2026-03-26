@@ -3,7 +3,7 @@ import SearchIcon from '@mui/icons-material/SearchTwoTone';
 import ChevronRightIcon from '@mui/icons-material/ChevronRightTwoTone';
 import GroupsIcon from '@mui/icons-material/GroupsTwoTone';
 import { Layout } from '../../components/layout';
-import { RoundButton } from '../../components/button';
+import { Button } from '../../components/button';
 import { CapitalText, NormalText } from '../../components/text';
 import { MenuIcon } from '../../components/icon';
 import './Screen.css';
@@ -22,12 +22,12 @@ export default function Screen({
                     {loading ? 'Loading your rooms' : (rooms.length === 0 ? 'You have no rooms' : `${totalRooms}/25 Rooms`)}
                 </CapitalText>
                 <div className={`flex items-center justify-center gap-4 ${isAtLimit ? 'opacity-50' : ''}`}>
-                    <RoundButton 
+                    <Button 
                         icon={AddIcon} 
                         disabled={isAtLimit}
                         onClick={() => { if (!isAtLimit) onOpenCreate(); }} 
                     />
-                    <RoundButton 
+                    <Button 
                         icon={SearchIcon} 
                         disabled={isAtLimit}
                         onClick={() => { if (!isAtLimit) onOpenJoin(); }} 

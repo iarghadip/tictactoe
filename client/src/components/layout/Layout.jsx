@@ -1,5 +1,5 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBackTwoTone';
-import { RoundButton } from '../../components/button';
+import { Button } from '../../components/button';
 import { NormalText } from '../../components/text';
 import './Layout.css';
 
@@ -19,7 +19,7 @@ export default function Layout({
             >
                 {hasHeader && (
                     <div className="relative flex items-center gap-4 py-2 sticky top-0 z-10 layout__header">
-                        {onBack && <RoundButton onClick={onBack} icon={ArrowBackIcon}/>}
+                        {onBack && <Button onClick={onBack} icon={ArrowBackIcon}/>}
                         {title && <NormalText size="2">{title}</NormalText>}
                     </div>
                 )}

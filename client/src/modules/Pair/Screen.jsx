@@ -1,6 +1,6 @@
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmptyTwoTone';
 import LogoutIcon from '@mui/icons-material/LogoutTwoTone';
-import { RoundButton } from '../../components/button';
+import { Button } from '../../components/button';
 import { Layout } from '../../components/layout';
 import { CapitalText, NormalText } from '../../components/text';
 import './Screen.css';
@@ -23,7 +23,7 @@ export default function Screen({
             </div>
             <div className="flex items-center justify-center flex-col gap-4">
                 <CapitalText fill="-1">{elapsed}s</CapitalText>
-                <RoundButton onClick={onCancel} icon={LogoutIcon} btnRef={cancelBtnRef} danger />
+                <Button onClick={onCancel} icon={LogoutIcon} btnRef={cancelBtnRef} danger />
             </div>
         </Layout>
     );

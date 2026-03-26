@@ -3,7 +3,7 @@ import LogoutIcon from '@mui/icons-material/LogoutTwoTone';
 import { Confetti } from '../../components/confetti';
 import { Layout } from '../../components/layout';
 import { Score } from '../../components/score';
-import { RoundButton } from '../../components/button';
+import { Button } from '../../components/button';
 import { CapitalText, NormalText } from '../../components/text';
 import './Screen.css';
 
@@ -22,10 +22,10 @@ export default function Screen({
             <div className="flex items-center justify-center flex-col gap-4">
                 <CapitalText>{turnText}</CapitalText>
                 <div className="flex items-center justify-center gap-4">
-                    <RoundButton
+                    <Button
                         onClick={onRematch} icon={RefreshIcon} disabled={myVoted}
                         glowing={opponentVoted} className={myVoted ? 'icon-spin' : ''}/>
-                    <RoundButton onClick={onLeave} icon={LogoutIcon} danger />
+                    <Button onClick={onLeave} icon={LogoutIcon} danger />
                 </div>
             </div>
         </Layout>

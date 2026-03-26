@@ -1,11 +1,11 @@
-.round-btn {
+.button {
     background: rgba(255, 255, 255, .03);
     border: 1px solid rgba(255, 255, 255, .1);
     color: #E6E0E9;
     transition: background 0.2s ease, transform 0.15s ease;
 }
 
-.round-btn::after {
+.button::after {
     content: '';
     position: absolute;
     width: 30px;
@@ -18,41 +18,41 @@
     pointer-events: none;
 }
 
-.round-btn:hover {
+.button:hover {
     background: rgba(255, 255, 255, 0.18);
     transform: scale(1.08);
 }
 
-.round-btn:hover::after {
+.button:hover::after {
     opacity: 0.3;
 }
 
-.round-btn:disabled {
+.button:disabled {
     transform: none;
 }
 
-.round-btn:disabled::after {
+.button:disabled::after {
     display: none;
 }
 
-.round-btn--glowing::after {
-    animation: round-btn-glow 1s ease-in-out infinite;
+.button--glowing::after {
+    animation: button-glow 1s ease-in-out infinite;
 }
 
-.round-btn--danger {
+.button--danger {
     color: #ff5252;
     border-color: rgba(255, 82, 82, 0.3);
 }
 
-.round-btn--danger::after {
+.button--danger::after {
     background: #ff5252;
 }
 
-.round-btn--danger:hover {
+.button--danger:hover {
     background: rgba(255, 82, 82, 0.15);
 }
 
-@keyframes round-btn-glow {
+@keyframes button-glow {
     0%, 100% {
         opacity: 0.15;
     }

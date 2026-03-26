@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useNakama } from '../../contexts/nakamaContext';
-import { MenuInput } from '../../components/input';
+import { Input } from '../../components/input';
 import Screen from './Screen';
 
 export default function MemberPage({ room, onBack, onRoomMatch }) {
@@ -193,7 +193,7 @@ export default function MemberPage({ room, onBack, onRoomMatch }) {
                 onEditOpen={() => setEditOpen(true)}
             />
             {isAdmin && (
-                <MenuInput
+                <Input
                     open={editOpen}
                     title="Rename Room"
                     fields={[{ key: 'name', placeholder: 'New Room Name' }]}

@@ -1,6 +1,6 @@
-import './RoundButton.css';
+import './Button.css';
 
-export default function RoundButton({
+export default function Button({
     onClick, disabled, glowing, danger, btnRef, icon: Icon, className = ''
 }) {
     return (
@@ -15,9 +15,9 @@ export default function RoundButton({
                 cursor-pointer shrink-0
                 relative overflow-visible
                 disabled:opacity-30 disabled:cursor-not-allowed
-                round-btn
-                ${glowing ? 'round-btn--glowing' : ''}
-                ${danger ? 'round-btn--danger' : ''}
+                button
+                ${glowing ? 'button--glowing' : ''}
+                ${danger ? 'button--danger' : ''}
                 ${className}
             `}
         >

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNakama } from '../../contexts/nakamaContext';
-import { MenuInput } from '../../components/input';
+import { Input } from '../../components/input';
 import { HOME_SCREEN_MENU } from '../../constants/menus';
 import Screen from './Screen';
 
@@ -98,7 +98,7 @@ export default function HomePage({
                 onMenuSelect={requireAuth}
                 onLogout={handleLogout}
             />
-            <MenuInput
+            <Input
                 open={authModal}
                 title="Who are you?"
                 fields={[{ key: 'username', placeholder: 'User Name' }]}
