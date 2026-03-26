@@ -3,7 +3,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRightTwoTone';
 import { Layout } from '../../components/layout';
 import { MenuIcon } from '../../components/icon';
 import { CapitalText, NormalText } from '../../components/text';
-import './HomeScreen.css';
+import './Screen.css';
 
 export default function HomeScreen({
     displayName, isLoggedIn, menuItems, onMenuSelect, onLogout,

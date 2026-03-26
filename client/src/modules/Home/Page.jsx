@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useNakama } from '../contexts/nakamaContext';
-import { HomeScreen } from '../screens/home';
-import { MenuInput } from '../components/input';
-import { HOME_SCREEN_MENU } from '../constants/menus';
+import { useNakama } from '../../contexts/nakamaContext';
+import { MenuInput } from '../../components/input';
+import { HOME_SCREEN_MENU } from '../../constants/menus';
+import Screen from './Screen';
 
 export default function HomePage({
     onFindMatch, onGlobalRanks, onAbout, onRooms, onSettings
@@ -66,7 +66,7 @@ export default function HomePage({
 
     return (
         <>
-            <HomeScreen
+            <Screen
                 displayName={displayName}
                 isLoggedIn={!!session}
                 menuItems={menuItems}
