@@ -44,12 +44,64 @@ export const playSound = (name) => {
 
 let musicSession = 0;
 let currentMusicHowl = null;
+let preloadedNextMusic = null;
 let musicQueue = [];
+
+const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
+
+const prepareNextMusic = () => {
+    if (musicQueue.length === 0) {
+        musicQueue = shuffleArray([music1, music2, music3, music4, music5]);
+    }
+    const nextTrack = musicQueue.pop();
+
+    preloadedNextMusic = new Howl({
+        src: [nextTrack],
+        html5: false,
+        preload: true,
+        onloaderror: (id, err) => console.warn('Music load error:', err),
+        onplayerror: function() {
+            this.once('unlock', () => this.play());
+        }
+    });
+};
+
+prepareNextMusic(); 
+
+export const waitForAudio = () => {
+    return new Promise((resolve) => {
+        const sounds = [...Object.values(sfxCache), preloadedNextMusic];
+        let loadedCount = 0;
+
+        const checkDone = () => {
+            if (loadedCount === sounds.length) resolve();
+        };
+
+        sounds.forEach(sound => {
+            if (sound.state() === 'loaded') {
+                loadedCount++;
+            } else {
+                sound.once('load', () => {
+                    loadedCount++;
+                    checkDone();
+                });
+                sound.once('loaderror', () => {
+                    console.warn('Audio failed to load.');
+                    loadedCount++;
+                    checkDone();
+                });
+            }
+        });
+
+        checkDone(); 
+    });
+};
 
 export const stopMusic = () => {
     musicSession++;
     if (currentMusicHowl) {
         currentMusicHowl.stop();
+        currentMusicHowl.unload();
         currentMusicHowl = null;
     }
 };
@@ -58,33 +110,24 @@ export const playMusic = () => {
     stopMusic();
     const session = musicSession;
 
-    const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
-
-    const playNextTrack = () => {
+    const playCurrent = () => {
         if (musicSession !== session) return;
 
-        if (musicQueue.length === 0) {
-            musicQueue = shuffleArray([music1, music2, music3, music4, music5]);
-        }
+        currentMusicHowl = preloadedNextMusic;
 
-        const nextTrack = musicQueue.pop();
-
-        const howl = new Howl({
-            src: [nextTrack],
-            html5: false,
-            onend: playNextTrack,
-            onloaderror: (id, err) => console.warn('Audio load error:', err),
-            onplayerror: () => {
-                howl.once('unlock', () => howl.play());
-            },
+        currentMusicHowl.on('end', function() {
+            if (musicSession === session) {
+                playCurrent(); 
+            }
+            this.unload();
         });
 
-        currentMusicHowl = howl;
-
         if (getPreference('music')) {
-            howl.play();
+            currentMusicHowl.play();
         }
+        
+        prepareNextMusic();
     };
 
-    playNextTrack();
+    playCurrent();
 };

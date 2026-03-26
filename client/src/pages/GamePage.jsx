@@ -4,7 +4,7 @@ import { GameScreen } from '../screens/game';
 import ResultPage from './ResultPage';
 import { SERVER_OPCODE, CLIENT_OPCODE } from '../constants/opcodes';
 import { GAME_WINNER_COMBINATIONS } from '../constants/misc';
-import { playSound, playMusic, stopMusic } from '../components/audio';
+import { playSound, playMusic, stopMusic, waitForAudio } from '../components/audio';
 
 function checkWinner(squares) {
     for (const combo of GAME_WINNER_COMBINATIONS) {
@@ -45,13 +45,20 @@ export default function GamePage({ match, onLeave }) {
     const [isTimed, setIsTimed] = useState(true);
     const [myStats, setMyStats] = useState(null);
     const [showResult, setShowResult] = useState(false);
+    const [audioLoaded, setAudioLoaded] = useState(false);
+
+    useEffect(() => {
+        waitForAudio().then(() => {
+            setAudioLoaded(true);
+        });
+    }, []);
 
     const myMark = marks[myUserId];
     const opponentMark = myMark === 'X' ? 'O' : 'X';
     const opponentName = players[opponentMark];
     const isMyTurn = currentTurn === myUserId;
     const isFinished = status === 'finished';
-    const isLoading = !players[myMark] || !players[opponentMark];
+    const isLoading = !players[myMark] || !players[opponentMark] || !audioLoaded;
 
     const result = checkWinner(cells);
     const winnerMark = result?.winner ?? gameOverWinner;
