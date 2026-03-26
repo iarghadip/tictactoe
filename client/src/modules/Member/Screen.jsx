@@ -11,9 +11,9 @@ import { Layout } from '../../components/layout';
 import { RoundButton } from '../../components/button';
 import { CapitalText, NormalText } from '../../components/text';
 import { MenuIcon } from '../../components/icon';
-import './MemberScreen.css';
+import './Screen.css';
 
-export default function MemberScreen({
+export default function Screen({
     loading, myUserId, selectedRoom, roomMembers, pendingMembers, pendingIds,
     onBack, onApprove, onKick, onLeave, onDelete, onStartRoomMatch, onEditOpen,
 }) {

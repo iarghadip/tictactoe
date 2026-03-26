@@ -9,7 +9,7 @@ import { NormalText, CapitalText } from '../../components/text';
 import { MenuIcon } from '../../components/icon';
 import './Screen.css';
 
-export default function SettingsScreen({
+export default function Screen({
     nameValue, soundEnabled, musicEnabled,
     onNameChange, onToggleSound, onToggleMusic, onBack,
 }) {

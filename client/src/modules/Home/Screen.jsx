@@ -5,7 +5,7 @@ import { MenuIcon } from '../../components/icon';
 import { CapitalText, NormalText } from '../../components/text';
 import './Screen.css';
 
-export default function HomeScreen({
+export default function Screen({
     displayName, isLoggedIn, menuItems, onMenuSelect, onLogout,
 }) {
     return (

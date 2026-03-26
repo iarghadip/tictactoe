@@ -35,7 +35,7 @@ function PlayerRow({ player, isMe }) {
     );
 }
 
-export default function RankScreen({
+export default function Screen({
     loading, top100, myStats, myUserId, onBack
 }) {
     return (

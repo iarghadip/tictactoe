@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useNakama } from '../contexts/nakamaContext';
-import { MemberScreen } from '../screens/member';
-import { MenuInput } from '../components/input';
+import { useNakama } from '../../contexts/nakamaContext';
+import { MenuInput } from '../../components/input';
+import Screen from './Screen';
 
 export default function MemberPage({ room, onBack, onRoomMatch }) {
     const { client, session, account, socket } = useNakama();
@@ -173,7 +173,7 @@ export default function MemberPage({ room, onBack, onRoomMatch }) {
 
     return (
         <>
-            <MemberScreen
+            <Screen
                 loading={loading}
                 myUserId={myUserId}
                 selectedRoom={{ ...room, edge_count: edgeCount, name: roomName }}
