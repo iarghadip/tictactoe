@@ -3,7 +3,7 @@ import { NormalText } from '../../components/text';
 import { ABOUT_SCREEN_MENU } from '../../constants/menus';
 import './Screen.css';
 
-export default function AboutScreen({ onBack }) {
+export default function Screen({ onBack }) {
     return (
         <Layout title="About Game" onBack={onBack}>
             <div className="flex flex-col overflow-hidden card-theme">

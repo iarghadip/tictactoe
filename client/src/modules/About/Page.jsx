@@ -1,5 +1,5 @@
-import AboutScreen from './Screen';
+import Screen from './Screen';
 
 export default function AboutPage({ onBack }) {
-    return <AboutScreen onBack={onBack} />;
+    return <Screen onBack={onBack} />;
 }

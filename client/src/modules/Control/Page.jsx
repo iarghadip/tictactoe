@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
-import { useNakama } from '../contexts/nakamaContext';
-import { SettingsScreen } from '../screens/settings';
-import { getMusicEnabled, getSoundEnabled } from '../components/audio';
-import { setMusicEnabled, setSoundEnabled } from '../components/audio';
+import { useNakama } from '../../contexts/nakamaContext';
+import { getMusicEnabled, getSoundEnabled } from '../../components/audio';
+import { setMusicEnabled, setSoundEnabled } from '../../components/audio';
+import Screen from './Screen';
 
-export default function SettingsPage({ onBack }) {
+export default function ControlPage({ onBack }) {
     const { account, updateDisplayName } = useNakama();
 
     const rawName = account?.user?.display_name || '';
@@ -49,7 +49,7 @@ export default function SettingsPage({ onBack }) {
     };
 
     return (
-        <SettingsScreen
+        <Screen
             nameValue={nameValue}
             soundEnabled={soundEnabled}
             musicEnabled={musicEnabled}

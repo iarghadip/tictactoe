@@ -7,14 +7,14 @@ import { Layout } from '../../components/layout';
 import { RoundButton } from '../../components/button';
 import { NormalText, CapitalText } from '../../components/text';
 import { MenuIcon } from '../../components/icon';
-import './SettingsScreen.css';
+import './Screen.css';
 
 export default function SettingsScreen({
     nameValue, soundEnabled, musicEnabled,
     onNameChange, onToggleSound, onToggleMusic, onBack,
 }) {
     return (
-        <Layout title="Player Settings" onBack={onBack}>
+        <Layout title="Control Panel" onBack={onBack}>
             <div className="flex flex-col overflow-hidden card-theme">
                 <div className="flex items-center card-theme-item">
                     <MenuIcon icon={PersonIcon} />
