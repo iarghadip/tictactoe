@@ -19,7 +19,7 @@ export default function MenuInput({
             });
             setValues(initial);
         }
-    }, [open, fields, initialValues]);
+    }, [open]);
 
     const handleKeyDown = (e) => {
         if (loading) return;
