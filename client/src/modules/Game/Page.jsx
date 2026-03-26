@@ -121,7 +121,7 @@ export default function GamePage({ match, onLeave }) {
         if (!client || !session || !myUserId) return;
         try {
             const res = await client.listLeaderboardRecords(
-                session, 'global_tictactoe', [myUserId], 1000
+                session, 'tictactoe', [myUserId], 1000
             );
             const myRecord = res.owner_records?.[0];
             if (!myRecord) { setMyStats(null); return; }
