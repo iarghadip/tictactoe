@@ -1,12 +1,12 @@
 import Screen from './Screen';
 
 export default function ResultPage({
-    turnText, myStats, myVoted, opponentVoted,
+    winText, myStats, myVoted, opponentVoted,
     onRematch, onLeave, title, isWinner
 }) {
     return (
         <Screen
-            turnText={turnText}
+            winText={winText}
             myStats={myStats}
             myVoted={myVoted}
             opponentVoted={opponentVoted}

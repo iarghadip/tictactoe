@@ -8,7 +8,7 @@ import { CapitalText, NormalText } from '../../components/text';
 import './Screen.css';
 
 export default function Screen({
-    turnText, myStats, myVoted, opponentVoted,
+    winText, myStats, myVoted, opponentVoted,
     onRematch, onLeave, title, isWinner
 }) {
     return (
@@ -20,7 +20,7 @@ export default function Screen({
             <Confetti isWinner={isWinner} />
             <Score stats={myStats} />
             <div className="flex items-center justify-center flex-col gap-4">
-                <CapitalText>{turnText}</CapitalText>
+                <CapitalText>{winText}</CapitalText>
                 <div className="flex items-center justify-center gap-4">
                     <Button
                         onClick={onRematch} icon={RefreshIcon} disabled={myVoted}

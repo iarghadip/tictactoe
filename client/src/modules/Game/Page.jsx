@@ -68,13 +68,13 @@ export default function GamePage({ match, onLeave }) {
         ? 'Loading the game'
         : `${players[myMark]} vs ${players[opponentMark]}`;
 
-    const turnText = isFinished
-        ? winnerMark
-            ? iWon ? 'You won! (+75)' : `${players[winnerMark]} won! (-25)`
-            : "It's a draw!"
-        : isMyTurn
-            ? 'Your turn'
-            : `${opponentName}'s turn`;
+    const winText = winnerMark
+        ? iWon ? 'You won! (+75)' : `${players[winnerMark]} won! (-25)`
+        : 'It\'s a draw!'
+
+    const turnText = isMyTurn
+        ? 'Your turn'
+        : `${opponentName}'s turn`;
 
     const bottomText = isLoading
         ? 'Loading the players'
@@ -291,7 +291,7 @@ export default function GamePage({ match, onLeave }) {
     if (showResult) {
         return (
             <ResultPage
-                turnText={turnText}
+                winText={winText}
                 myStats={myStats}
                 myVoted={myVoted}
                 opponentVoted={opponentVoted}
