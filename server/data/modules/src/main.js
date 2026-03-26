@@ -24,6 +24,9 @@ var CLIENT_OPCODE = {
 
 var TURN_LIMIT = 30;
 var DISCONNECT_GRACE = 60;
+var ROOM_LIMIT = 25;
+
+var LEADERBOARD_ID = "global_tictactoe_v2";
 
 function checkWinner(board) {
     for (var i = 0; i < WIN_COMBOS.length; i++) {
@@ -66,8 +69,8 @@ function updatePlayerStats(nk, logger, userId, result) {
             key: key,
             userId: userId,
             value: stats,
-            permissionRead: 2, 
-            permissionWrite: 0 
+            permissionRead: 2,
+            permissionWrite: 0
         }]);
     } catch (e) {
         logger.error('Failed to write stats for %s: %s', userId, e.message);
@@ -81,13 +84,84 @@ function updateLeaderboard(nk, logger, winnerId, winnerName, loserId, loserName)
     var loserStats = updatePlayerStats(nk, logger, loserId, 'loss');
 
     try {
-        nk.leaderboardRecordWrite("global_tictactoe", winnerId, winnerName, 75, 0, winnerStats);
-        nk.leaderboardRecordWrite("global_tictactoe", loserId, loserName, -25, 0, loserStats);
+        nk.leaderboardRecordWrite(LEADERBOARD_ID, winnerId, winnerName, 75, 0, winnerStats);
+        nk.leaderboardRecordWrite(LEADERBOARD_ID, loserId, loserName, -25, 0, loserStats);
         logger.info('Leaderboard updated. Winner: %s, Loser: %s', winnerId, loserId);
     } catch (e) {
-        logger.error('Failed to update native leaderboard: %s', e.message);
+        logger.error('Failed to update leaderboard: %s', e.message);
     }
 }
+
+var rpcCreateRoom = function (ctx, logger, nk, payload) {
+
+    var name = payload || '';
+    
+    try {
+        name = JSON.parse(name);
+    } catch (e) {
+        
+    }
+
+    name = (typeof name === 'string' ? name : '').trim();
+
+    if (!name) {
+        throw new Error('Room name is required.');
+    }
+
+    var userId = ctx.userId;
+    var totalCount = 0;
+    try {
+        var cursor = undefined;
+        do {
+            var result = nk.userGroupsList(userId, 100, null, cursor);
+            var groups = result.userGroups || [];
+            totalCount += groups.length;
+            cursor = result.cursor || undefined;
+        } while (cursor);
+    } catch (e) {
+        logger.error('rpcCreateRoom: failed to list groups for %s: %s', userId, e.message);
+        throw new Error('Failed to check room count.');
+    }
+
+    if (totalCount >= ROOM_LIMIT) {
+        throw new Error('You can only join or create up to ' + ROOM_LIMIT + ' rooms.');
+    }
+
+    var group;
+    try {
+        group = nk.groupCreate(userId, name, userId, null, null, null, false, {}, 100);
+    } catch (e) {
+        logger.error('rpcCreateRoom: failed to create group "%s": %s', name, e.message);
+        throw new Error(e.message || 'Room name already exists!');
+    }
+
+    logger.info('rpcCreateRoom: user %s created room "%s" (%s)', userId, name, group.id);
+    return JSON.stringify({ groupId: group.id });
+};
+
+var beforeJoinGroup = function (ctx, logger, nk, data) {
+    var userId = ctx.userId;
+    var totalCount = 0;
+    var cursor = undefined;
+
+    try {
+        do {
+            var result = nk.userGroupsList(userId, 100, null, cursor);
+            var groups = result.userGroups || [];
+            totalCount += groups.length;
+            cursor = result.cursor || undefined;
+        } while (cursor);
+    } catch (e) {
+        logger.error('beforeJoinGroup: failed to list groups for %s: %s', userId, e.message);
+        throw new Error('Failed to check room count.');
+    }
+
+    if (totalCount >= ROOM_LIMIT) {
+        throw new Error('You cannot join or request more than ' + ROOM_LIMIT + ' rooms.');
+    }
+
+    return data;
+};
 
 var matchmakerMatched = function (ctx, logger, nk, matches) {
     logger.info('Matchmaker matched: %s vs %s', matches[0].presence.username, matches[1].presence.username);
@@ -196,13 +270,13 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
             if (dcElapsed >= DISCONNECT_GRACE) {
                 var playerIds = Object.keys(state.marks);
                 var winnerId = playerIds.find(function (id) { return id !== dcId; });
-                
+
                 if (state.status === 'playing' && playerIds.length === 2) {
                     var winnerName = state.players[state.marks[winnerId]];
                     var loserName = state.players[state.marks[dcId]];
                     updateLeaderboard(nk, logger, winnerId, winnerName, dcId, loserName);
                 }
-                
+
                 state.status = 'finished';
                 state.turnStartTick = null;
                 dispatcher.broadcastMessage(SERVER_OPCODE.MATCH_ENDED, JSON.stringify({}));
@@ -233,7 +307,7 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
                 state.turnStartTick = null;
                 var playerIds = Object.keys(state.marks);
                 var loserId = playerIds.find(function (id) { return id !== senderId; });
-                
+
                 var winnerName = state.players[state.marks[senderId]];
                 var loserName = state.players[state.marks[loserId]];
                 updateLeaderboard(nk, logger, senderId, winnerName, loserId, loserName);
@@ -302,7 +376,7 @@ var matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
             if (state.status === 'playing') {
                 var playerIds = Object.keys(state.marks);
                 var winnerId = playerIds.find(function (id) { return id !== senderId; });
-                
+
                 var winnerName = state.players[state.marks[winnerId]];
                 var loserName = state.players[state.marks[senderId]];
                 updateLeaderboard(nk, logger, winnerId, winnerName, senderId, loserName);
@@ -353,18 +427,22 @@ var matchTerminate = function (ctx, logger, nk, dispatcher, tick, state, graceSe
 
 var InitModule = function (ctx, logger, nk, initializer) {
     try {
-        var id = "global_tictactoe";
-        var authoritative = true; 
-        var sortOrder = "desc";   
-        var operator = "incr";    
-        var resetSchedule = null; 
-        var metadata = {};
-
-        nk.leaderboardCreate(id, authoritative, sortOrder, operator, resetSchedule, metadata);
-        logger.info('Native Global leaderboard initialized.');
+        nk.leaderboardCreate(
+            LEADERBOARD_ID,
+            true,
+            "desc",
+            "incr",
+            null,
+            {}
+        );
+        logger.info('Leaderboard "%s" initialized.', LEADERBOARD_ID);
     } catch (e) {
-        logger.error('Failed to initialize native leaderboard: %s', e.message);
+        logger.error('Failed to initialize leaderboard: %s', e.message);
     }
+
+    initializer.registerRpc('create_room', rpcCreateRoom);
+    
+    initializer.registerBeforeJoinGroup(beforeJoinGroup);
 
     initializer.registerMatchmakerMatched(matchmakerMatched);
     initializer.registerMatch('tictactoe', {
@@ -377,5 +455,5 @@ var InitModule = function (ctx, logger, nk, initializer) {
         matchTerminate: matchTerminate,
     });
 
-    logger.info('Tic-Tac-Toe module loaded without SQL.');
+    logger.info('Tic-Tac-Toe module loaded.');
 };

@@ -16,16 +16,26 @@ export default function RoomScreen({
 }) {
     const [createOpen, setCreateOpen] = useState(false);
     const [joinOpen, setJoinOpen] = useState(false);
+    const totalRooms = (rooms?.length || 0) + (requestedRooms?.length || 0);
+    const isAtLimit = totalRooms >= 25;
 
     return (
         <Layout title="Explore Rooms" onBack={onBack}>
             <div className="flex items-center justify-center flex-col gap-4 mb-6">
                 <CapitalText fill={loading ? '-1' : undefined}>
-                    {loading ? 'Loading your rooms' : (rooms.length === 0 ? 'You are not a member yet' : `${rooms.length}/100 Rooms`)}
+                    {loading ? 'Loading your rooms' : (rooms.length === 0 ? 'You are not a member yet' : `${totalRooms}/25 Rooms`)}
                 </CapitalText>
-                <div className="flex items-center justify-center gap-4">
-                    <RoundButton icon={AddIcon} onClick={() => setCreateOpen(true)} />
-                    <RoundButton icon={SearchIcon} onClick={() => setJoinOpen(true)} />
+                <div className={`flex items-center justify-center gap-4 ${isAtLimit ? 'opacity-50' : ''}`}>
+                    <RoundButton 
+                        icon={AddIcon} 
+                        disabled={isAtLimit}
+                        onClick={() => { if (!isAtLimit) setCreateOpen(true); }} 
+                    />
+                    <RoundButton 
+                        icon={SearchIcon} 
+                        disabled={isAtLimit}
+                        onClick={() => { if (!isAtLimit) setJoinOpen(true); }} 
+                    />
                 </div>
             </div>
 
