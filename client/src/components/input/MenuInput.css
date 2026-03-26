@@ -22,11 +22,20 @@
 .menu-input__row {
     background: rgba(255, 255, 255, 0.05);
     border: 1.5px solid rgba(255, 255, 255, 0.08);
-    transition: border-color 0.2s ease;
+    transition: border-color 0.2s ease, opacity 0.2s ease;
 }
 
 .menu-input__row:focus-within {
     border-color: rgba(255, 255, 255, 0.25);
+}
+
+.menu-input__row--locked {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.menu-input__row--locked:focus-within {
+    border-color: rgba(255, 255, 255, 0.08);
 }
 
 .menu-input__row input {
@@ -66,4 +75,18 @@
         opacity: 1;
         transform: scale(1);
     }
+}
+
+@keyframes icon-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.icon-spin svg,
+.icon-spin .MuiSvgIcon-root {
+    animation: icon-spin 0.8s linear infinite;
 }

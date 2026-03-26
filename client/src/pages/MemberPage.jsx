@@ -8,6 +8,9 @@ export default function MemberPage({ room, onBack, onRoomMatch }) {
     const [roomMembers, setRoomMembers] = useState([]);
     const [pendingMembers, setPendingMembers] = useState([]);
     const [edgeCount, setEdgeCount] = useState(room.edge_count);
+    const [roomName, setRoomName] = useState(room.name);
+    const [renameLoading, setRenameLoading] = useState(false);
+    const [renameError, setRenameError] = useState(null);
     const myUserId = account?.user?.id;
     const isAdmin = room.creator_id === myUserId;
     const channelIdRef = useRef(null);
@@ -133,11 +136,30 @@ export default function MemberPage({ room, onBack, onRoomMatch }) {
         }
     };
 
+    const handleRename = async (groupId, name, onSuccess) => {
+        setRenameLoading(true);
+        setRenameError(null);
+        try {
+            await client.updateGroup(session, groupId, { name: name.trim() });
+            setRoomName(name.trim());
+            broadcastRefresh();
+            fetchMembers(true);
+            onSuccess();
+        } catch (e) {
+            console.error('Failed to rename room:', e);
+            setRenameError(e.message || 'Room name already taken!');
+        } finally {
+            setRenameLoading(false);
+        }
+    };
+
+    const clearRenameError = () => setRenameError(null);
+
     return (
         <MemberScreen
             loading={loading}
             myUserId={myUserId}
-            selectedRoom={{ ...room, edge_count: edgeCount }}
+            selectedRoom={{ ...room, edge_count: edgeCount, name: roomName }}
             roomMembers={roomMembers}
             pendingMembers={pendingMembers}
             onBack={onBack}
@@ -146,6 +168,10 @@ export default function MemberPage({ room, onBack, onRoomMatch }) {
             onLeave={handleLeave}
             onDelete={handleDelete}
             onStartRoomMatch={onRoomMatch}
+            onRename={handleRename}
+            renameLoading={renameLoading}
+            renameError={renameError}
+            clearRenameError={clearRenameError}
         />
     );
 }

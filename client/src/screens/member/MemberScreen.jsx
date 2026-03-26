@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import TimerIcon from '@mui/icons-material/TimerTwoTone';
 import AppsIcon from '@mui/icons-material/AppsTwoTone';
 import LogoutIcon from '@mui/icons-material/LogoutTwoTone';
@@ -6,17 +7,26 @@ import CheckIcon from '@mui/icons-material/CheckTwoTone';
 import CloseIcon from '@mui/icons-material/CloseTwoTone';
 import PersonIcon from '@mui/icons-material/PersonTwoTone';
 import PendingIcon from '@mui/icons-material/PendingTwoTone';
+import EditIcon from '@mui/icons-material/EditTwoTone';
 import { Layout } from '../../components/layout';
 import { RoundButton } from '../../components/button';
 import { CapitalText, NormalText } from '../../components/text';
 import { MenuIcon } from '../../components/icon';
+import { MenuInput } from '../../components/input';
 import './MemberScreen.css';
 
 export default function MemberScreen({
     loading, myUserId, selectedRoom, roomMembers, pendingMembers,
-    onBack, onApprove, onKick, onLeave, onDelete, onStartRoomMatch
+    onBack, onApprove, onKick, onLeave, onDelete, onStartRoomMatch,
+    onRename, renameLoading, renameError, clearRenameError
 }) {
     const isAdmin = selectedRoom.creator_id === myUserId;
+    const [editOpen, setEditOpen] = useState(false);
+
+    const handleEditClose = () => {
+        setEditOpen(false);
+        clearRenameError?.();
+    };
 
     return (
         <Layout title={selectedRoom.name} onBack={onBack}>
@@ -33,6 +43,12 @@ export default function MemberScreen({
                         icon={AppsIcon}
                         onClick={() => onStartRoomMatch('classic', selectedRoom.id)}
                     />
+                    {isAdmin && (
+                        <RoundButton
+                            icon={EditIcon}
+                            onClick={() => setEditOpen(true)}
+                        />
+                    )}
                     {isAdmin ? (
                         <RoundButton icon={DeleteIcon} onClick={() => onDelete(selectedRoom.id)} danger />
                     ) : (
@@ -99,6 +115,19 @@ export default function MemberScreen({
                         </div>
                     ))}
                 </div>
+            )}
+
+            {isAdmin && (
+                <MenuInput
+                    open={editOpen}
+                    title="Rename Room"
+                    fields={[{ key: 'name', placeholder: 'New Room Name' }]}
+                    initialValues={{ name: selectedRoom.name }}
+                    onSubmit={(v) => onRename(selectedRoom.id, v.name, () => setEditOpen(false))}
+                    onClose={handleEditClose}
+                    loading={renameLoading}
+                    error={renameError}
+                />
             )}
         </Layout>
     );
