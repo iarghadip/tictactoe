@@ -92,7 +92,11 @@ Once the code reaches the `production` branch, GitHub Actions takes over and doe
 
 ## 🚀 Architecture & Design
 
-The project is built using a **Server-Authoritative, Client-Server Architecture**. This means the backend server makes the final decisions for the game state, which keeps things secure and prevents cheating.
+<p align="center">
+  <img src="architecture-diagram.png" alt="Architecture Diagram" width="600" />
+</p>
+
+The project is built using a **Containerized Three-Tier, Client-Server, Server-Authoritative, Component-Based Architecture**. This means the backend server makes the final decisions for the game state, which keeps things secure and prevents cheating.
 
 Here is a simple breakdown of how the system is designed to run efficiently:
 
