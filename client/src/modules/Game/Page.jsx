@@ -47,6 +47,7 @@ export default function GamePage({ match, onLeave }) {
     const [showResult, setShowResult] = useState(false);
     const [audioLoaded, setAudioLoaded] = useState(false);
     const [gameReady, setGameReady] = useState(false);
+    const [ackSentAt, setAckSentAt] = useState(null);
 
     useEffect(() => {
         waitForAudio().then(() => setAudioLoaded(true));
@@ -69,7 +70,7 @@ export default function GamePage({ match, onLeave }) {
 
     const turnText = isFinished
         ? winnerMark
-            ? iWon ? 'You won!' : `${players[winnerMark]} won!`
+            ? iWon ? 'You won! (+75)' : `${players[winnerMark]} won! (-25)`
             : "It's a draw!"
         : isMyTurn
             ? 'Your turn'
@@ -111,6 +112,7 @@ export default function GamePage({ match, onLeave }) {
         setOpponentDisconnected(false);
         setShowResult(false);
         setGameReady(true);
+        setAckSentAt(null);
         pendingSoundRef.current = null;
         clearDisconnectTimer();
     }, [clearDisconnectTimer]);
@@ -118,21 +120,28 @@ export default function GamePage({ match, onLeave }) {
     const fetchMyStats = useCallback(async () => {
         if (!client || !session || !myUserId) return;
         try {
-            const res = await client.listLeaderboardRecords(session, 'tictactoe', [myUserId], 1);
-            if (res.owner_records && res.owner_records.length > 0) {
-                const myRecord = res.owner_records[0];
-                setMyStats({
-                    id: myRecord.owner_id,
-                    display_name: myRecord.username || 'Anonymous',
-                    score: parseInt(myRecord.score, 10),
-                    rank: parseInt(myRecord.rank, 10),
-                    wins: myRecord.metadata?.wins || 0,
-                    losses: myRecord.metadata?.losses || 0,
-                    matches: myRecord.metadata?.matches || 0,
-                });
-            } else {
-                setMyStats(null);
+            const res = await client.listLeaderboardRecords(
+                session, 'global_tictactoe', [myUserId], 1000
+            );
+            const myRecord = res.owner_records?.[0];
+            if (!myRecord) { setMyStats(null); return; }
+
+            let rank = 0;
+            if (res.records?.length > 0) {
+                const idx = res.records.findIndex(r => r.owner_id === myUserId);
+                if (idx >= 0) rank = idx + 1;
             }
+            if (!rank) rank = parseInt(myRecord.rank, 10) || 0;
+
+            setMyStats({
+                id: myRecord.owner_id,
+                display_name: myRecord.username || 'Anonymous',
+                score: parseInt(myRecord.score, 10),
+                rank,
+                wins: myRecord.metadata?.wins || 0,
+                losses: myRecord.metadata?.losses || 0,
+                matches: myRecord.metadata?.matches || 0,
+            });
         } catch (e) {
             console.error('Failed to fetch stats:', e);
         }
@@ -159,6 +168,16 @@ export default function GamePage({ match, onLeave }) {
     useEffect(() => { if (isFinished) fetchMyStats(); }, [isFinished, fetchMyStats]);
 
     useEffect(() => {
+        if (!ackSentAt || gameReady) return;
+        const timer = setTimeout(() => {
+            if (!activeRef.current) return;
+            stopMusic();
+            onLeaveRef.current();
+        }, 60000);
+        return () => clearTimeout(timer);
+    }, [ackSentAt, gameReady]);
+
+    useEffect(() => {
         if (!socket) return;
         activeRef.current = true;
 
@@ -174,6 +193,7 @@ export default function GamePage({ match, onLeave }) {
                     setPlayers(payload.players);
                     setIsTimed((payload.mode ?? 'timed') === 'timed');
                     setGameReady(false);
+                    setAckSentAt(Date.now());
                     socket.sendMatchState(
                         match.match_id,
                         CLIENT_OPCODE.READY_ACK,
