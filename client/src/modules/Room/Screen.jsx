@@ -6,9 +6,9 @@ import { Layout } from '../../components/layout';
 import { RoundButton } from '../../components/button';
 import { CapitalText, NormalText } from '../../components/text';
 import { MenuIcon } from '../../components/icon';
-import './RoomScreen.css';
+import './Screen.css';
 
-export default function RoomScreen({
+export default function Screen({
     loading, rooms, requestedRooms, onSelectRoom,
     onBack, onOpenCreate, onOpenJoin
 }) {

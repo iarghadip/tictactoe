@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useNakama } from '../contexts/nakamaContext';
-import { RoomScreen } from '../screens/room';
-import { MenuInput } from '../components/input';
+import { useNakama } from '../../contexts/nakamaContext';
+import { MenuInput } from '../../components/input';
+import Screen from './Screen';
 
 export default function RoomPage({ onBack, onSelectRoom }) {
     const { client, session, account, socket } = useNakama();
@@ -133,7 +133,7 @@ export default function RoomPage({ onBack, onSelectRoom }) {
 
     return (
         <>
-            <RoomScreen
+            <Screen
                 loading={loading}
                 rooms={rooms}
                 requestedRooms={requestedRooms}

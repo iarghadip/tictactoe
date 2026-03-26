@@ -1,13 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNakama } from './contexts/nakamaContext';
-
-import RoomPage from './pages/RoomPage';
-
-
 import HomePage from './modules/Home/Page';
 import PairPage from './modules/Pair/Page';
 import GamePage from './modules/Game/Page';
-
+import RoomPage from './modules/Room/Page';
 import MemberPage from './modules/Member/Page';
 import RankPage from './modules/Rank/Page';
 import ControlPage from './modules/Control/Page';
