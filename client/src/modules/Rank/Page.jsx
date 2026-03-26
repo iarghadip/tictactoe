@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useNakama } from '../contexts/nakamaContext';
-import { RankScreen } from '../screens/rank';
+import { useNakama } from '../../contexts/nakamaContext';
+import Screen from './Screen';
 
 export default function RankPage({ onBack }) {
     const { client, session, account } = useNakama();
@@ -54,7 +54,7 @@ export default function RankPage({ onBack }) {
     }, [client, session, myUserId]);
 
     return (
-        <RankScreen
+        <Screen
             loading={loading}
             top100={top100}
             myStats={myStats}

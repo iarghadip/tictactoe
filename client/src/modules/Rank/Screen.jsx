@@ -5,7 +5,7 @@ import { Score } from '../../components/score';
 import { CapitalText, NormalText } from '../../components/text';
 import { MenuIcon } from '../../components/icon';
 import { MenuText } from '../../components/text';
-import './RankScreen.css';
+import './Screen.css';
 
 function PlayerRow({ player, isMe }) {
     const isTop = player.rank <= 3;
