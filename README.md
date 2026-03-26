@@ -2,6 +2,8 @@
 
 Welcome to the Tic Tac Toe project! This document contains everything you need to set up, test, and deploy the game.
 
+⚠️ It has been noticed during testing that some network providers with slower speeds are causing disturbance during matchmaking.
+
 ---
 
 ## 🛠️ Setup Guide
