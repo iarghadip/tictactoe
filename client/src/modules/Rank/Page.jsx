@@ -32,11 +32,13 @@ export default function RankPage({ onBack }) {
 
                 if (result.owner_records && result.owner_records.length > 0) {
                     const myRecord = result.owner_records[0];
+                    const rankIdx = mappedPlayers.findIndex(p => p.id === myUserId);
+                    const rank = rankIdx >= 0 ? rankIdx + 1 : parseInt(myRecord.rank, 10) || 0;
                     setMyStats({
                         id: myRecord.owner_id,
                         display_name: myRecord.username || 'Anonymous',
                         score: parseInt(myRecord.score, 10),
-                        rank: parseInt(myRecord.rank, 10),
+                        rank,
                         wins: myRecord.metadata?.wins || 0,
                         losses: myRecord.metadata?.losses || 0,
                         matches: myRecord.metadata?.matches || 0,
