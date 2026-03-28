@@ -6,6 +6,62 @@ This document contains all necessary instructions to set up, test, and deploy th
 
 ---
 
+## ⚙️ Development Environment Setup
+
+Install the following dependencies before running the project locally.
+
+### 1. Docker
+
+Add the official Docker repository to Fedora, install the core engine, CLI, and Compose plugin, then start the background service:
+
+```bash
+sudo dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
+sudo dnf install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
+sudo systemctl enable --now docker
+```
+
+### 2. Node.js
+
+Install Node.js (LTS recommended) to run the React frontend and manage packages via npm:
+
+```bash
+curl -fsSL https://rpm.nodesource.com/setup_lts.x | sudo bash -
+sudo dnf install -y nodejs
+```
+
+Verify the installation:
+
+```bash
+node -v
+npm -v
+```
+
+> **Note:** Node.js is required to run `npm install` and `npm run dev` in the `client/` directory.
+
+### 3. Nakama
+
+Download the specific v3.38.0 Linux binary, extract it, and move it into your system's executable path so the `nakama` command works globally:
+
+```bash
+wget https://github.com/heroiclabs/nakama/releases/download/v3.38.0/nakama-3.38.0-linux-amd64.tar.gz
+tar -xvzf nakama-3.38.0-linux-amd64.tar.gz
+sudo mv nakama /usr/local/bin/
+```
+
+### 4. CockroachDB
+
+Download the v23.2.0 database engine, extract it, and move the executable to your system path:
+
+```bash
+curl -O https://binaries.cockroachdb.com/cockroach-v23.2.0.linux-amd64.tgz
+tar -xzf cockroach-v23.2.0.linux-amd64.tgz
+sudo cp -i cockroach-v23.2.0.linux-amd64/cockroach /usr/local/bin/
+```
+
+> **Note:** Ensure a local CockroachDB node is running in the background on port `26257` before starting the backend.
+
+---
+
 ## 🛠️ Setup Guide
 
 The following instructions detail the process for local project setup and live server preparation.
@@ -121,7 +177,7 @@ The project adheres to Agile principles. The codebase and deployment pipelines a
 * **Nakama:** The backend operates entirely on the Nakama game server executable, managing real-time multiplayer connections, matchmaking, and user authentication.
 
 ### 🗄️ Database
-* **CockroachDB:** The system utilizes Nakama’s default database, CockroachDB, operating within the Docker environment for secure storage of player data and match records.
+* **CockroachDB:** The system utilizes Nakama's default database, CockroachDB, operating within the Docker environment for secure storage of player data and match records.
 
 ---
 
