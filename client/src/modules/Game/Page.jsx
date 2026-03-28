@@ -133,14 +133,20 @@ export default function GamePage({ match, onLeave }) {
             }
             if (!rank) rank = parseInt(myRecord.rank, 10) || 0;
 
+            const matches = myRecord.metadata?.matches || 0;
+            const wins = myRecord.metadata?.wins || 0;
+            const losses = myRecord.metadata?.losses || 0;
+            const draws = matches - (wins + losses);
+
             setMyStats({
                 id: myRecord.owner_id,
                 display_name: myRecord.username || 'Anonymous',
                 score: parseInt(myRecord.score, 10),
                 rank,
-                wins: myRecord.metadata?.wins || 0,
-                losses: myRecord.metadata?.losses || 0,
-                matches: myRecord.metadata?.matches || 0,
+                matches,
+                wins,
+                losses,
+                draws
             });
         } catch (e) {
             console.error('Failed to fetch stats:', e);

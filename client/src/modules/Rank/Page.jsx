@@ -18,15 +18,22 @@ export default function RankPage({ onBack }) {
             try {
                 const result = await client.listLeaderboardRecords(session, 'tictactoe', [myUserId], 100);
                 
-                const mappedPlayers = (result.records || []).map(record => ({
-                    id: record.owner_id,
-                    display_name: record.username || 'Anonymous',
-                    score: parseInt(record.score, 10),
-                    rank: parseInt(record.rank, 10),
-                    wins: record.metadata?.wins || 0,
-                    losses: record.metadata?.losses || 0,
-                    matches: record.metadata?.matches || 0,
-                }));
+                const mappedPlayers = (result.records || []).map(record => {
+                    const matches = record.metadata?.matches || 0;
+                    const wins = record.metadata?.wins || 0;
+                    const losses = record.metadata?.losses || 0;
+                    const draws = matches - (wins + losses);
+                    return {
+                        id: record.owner_id,
+                        display_name: record.username || 'Anonymous',
+                        score: parseInt(record.score, 10),
+                        rank: parseInt(record.rank, 10),
+                        matches,
+                        wins,
+                        losses,
+                        draws
+                    };
+                });
 
                 setTop100(mappedPlayers);
 
@@ -34,14 +41,19 @@ export default function RankPage({ onBack }) {
                     const myRecord = result.owner_records[0];
                     const rankIdx = mappedPlayers.findIndex(p => p.id === myUserId);
                     const rank = rankIdx >= 0 ? rankIdx + 1 : parseInt(myRecord.rank, 10) || 0;
+                    const matches = myRecord.metadata?.matches || 0;
+                    const wins = myRecord.metadata?.wins || 0;
+                    const losses = myRecord.metadata?.losses || 0;
+                    const draws = matches - (wins + losses);
                     setMyStats({
                         id: myRecord.owner_id,
                         display_name: myRecord.username || 'Anonymous',
                         score: parseInt(myRecord.score, 10),
                         rank,
-                        wins: myRecord.metadata?.wins || 0,
-                        losses: myRecord.metadata?.losses || 0,
-                        matches: myRecord.metadata?.matches || 0,
+                        matches,
+                        wins,
+                        losses,
+                        draws
                     });
                 } else {
                     setMyStats(null);

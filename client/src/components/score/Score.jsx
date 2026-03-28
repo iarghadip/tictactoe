@@ -30,9 +30,10 @@ export default function Score({ stats, loading = false }) {
             </div>
             <CapitalText>{stats.display_name}</CapitalText>
             <div className="flex gap-3">
-                <StatPill label="played" value={stats.matches} />
-                <StatPill label="won" value={stats.wins} />
-                <StatPill label="lost" value={stats.losses} />
+                <StatPill label="Played" value={stats.matches} />
+                <StatPill label="Won" value={stats.wins} />
+                <StatPill label="Lost" value={stats.losses} />
+                <StatPill label="Draw" value={stats.draws} />
             </div>
         </div>
     );

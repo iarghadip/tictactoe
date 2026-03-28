@@ -26,7 +26,7 @@ function PlayerRow({ player, isMe }) {
             </div>
             <div className="flex flex-col flex-1 min-w-0 rank-screen-row__info">
                 <NormalText>{player.display_name}</NormalText>
-                <CapitalText size="11">{player.matches}P · {player.wins}W · {player.losses}L</CapitalText>
+                <CapitalText size="11">{player.matches}P · {player.wins}W · {player.losses}L · {player.draws}D</CapitalText>
             </div>
             <NormalText className="shrink-0 rank-screen-row__score">
                 {player.score.toLocaleString()}
