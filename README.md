@@ -100,7 +100,7 @@ The initial server setup required for automated GitHub Actions deployment:
 
 Guidelines for verifying successful connection and gameplay between participants.
 
-### 🔗 Where to Test (Server Links)
+### 🔗 Where to Test
 
 Select the appropriate link based on the testing environment:
 * **Development Server (Local):** `http://localhost:3000`
