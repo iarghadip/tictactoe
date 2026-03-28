@@ -84,10 +84,9 @@ export default function HomePage({
         disconnect();
     };
 
-    const menuItems = [];
-    HOME_SCREEN_MENU.forEach((group, gi) => {
-        group.items.forEach((item) => menuItems.push({ ...item, gi }));
-    });
+    const menuItems = HOME_SCREEN_MENU.flatMap((group, gi) =>
+        group.items.map(item => ({ ...item, gi }))
+    );
 
     return (
         <>
