@@ -51,10 +51,16 @@ export default function HomePage({
     };
 
     const handleAuth = async ({ username }) => {
+        const cleanUsername = username.trim();
+
+        if (cleanUsername.length < 6) {
+            setAuthError('Username is too short!');
+            return;
+        }
+
         setAuthLoading(true);
         setAuthError(null);
         try {
-            const cleanUsername = username.trim();
             await connect(cleanUsername);
 
             localStorage.setItem('username', cleanUsername);
