@@ -103,7 +103,7 @@ The project utilizes a **Containerized Three-Tier, Client-Server, Server-Authori
 
 System design breakdown:
 
-### 📦 Containerized Three-Tier Architecture
+### 📦 Containerized
 This deployment model is optimized for execution on a single Virtual Machine (VM). Docker is utilized to isolate the system into three distinct containers:
 1. **Presentation Tier:** The React Frontend.
 2. **Application Tier:** The Nakama Backend.
@@ -111,7 +111,7 @@ This deployment model is optimized for execution on a single Virtual Machine (VM
 
 This containerized approach guarantees consistent operation across both local development environments and live production servers.
 
-### 🔄 Agile Methodology
+### 🔄 Methodology
 The project adheres to Agile principles. The codebase and deployment pipelines are structured to facilitate rapid, continuous delivery of features and fixes without disrupting live services.
 
 ### 🧩 Frontend
@@ -125,17 +125,17 @@ The project adheres to Agile principles. The codebase and deployment pipelines a
 
 ---
 
-## 🎨 Game Design
+## 🎨 Design
 
 Overview of the aesthetic, functional, and reward-based design elements.
 
-### 🌍 Platform Agnostic
+### 🌍 Platform
 The application is entirely web-based and features a responsive design that adapts to varying screen dimensions. It is accessible on mainstream devices without requiring downloads:
 * **Mobiles:** iPhone, Android
 * **Tablets:** iPad
 * **Computers:** Mac, Windows, Linux
 
-### 🏆 Competitive Scoring System
+### 🏆 Score
 A strict scoring system is implemented to maintain player engagement and penalize match abandonment. Ranks are affected as follows:
 * **Win:** +75 points
 * **Lose:** -25 points
@@ -143,7 +143,7 @@ A strict scoring system is implemented to maintain player engagement and penaliz
 
 *Note: The deduction of points for a defeat mandates active participation once a match commences.*
 
-### 🎵 Immersive Audio & Visuals
+### 🎵 Media
 To enhance the user experience, the application includes:
 * Engaging background music
 * Satisfying sound effects for individual actions
